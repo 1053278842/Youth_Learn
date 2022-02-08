@@ -1,7 +1,7 @@
 package com.ll.youth_learn.controller;
 
 import com.ll.youth_learn.entity.TopOrg;
-import com.ll.youth_learn.mapper.TopOrgMapper;
+import com.ll.youth_learn.mapper.ITopOrgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    public TopOrgMapper topOrgMapper;
+    public ITopOrgMapper topOrgMapper;
 
     @ResponseBody
     @RequestMapping("/getTopOrgList")

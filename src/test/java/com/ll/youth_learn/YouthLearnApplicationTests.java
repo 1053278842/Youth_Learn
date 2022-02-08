@@ -1,7 +1,7 @@
 package com.ll.youth_learn;
 
 import com.ll.youth_learn.entity.TopOrg;
-import com.ll.youth_learn.mapper.TopOrgMapper;
+import com.ll.youth_learn.mapper.ITopOrgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 class YouthLearnApplicationTests {
 
     @Autowired
-    private TopOrgMapper topOrgMapper;
+    private ITopOrgMapper topOrgMapper;
 
     @Test
     void contextLoads() {

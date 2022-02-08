@@ -8,15 +8,23 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-@TableName("t_org_top")
+/**
+ * |       |\__/,|   (`\
+ * |    _.|o o  |_   ) )
+ * |  -(((---(((--------
+ * if sudden problems,please don't look for me,Thank you~
+ *
+ * @Author :      Liu Long
+ * @CreateTime :  2022/2/9 1:22
+ * @Description :
+ */
+@TableName("t_org")
 @Data
-public class TopOrg implements Serializable {
-
+public class Org implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-
     @TableField("name")
     private String name;
-
-
+    @TableField("path")
+    private String path;
 }
