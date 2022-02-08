@@ -408,6 +408,7 @@
                                                     <div class="form-group">
                                                         <label for="org" class="col-form-label">一级组织</label>
                                                         <select class="select2 form-control" id="OrgLevel1">
+                                                            <option value="" selected="selected">......</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -595,7 +596,7 @@
                 success:function (data){
                     if(data.length != 0){
                         for(var i=0; i<data.length; i++){
-                            var option="<option value=\""+data[i].id+"\"";
+                            var option = "<option value=\""+data[i].id+"\"";
                             option += ">"+data[i].name+"</option>";  //动态添加数据
                             $("select[id=OrgLevel1]").append(option);
                         }
