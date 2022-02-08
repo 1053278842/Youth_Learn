@@ -1,5 +1,9 @@
 package com.ll.youth_learn.service;
 
+import com.ll.youth_learn.entity.TopOrg;
+
+import java.util.List;
+
 /**
  * |       |\__/,|   (`\
  * |    _.|o o  |_   ) )
@@ -11,4 +15,10 @@ package com.ll.youth_learn.service;
  * @Description :
  */
 public interface IOrgService {
+    /**
+     * 返回所有的TopOrg
+     * @return
+     * @throws Exception
+     */
+    List<TopOrg> selectTopOrgList() throws Exception;
 }

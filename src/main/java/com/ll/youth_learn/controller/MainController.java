@@ -25,7 +25,6 @@ public class MainController {
 
     @RequestMapping("/goIndex")
     public String goIndex(){
-        log.warn("用户偷跑！");
         return "index";
     }
 }

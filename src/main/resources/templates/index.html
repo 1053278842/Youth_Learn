@@ -1,3 +1,4 @@
+<html xmlns:th="http://www.thymeleaf.org">
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -405,14 +406,8 @@
                                             <div class="row">
                                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                                     <div class="form-group">
-                                                        <label for="org" class="col-form-label">顶级组织</label>
-                                                        <select class="select2 form-control" id="org">
-                                                            <option value="AK">Alaska</option>
-                                                            <option value="HI">Hawaii</option>
-                                                            <option value="CA">California</option>
-                                                            <option value="NV">Nevada</option>
-                                                            <option value="OR">Oregon</option>
-                                                            <option value="WA">Washington</option>
+                                                        <label for="org" class="col-form-label">一级组织</label>
+                                                        <select class="select2 form-control" id="OrgLevel1">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -570,44 +565,6 @@
 			</div>
         </div>
     </div>
-
-    <!-- Color Setting -->
-	<div id="style-switcher">
-		<div>
-			<ul class="colors">
-				<li>
-					<p class='colorchange' id='color'>
-					</p>
-				</li>
-				<li>
-					<p class='colorchange' id='color2'>
-					</p>
-				</li>
-				<li>
-					<p class='colorchange' id='color3'>
-					</p>
-				</li>
-				<li>
-					<p class='colorchange' id='color4'>
-					</p>
-				</li>
-				<li>
-					<p class='colorchange' id='color5'>
-					</p>
-				</li>
-				<li>
-					<p class='colorchange' id='style'>
-					</p>
-				</li>
-			</ul>
-		</div>
-		<div class="bottom">
-			<a href="" class="settings">
-				<i class="fa fa-cog" aria-hidden="true"></i>
-			</a>
-		</div>
-	</div>
-    <!-- Color Setting -->
 	
 	
     <!-- Script Start -->
@@ -621,6 +578,35 @@
     <script src="static/js/nice-select.min.js"></script>
     <!-- Custom Script -->
     <script src="static/js/custom.js"></script>
+    <!--我的Script-->
+    <script>
+        $(function(){
+            /*获取TopOrgJson,修改一级Select*/
+            getTopOrgListJson();
+        })
+
+        /*获取TopOrgJson,修改一级Select*/
+        function getTopOrgListJson() {
+            $.ajax({
+                type:"get",
+                url:"/Org/getTopOrgList",
+                contentType:"application/json;charset=UTF-8",
+                dataType:"json",
+                success:function (data){
+                    if(data.length != 0){
+                        for(var i=0; i<data.length; i++){
+                            var option="<option value=\""+data[i].id+"\"";
+                            option += ">"+data[i].name+"</option>";  //动态添加数据
+                            $("select[id=OrgLevel1]").append(option);
+                        }
+                    }
+                },
+                error:function (data){
+                    console.log("错误！getTopOrgListJson()",data);
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>
