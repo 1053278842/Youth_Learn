@@ -1,4 +1,6 @@
-package com.ll.youth_learn.service;
+package com.ll.youthlearn.service;
+
+import com.ll.youthlearn.entity.User;
 
 /**
  * |       |\__/,|   (`\
@@ -15,6 +17,8 @@ public interface IUserService {
     void selectTopOrgs() throws Exception;
 
     void selectOrgsByLevels() throws Exception;
+
+    void insertUser(User user) throws Exception;
 
 //    void insertOrg()
 }

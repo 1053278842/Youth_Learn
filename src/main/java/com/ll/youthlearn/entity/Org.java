@@ -1,4 +1,4 @@
-package com.ll.youth_learn.entity;
+package com.ll.youthlearn.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

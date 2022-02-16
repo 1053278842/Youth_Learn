@@ -1,7 +1,7 @@
-package com.ll.youth_learn;
+package com.ll.youthlearn;
 
-import com.ll.youth_learn.entity.TopOrg;
-import com.ll.youth_learn.mapper.ITopOrgMapper;
+import com.ll.youthlearn.entity.TopOrg;
+import com.ll.youthlearn.mapper.ITopOrgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

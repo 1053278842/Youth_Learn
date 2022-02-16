@@ -1,11 +1,10 @@
-package com.ll.youth_learn.service.impl;
+package com.ll.youthlearn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ll.youth_learn.entity.TopOrg;
-import com.ll.youth_learn.mapper.IOrgMapper;
-import com.ll.youth_learn.mapper.ITopOrgMapper;
-import com.ll.youth_learn.service.IOrgService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ll.youthlearn.entity.TopOrg;
+import com.ll.youthlearn.mapper.IOrgMapper;
+import com.ll.youthlearn.mapper.ITopOrgMapper;
+import com.ll.youthlearn.service.IOrgService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +20,18 @@ import java.util.List;
  * @CreateTime :  2022/2/9 1:31
  * @Description :
  */
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service("orgService")
 public class OrgServiceImpl implements IOrgService {
 
-    @Autowired
-    private IOrgMapper orgMapper;
+    private final IOrgMapper orgMapper;
 
-    @Autowired
-    private ITopOrgMapper topOrgMapper;
+    private final ITopOrgMapper topOrgMapper;
+
+    public OrgServiceImpl(IOrgMapper orgMapper, ITopOrgMapper topOrgMapper) {
+        this.orgMapper = orgMapper;
+        this.topOrgMapper = topOrgMapper;
+    }
 
     @Override
     public List<TopOrg> selectTopOrgList() throws Exception {

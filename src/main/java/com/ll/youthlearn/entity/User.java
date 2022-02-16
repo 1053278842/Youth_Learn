@@ -1,4 +1,4 @@
-package com.ll.youth_learn.entity;
+package com.ll.youthlearn.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -34,7 +34,10 @@ public class User implements Serializable {
     @TableField("password")
     private String password;
 
-    //存放用户所创建组织的路径信息
+    /**存放用户所创建组织的路径信息**/
     @TableField("org_path")
     private String orgPath;
+
+    @TableField("role")
+    private String role;
 }

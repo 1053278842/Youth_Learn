@@ -1,7 +1,7 @@
-package com.ll.youth_learn.mapper;
+package com.ll.youthlearn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ll.youth_learn.entity.User;
+import com.ll.youthlearn.entity.Org;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @Description :
  */
 @Mapper
-public interface IUserMapper extends BaseMapper<User> {
+public interface IOrgMapper extends BaseMapper<Org> {
 }

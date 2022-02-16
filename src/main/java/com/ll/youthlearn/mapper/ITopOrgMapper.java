@@ -1,9 +1,8 @@
-package com.ll.youth_learn.mapper;
+package com.ll.youthlearn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ll.youth_learn.entity.Org;
+import com.ll.youthlearn.entity.TopOrg;
 import org.apache.ibatis.annotations.Mapper;
-
 /**
  * |       |\__/,|   (`\
  * |    _.|o o  |_   ) )
@@ -15,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Description :
  */
 @Mapper
-public interface IOrgMapper extends BaseMapper<Org> {
+public interface ITopOrgMapper extends BaseMapper<TopOrg> {
+
 }

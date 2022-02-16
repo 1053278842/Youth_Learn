@@ -1,6 +1,6 @@
-package com.ll.youth_learn.service;
+package com.ll.youthlearn.service;
 
-import com.ll.youth_learn.entity.TopOrg;
+import com.ll.youthlearn.entity.TopOrg;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IOrgService {
     /**
-     * 返回所有的TopOrg
+     * 返回所有的TopOrg ，按照id降序排列(-1,-2...-10)
      * @return
      * @throws Exception
      */
