@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("userService")
 @Transactional(rollbackFor = Exception.class)
-public class UserServiceImp implements IUserService {
+public class UserServiceImpl implements IUserService {
 
     private ITopOrgMapper topOrgMapper;
 
@@ -31,7 +31,7 @@ public class UserServiceImp implements IUserService {
 
 
     @Autowired
-    public UserServiceImp(ITopOrgMapper topOrgMapper, IUserMapper userMapper, BCryptPasswordEncoder encoder) {
+    public UserServiceImpl(ITopOrgMapper topOrgMapper, IUserMapper userMapper, BCryptPasswordEncoder encoder) {
         this.topOrgMapper = topOrgMapper;
         this.userMapper = userMapper;
         this.encoder = encoder;
