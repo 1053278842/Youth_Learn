@@ -285,19 +285,17 @@
 
 
 <!-- Script Start -->
-<script src="static/js/jquery.min.js" th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
-<script src="static/js/popper.min.js" th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
-<script src="static/js/bootstrap.min.js" th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
-<script src="static/js/custom.js" th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+<script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
+<script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+<script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
 
 </body>
 
 
 <!--MyScript-->
 <script th:inline="javascript">
-    const str=[[${MEMBER_LIST}]];
-    console.log(str);
-    alert(str);
+
     function SortAscOrDesc(obj){
         const thisClass=obj.className;
 
@@ -343,19 +341,11 @@
                 }else{
                     $("#SortButton").attr("data"," ↓");
                 }
-
-                //跟新统计卡片
-                const str=[[${MEMBER_LIST}]];
-                console.log(str);
-
             },
             error: function(data){
-                console.log("member-table页获取后台数据出错！")
+                console.log("member-table页获取后台数据出错！");
             }
         })
-        //跟新统计卡片
-        const str=[[${MEMBER_LIST}]];
-        console.log(str);
     }
 
     /**
