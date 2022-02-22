@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 /**
  * |       |\__/,|   (`\
@@ -19,7 +20,7 @@ import java.sql.Timestamp;
  */
 @Data
 @TableName("t_member")
-public class Member {
+public class Member implements Serializable {
 
     @TableId(value="id",type = IdType.AUTO)
     private Integer id;

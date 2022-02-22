@@ -23,4 +23,29 @@ public interface IMemberService {
      * @throws Exception
      */
     List<Member> selectMemberByUserIdAndOrder(int userId,boolean isAsc) throws Exception;
+
+    /**
+     *  根据传入的id修改对应member的email字段值
+     * @param id
+     * @param email
+     * @return
+     * @throws Exception
+     */
+    int updateOneWithId(Integer id,String email) throws Exception;
+
+    /**
+     * 根据memberId删除指定的member
+     * @param memberId
+     * @return 返回删除结果 int
+     */
+    int deleteOneWithId(Integer memberId) throws Exception;
+
+    /**
+     * 根据用户手动传入的name和email插入新数据
+     * 时间为当前时间，id自增，time=0....
+     * @param memberName
+     * @param memberEmail
+     * @return
+     */
+    int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path);
 }

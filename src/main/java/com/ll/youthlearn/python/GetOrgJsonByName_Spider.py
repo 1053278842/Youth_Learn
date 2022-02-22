@@ -64,8 +64,6 @@ if __name__=="__main__":
     dataList=[]
     #线程池
     threads = []
-    m=Manager()
-    dataQ=m.Queue()
     for raw in allStage:
         stage=raw[0]
         t=threading.Thread(target=getOrgByNameStage,args=(orgNames,stage,dataList))

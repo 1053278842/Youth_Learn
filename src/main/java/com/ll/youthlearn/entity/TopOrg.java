@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Administrator
+ */
 @TableName("t_org_top")
 @Data
 public class TopOrg implements Serializable {

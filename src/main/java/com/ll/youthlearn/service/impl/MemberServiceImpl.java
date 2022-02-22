@@ -40,4 +40,29 @@ public class MemberServiceImpl implements IMemberService{
             return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).orderByDesc("times"));
         }
     }
+
+    @Override
+    public int updateOneWithId(Integer id, String email) throws Exception {
+        Member tempM=new Member();
+        tempM.setId(id);
+        tempM.setEmail(email);
+        return memberMapper.updateById(tempM);
+    }
+
+    @Override
+    public int deleteOneWithId(Integer memberId) throws Exception {
+        return memberMapper.deleteById(memberId);
+    }
+
+    @Override
+    public int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) {
+        Member member=new Member();
+        member.setEmail(memberEmail);
+        member.setName(memberName);
+        member.setMaxTimes(maxTimes);
+        member.setTimes(0);
+        member.setPath(path);
+        member.setParentUserId(parentId);
+        return memberMapper.insert(member);
+    }
 }

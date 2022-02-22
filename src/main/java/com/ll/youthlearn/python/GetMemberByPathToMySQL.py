@@ -1,5 +1,6 @@
 import threading
 from turtle import stamp
+from typing import final
 from pymysql import NULL
 import requests
 import pymysql
@@ -45,6 +46,15 @@ def getOrgByNameStage(orgNames,stage,dataList,titleList):
 
 if __name__=="__main__":
 
+    #获取java传来的值
+    # userId=9
+    # orgNames=eval("['团省委', '机关', '学校部']")
+    # maxStage=80
+    # orgNames=eval("['直属高校', '合肥学院', '人工智能与大数据学院','2019级信息管理与信息系统(对口)班']")
+    userId=sys.argv[1]
+    orgNames=eval(sys.argv[2])
+    maxStage=sys.argv[3]
+
     t1=time.time()
     t2=time.time()
     headers={
@@ -54,16 +64,11 @@ if __name__=="__main__":
     # 数据库连接
     conn = getConn()
     cursor=conn.cursor()
-    sql = 'select stage from t_stage order by mid(stage,13,20)+1 desc limit 0,35'
+    sql = 'select stage from t_stage order by mid(stage,13,20)+1 desc limit 0,'+str(maxStage)
     cursor.execute(sql)
     allStage=cursor.fetchall()
 
-    #获取java传来的值
-    # userId=9
-    # orgNames=eval("['团省委', '机关', '学校部']")
-    # orgNames=eval("['直属高校', '合肥学院', '人工智能与大数据学院','2019级信息管理与信息系统(对口)班']")
-    userId=sys.argv[1]
-    orgNames=eval(sys.argv[2])
+
 
     #遍历结果,多线程启动爬虫
     dataList=[]
@@ -90,23 +95,41 @@ if __name__=="__main__":
         resultDict[t]=0
     maxTimes=len(resultDict.keys())
 
-    #拼接SQL语句，批量插入member
+
+    # 去重计次重构
+    t2=time.time()
+    finalDict={}
+    for org in dataList:
+        if(finalDict.__contains__(org['username'])):
+            finalDict[org['username']]=[finalDict[org['username']][0],finalDict[org['username']][1]+1]
+        else:
+            finalDict[org['username']]=[org['addtime'],1]
+    print("去重计次耗时:", time.time()-t2)
+
+
+    # 拼接SQL语句，批量插入member
     t2=time.time()
     cursor=conn.cursor()
     sql = 'insert into t_member (name,timestamp,times,path,parent_user_id,maxTimes) values '
-    for org in dataList:
+    for key,value in finalDict.items():
+        userName=key
+        addTime=value[0]
+        times=value[1]
         # print(org['addtime'],org['username'])
-        if org['addtime'] is None:
+        if addTime is None:
             stamptime=datetime.datetime.strptime("2000-01-01","%Y-%m-%d")
         else:
-            stamptime=datetime.datetime.strptime(org['addtime'],"%Y-%m-%d")
+            stamptime=datetime.datetime.strptime(addTime,"%Y-%m-%d")
         # print(stamptime)
         sql+='("%s","%s","%s","%s","%s","%s"),'%(
-            org['username'],stamptime,1,orgNames,userId,maxTimes
+            userName,stamptime,times,orgNames,userId,maxTimes
         )
     # 去掉最后一个','!
     sql=sql[0:-1]
-    sql+=" on duplicate key update times=times+1,timestamp=IF(timestamp<values(timestamp),values(timestamp),timestamp)"
+    sql+=(" on duplicate key update "+
+          "times=IF(maxTimes<values(maxTimes),VALUES(times),times),"+
+          "maxTimes=IF(maxTimes<values(maxTimes),VALUES(maxTimes),maxTimes),"+
+          "timestamp=IF(timestamp<values(timestamp),values(timestamp),timestamp)")
     print("拼接SQL耗时:", time.time()-t2)
 
     #执行事务
