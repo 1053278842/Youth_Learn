@@ -30,10 +30,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //TODO 开启csrf,ajax问题使用meta元素设置token解决
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/index","/memberTable").authenticated()
+                .antMatchers("/memberTable").authenticated()
                 .anyRequest().permitAll()
                 .and()
             .formLogin()

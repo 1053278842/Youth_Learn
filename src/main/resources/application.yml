@@ -3,15 +3,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://110.42.155.172:3306/youth_learn
     username: root
-    password: 123456
+    password: LiuLong123123+
   mvc:
     static-path-pattern: /static/**
 #    favicon:
 #      enabled: false
 
-#mybatis-plus:
+mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.ll.youthlearn.entity
 server:
   port: 8082

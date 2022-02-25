@@ -36,6 +36,7 @@ public interface IMemberService {
     /**
      * 根据memberId删除指定的member
      * @param memberId
+     * @param memberId
      * @return 返回删除结果 int
      */
     int deleteOneWithId(Integer memberId) throws Exception;
@@ -45,7 +46,10 @@ public interface IMemberService {
      * 时间为当前时间，id自增，time=0....
      * @param memberName
      * @param memberEmail
+     * @param parentId
+     * @param maxTimes
+     * @param path
      * @return
      */
-    int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path);
+    int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) throws Exception;
 }

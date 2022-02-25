@@ -38,4 +38,8 @@ public class MainController {
     public String memberTable() {
         return "member-table";
     }
+    @RequestMapping("/memberLast")
+    public String memberLast() {
+        return "member-last";
+    }
 }

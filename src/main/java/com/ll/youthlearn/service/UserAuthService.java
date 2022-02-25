@@ -36,6 +36,7 @@ public class UserAuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", username));
+        //TODO session不安全
         session.setAttribute("USER_INFO",user);
         if (user==null){
             throw new UsernameNotFoundException("用户"+username+"登录失败,用户名不存在！");

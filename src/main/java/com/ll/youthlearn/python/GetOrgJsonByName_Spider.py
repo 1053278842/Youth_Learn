@@ -18,7 +18,7 @@ import sys
 
 
 def getConn():
-    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='123456',db='youth_learn')
+    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='LiuLong123123+',db='youth_learn')
 
 def getOrgByNameStage(orgNames,stage,dataList):
     # url='http://dxx.ahyouth.org.cn/api/peopleRankStage?table_name=%s&level1=%s'%(stage,urllib.parse.quote(orgNames))
@@ -46,13 +46,14 @@ if __name__=="__main__":
     }
 
 
-
+    t2=time.time()
     # 数据库连接
     conn = getConn()
     cursor=conn.cursor()
     sql = ' select stage from t_stage order by mid(stage,13,20)+1 desc limit 0,35'
     cursor.execute(sql)
     allStage=cursor.fetchall()
+    # print("获取stage耗时:",time.time()-t2)
 
     #获取java传来的值
     # orgName=sys.argv[1]

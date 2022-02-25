@@ -2,6 +2,7 @@ package com.ll.youthlearn.controller;
 
 import com.ll.youthlearn.entity.Org;
 import com.ll.youthlearn.entity.TopOrg;
+import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IOrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -10,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +28,9 @@ import java.util.List;
 @Slf4j
 public class OrgController {
 
+    @Resource(name = "pythonSpider")
+    private IPythonSpider pythonSpider;
+
     @Resource(name = "orgService")
     private IOrgService orgService;
 
@@ -45,41 +45,7 @@ public class OrgController {
     @ResponseBody
     @RequestMapping("/getOrgsAllStage")
     public List<Org> getOrgsAllStageByNames(@RequestBody Org[] orgs ){
-        //拼接param:org对象->["name1","level2Name"]
-        String paramStr="";
-        paramStr+="[";
-        for (Org o:orgs) {
-            paramStr+="'"+o.getName()+"',";
-        }
-        //去掉最后一个‘,'
-        paramStr=paramStr.substring(0,paramStr.length()-1);
-        paramStr+="]";
-
-        //调用python
-        //定义回传结果类型
-        List<Org> results_orgs=new ArrayList<Org>();
-
-        Process proc;
-        String location = System.getProperty("user.dir") + "\\src\\main\\java\\com\\ll\\youthlearn\\python\\GetOrgJsonByName_Spider.py";
-        String param=paramStr;
-        try {
-            String[] args=new String[]{"python", location,param};
-            proc = Runtime.getRuntime().exec(args);
-            //用输入输出流来截取结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"gbk"));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                Org tempOrg=new Org();
-                tempOrg.setName(line);
-                results_orgs.add(tempOrg);
-            }
-            in.close();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        List<Org> results_orgs = pythonSpider.getOrgJsonByName(orgs);
         return results_orgs;
     }
 }
