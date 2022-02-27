@@ -207,35 +207,7 @@
                             <h4>期次-列表</h4>
                             <p class="card-desc "> 检索期次 <input id="MaxStage" value="35" type="number" placeholder="During 1~50" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
                                 <a href="#" onclick="addMembersEachStageToMySQL()"><code>检索</code></a>
-<!--                                <button style="float:right" class="btn btn-success squer-btn sm-btn mt-2 mr-2" id="AddMemberToggle" onclick="$('#AddMemberToggle_Div').slideToggle();">Add Member</button>-->
                             </p>
-                            <!--隐藏的addMember栏-->
-<!--                            <div class="card-desc" id="AddMemberToggle_Div" style="display: none">-->
-<!--                                <form action="/Member/AddMemberManual" method="post">-->
-<!--                                <table id="example" class="table table-striped advance-table mb-0 vertically-middle ">-->
-<!--                                    <tbody class="dragable-container " id="member_table">-->
-<!--                                    <tr>-->
-<!--                                        <td style="height:48px;">-->
-<!--                                             <span class="img-thumb ">-->
-<!--                                                    <span class="ml-2 ">姓 名：</span>-->
-<!--                                            </span>-->
-<!--                                            <input class="" type="text" placeholder="name" name="name-input" id="name-input" >-->
-<!--                                        </td>-->
-<!--                                        <td style="height:48px;">-->
-<!--                                            <span class="img-thumb ">-->
-<!--                                                <span class="ml-2 ">邮 箱：</span>-->
-<!--                                            </span>-->
-<!--                                            <input class="" type="email" placeholder="example@domain.com" name="email-input" id="email-input">-->
-<!--                                            <input hidden class="" type="number" name="maxTimes-input" th:value="${35}" id="maxTimes-input">-->
-<!--                                            <input hidden class="" type="text" name="path-input" th:value="${session.USER_INFO.orgPath}" >-->
-<!--                                            <input hidden class="" type="number" name="parentId-input" th:value="${session.USER_INFO.id}">-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                    </tbody>-->
-<!--                                </table>-->
-<!--                                <input type="submit" style="float:right" class="btn btn-primary squer-btn sm-btn mt-2 mr-2"></input>-->
-<!--                                </form>-->
-<!--                            </div>-->
                         </div>
                         <div class="card-body ">
                             <div class="chart-holder ">
@@ -268,12 +240,12 @@
 <!--                                                </div>-->
                                             </td>
                                             <td>22/06/2020</td>
-<!--                                            <td th:text="${#dates.format(member.timestamp,'yyyy-MM-dd HH:mm')}">22/06/2020</td>-->
                                             <td th:text="${stage.members.size()}"></td>
                                             <td>
-                                                <a href="#">
-                                                    <label class="mb-0 badge badge-danger toltiped ">删除</label>
-                                                </a>
+                                                <!-- Button trigger modal -->
+                                                <button th:data-index="${stageStat.count}" th:onclick="showMemberList(this.getAttribute('data-index'))" type="button" class="btn squer-btn effect-btn sm-btn btn-info" data-toggle="modal" data-target="#longc">
+                                                    详细成员
+                                                </button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -337,141 +309,48 @@
         </div>
     </div>
 </div>
+<!--信息框框-->
+<div class="modal fade bd-example-modal-lg" id="longc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle2">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover dataTables-example table-sm"
+                           style="word-break:break-all; word-wrap:break-all;table-layout:fixed">
+                        <thead>
+                        <tr>
+                            <th  scope="col">#</th>
+                            <th  scope="col">姓 名</th>
+                            <th  scope="col">日 期</th>
+                            <th  scope="col">周 次</th>
+                        </tr>
+                        </thead>
+                        <tbody id="modal-boyd-tbody" >
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<!-- Script Start -->
-<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
-<script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
-<script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
-<script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
-<!--引入Echarts-->
-<script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
-
+<!--青年大学习折线图-->
 <script th:inline="javascript">
-
-    var memberModelList=[[${MEMBER_LIST}]];
-    if(memberModelList!=null){
-        var l1=0;
-        var l2=0;
-        var l3=0;
-        var l4=0;
-        var l5=0;
-        var l6=0;
-        for (i=0;i<memberModelList.length;i++){
-            var times = memberModelList[i]["times"];
-            var maxTimes = memberModelList[i]["maxTimes"];
-            var completionRate=parseInt(times*1.0/maxTimes*10);
-            switch (completionRate) {
-                case 10:
-                    l1++;
-                    break;
-                case 9:
-                case 8:
-                    l2++;
-                    break;
-                case 7:
-                case 6:
-                    l3++;
-                    break;
-                case 5:
-                case 4:
-                    l4++;
-                    break;
-                case 3:
-                case 2:
-                    l5++;
-                    break;
-                case 1:
-                case 0:
-                    l6++;
-                    break;
-            }
+    var stageList=[[${STAGE_LIST}]];
+    if(stageList!=null){
+       xData=[];
+        for (let i = 0; i < stageList; i++) {
+            
         }
-
-        var chartDom = document.getElementById('scatter');
-        var myChart = echarts.init(chartDom);
-        var option;
-        option = {
-            title: {
-                text: '成员学习情况饼图',
-                subtext: '大学习完成率',
-                left: 'center'
-            },
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left'
-            },
-            // color:['#03aa62', '#038C65', '#02735E','#025959','#012E40','#011526'],
-            series: [
-                {
-                    name: '成员学习情况饼图',
-                    type: 'pie',
-                    radius: '70%',
-                    data: [
-                        { value: l1, name: '100%    完成数： ' },
-                        { value: l2, name: '80%~99% 完成数： ' },
-                        { value: l3, name: '60%~79% 完成数： ' },
-                        { value: l4, name: '40%~59% 完成数： ' },
-                        { value: l5, name: '20%~39% 完成数： ' },
-                        { value: l6, name: ' 0%~19% 完成数： ' }
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    },
-                    label:{
-                        show:false,
-                    },
-                    labelLine:{
-                        show:false
-                    },
-
-                }
-            ]
-        };
-
-        option && myChart.setOption(option);
-    }
-</script>
-<script th:inline="javascript">
-    var memberModelList=[[${MEMBER_LIST}]];
-    if(memberModelList!=null){
-        var l1=0;
-        var l2=0;
-        var l3=0;
-        var l4=0;
-        var l5=0;
-        var maxYaxis=10;
-        var maxTimes=memberModelList[0]["maxTimes"];
-        var averTimes=[[${MEMBER_LIST_AverTimes}]]/100*100;
-        for (i=0;i<memberModelList.length;i++){
-            var times = memberModelList[i]["times"];
-            var completionRate=times*1.0/maxTimes*100;
-            if(completionRate>=80){
-                l1++;
-            }else if(completionRate>=60){
-                l2++
-            }else if(completionRate>=40){
-                l3++
-            }else if(completionRate>=20){
-                l4++
-            }else if(completionRate>=0){
-                l5++
-            }
-        }
-        var tempList=[l1,l2,l3,l4,l5];
-        for(ii=0;ii<tempList.length;ii++){
-            if(tempList[ii]>maxYaxis){
-                maxYaxis=tempList[ii]
-            }
-        }
-        maxYaxis+=parseInt(maxYaxis/10);
 
         var chartDom = document.getElementById('LineChartAndHistogram');
         var myChart = echarts.init(chartDom);
@@ -574,11 +453,300 @@
 
 </script>
 
+<!-- Script Start -->
+<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+<script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
+<script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+<script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+<!--引入Echarts-->
+<script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
+
+<script th:inline="javascript">
+
+    var stageList=[[${MEMBER_LIST}]];
+    if(stageList!=null){
+        var l1=0;
+        var l2=0;
+        var l3=0;
+        var l4=0;
+        var l5=0;
+        var l6=0;
+        for (i=0;i<stageList.length;i++){
+            var times = stageList[i]["times"];
+            var maxTimes = stageList[i]["maxTimes"];
+            var completionRate=parseInt(times*1.0/maxTimes*10);
+            switch (completionRate) {
+                case 10:
+                    l1++;
+                    break;
+                case 9:
+                case 8:
+                    l2++;
+                    break;
+                case 7:
+                case 6:
+                    l3++;
+                    break;
+                case 5:
+                case 4:
+                    l4++;
+                    break;
+                case 3:
+                case 2:
+                    l5++;
+                    break;
+                case 1:
+                case 0:
+                    l6++;
+                    break;
+            }
+        }
+
+        var chartDom = document.getElementById('scatter');
+        var myChart = echarts.init(chartDom);
+        var option;
+        option = {
+            title: {
+                text: '成员学习情况饼图',
+                subtext: '大学习完成率',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            // color:['#03aa62', '#038C65', '#02735E','#025959','#012E40','#011526'],
+            series: [
+                {
+                    name: '成员学习情况饼图',
+                    type: 'pie',
+                    radius: '70%',
+                    data: [
+                        { value: l1, name: '100%    完成数： ' },
+                        { value: l2, name: '80%~99% 完成数： ' },
+                        { value: l3, name: '60%~79% 完成数： ' },
+                        { value: l4, name: '40%~59% 完成数： ' },
+                        { value: l5, name: '20%~39% 完成数： ' },
+                        { value: l6, name: ' 0%~19% 完成数： ' }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label:{
+                        show:false,
+                    },
+                    labelLine:{
+                        show:false
+                    },
+
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    }
+</script>
+<script th:inline="javascript">
+    var stageList=[[${STAGE_LIST}]];
+    if(stageList!=null){
+        let xData=[];
+        let yData=[];
+        let yLineData=[];
+        for (let i = 0; i < stageList.length; i++) {
+            xData[i]=stageList[i]["name"];
+            yData[i]=stageList[i]["members"].length;
+        }
+        xData.reverse();
+        yData.reverse();
+
+        var maxY=Math.max(...yData);
+        var minY=Math.min(...yData);
+        console.log("maxY"+maxY+"|"+minY);
+        for (let i = 0; i < yData.length; i++) {
+            yLineData[i]=yData[i]*1.0/maxY*100;
+        }
+
+        var chartDom = document.getElementById('LineChartAndHistogram');
+        var myChart = echarts.init(chartDom);
+        var option;
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            title: {
+                text: '每期学习情况折柱图',
+                left: 'center'
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xData,
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '参与次数',
+                    min: minY-Math.floor(maxY*1.0/20),
+                    max: maxY+Math.floor(maxY*1.0/20),
+                    interval: 5,
+                },
+                {
+                    type: 'value',
+                    name: '完成率',
+                    min: minY-Math.floor(maxY*1.0/20)/maxY,
+                    max: 100,
+                    interval: 50,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '参与次数',
+                    type: 'bar',
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' 次';
+                        }
+                    },
+                    data: yData,
+                    markLine: {
+                        data: [
+                            { type: 'average', name: 'Avg' }
+                        ]
+                    },
+                },
+                {
+                    name: '完成率',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yLineData,
+                    markPoint:{
+                        data:[
+                            { type: 'max', name: 'Max' },
+                            { type: 'min', name: 'Min' }
+                        ]
+                    }
+                }
+            ]
+        };
+        option && myChart.setOption(option);
+    }
+
+</script>
+
 </body>
+<!--字符串格式化工具-->
+<script>
+    /**
+    函数:格式化字符串
+    参数：str:字符串模板； data:数据
+    调用方式:formatString("api/values/{id}/{name}",{id:101,name:"test"});
+             formatString("api/values/{0}/{1}",101,"test");
+    */
+    function formatString(str, data) {
+        if (!str || data == undefined) {
+            return str;
+        }
 
-
+        if (typeof data === "object") {
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    str = str.replace(new RegExp("\{" + key + "\}", "g"), data[key]);
+                }
+            }
+        } else {
+            var args = arguments,
+                reg = new RegExp("\{([0-" + (args.length - 1) + "])\}", "g");
+            return str.replace(reg, function(match, index) {
+                return args[index - (-1)];
+            });
+        }
+        return str;
+    }
+</script>
+<!--日期转周次工具-->
+<script>
+    /**
+     * 将字符串型的日期转化为周次
+     * @param date 形如2000-01-01的字符串
+     * @constructor ？
+     */
+    function DateStringToWeek(date){
+        var day = new Date(Date.parse(date));
+        var today = new Array('周日', '周一', '周二', '周三', '周四', '周五', '周六');
+        var week = today[day.getDay()];
+        return week;
+    }
+</script>
 <!--MyScript-->
 <script th:inline="javascript">
+
+    /**
+     * 根据传入的index,局部更新提示框
+     * @Param index stageList中的下表，可由此获取到对应的stage对象
+     * 触发时机是点击'详细信息'按钮
+     */
+    function showMemberList(index){
+        const current_stage=[[${STAGE_LIST}]];
+        const current_stage_memberList=current_stage[index].members;
+
+        let str="";
+
+        for(let i=0;i<current_stage_memberList.length;i++){
+            const tableIndex=i+1;
+            const memberName=current_stage_memberList[i]['memberName'];
+            const timestamp=current_stage_memberList[i]['timestamp'].substr(0,10);
+            const week=DateStringToWeek(timestamp);
+            str+=formatString(""
+                +"<tr>"
+                    +"<th scope='row'>{index}</th>"
+                    +"<td>{name}</td>"
+                    +"<td>{timestamp}</td>"
+                    +"<td>{week}</td>"
+                +"</tr>",
+                {
+                    index:tableIndex,
+                    name:memberName,
+                    timestamp:timestamp,
+                    week:week
+                }
+            );
+        }
+
+        $("#modal-boyd-tbody").html(str);
+    }
 
     /**
      * 爬取每期的Member数据并保存到数据库中

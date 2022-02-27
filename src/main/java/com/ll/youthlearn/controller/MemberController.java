@@ -139,7 +139,6 @@ public class MemberController {
 
     @RequestMapping("/addMemberEachStage")
     public ModelAndView addMemberEachStage(HttpSession session,Integer maxStage){
-
         Integer id = ((User)session.getAttribute("USER_INFO")).getId();
         String orgPath=((User)session.getAttribute("USER_INFO")).getOrgPath();
 

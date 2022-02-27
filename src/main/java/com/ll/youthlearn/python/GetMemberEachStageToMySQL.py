@@ -138,7 +138,7 @@ if __name__=="__main__":
         )
     # 去掉最后一个','!
     sql=sql[0:-1]
-    sql+=(" on duplicate key update id=id")
+    sql+=(" on duplicate key update member_id=member_id")
     print("拼接SQL耗时:", time.time()-t2)  
 
     # 执行事务

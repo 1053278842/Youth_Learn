@@ -14,14 +14,21 @@
             <result     property="timestamp"    column="timestamp"></result>
             <result     property="stage_id"     column="stage_id"></result>
             <result     property="user_id"      column="user_id"></result>
+            <result     property="memberName"   column="member_name"></result>
+<!--            <result     property="stage"        column="stage"></result>-->
         </collection>
     </resultMap>
     <select id="selectStageListByUserId" resultMap="StageMapper" parameterType="int">
-        select  s.id, name, stage,mes.id as mid, member_id, timestamp, stage_id, user_id
-        from t_stage s right join t_member_each_stage mes
-            on s.id=mes.stage_id
+        select  s.id, s.name, stage,mes.id as mid, member_id, mes.timestamp, stage_id, user_id, m.name as member_name
+        from
+                t_stage s
+            right join t_member_each_stage mes
+                on s.id=mes.stage_id
+            inner join t_member m
+                on m.id=mes.member_id
         where mes.user_id=#{userId}
-        order by mid(stage,13,20) desc
+        order by
+            mid(stage,13,20) desc,
+            timestamp         asc
     </select>
-
 </mapper>
