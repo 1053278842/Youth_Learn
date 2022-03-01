@@ -1,6 +1,6 @@
 package com.ll.youthlearn.config;
 
-import com.ll.youthlearn.service.UserAuthService;
+import com.ll.youthlearn.service.impl.UserAuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

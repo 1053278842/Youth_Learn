@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * |       |\__/,|   (`\
@@ -40,4 +41,14 @@ public class User implements Serializable {
 
     @TableField("role")
     private String role;
+
+    /**一对多的关系,存储该账户所管理下的所有路径以及路径信息**/
+    @TableField(value="paths",exist = false)
+    private List<OrgPath> paths;
+
+    /**
+     * 一个user当前只有一个OrgPath对象,默认是第一个即paths[0]
+     */
+    @TableField(value="current_path",exist = false)
+    private OrgPath current_path;
 }

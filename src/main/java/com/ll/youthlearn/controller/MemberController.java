@@ -1,8 +1,8 @@
 package com.ll.youthlearn.controller;
 
 import com.ll.youthlearn.entity.Member;
-import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
+import com.ll.youthlearn.service.IOrgPathService;
 import com.ll.youthlearn.service.impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -30,13 +29,16 @@ import java.util.List;
 @RequestMapping("/Member")
 public class MemberController {
 
+    private final IOrgPathService orgPathService;
+
     @Resource(name = "pythonSpider")
     private IPythonSpider pythonSpider;
 
     private final MemberServiceImpl memberService;
 
-    public MemberController(MemberServiceImpl memberService) {
+    public MemberController(MemberServiceImpl memberService, IOrgPathService orgPathService) {
         this.memberService = memberService;
+        this.orgPathService = orgPathService;
     }
 
     /**
@@ -56,6 +58,9 @@ public class MemberController {
 
         //获取组织人数
         Integer orgNums=memberList.size();
+
+        //将组织人数存储到相关表中：t_org_path::maxMemberNumber
+        orgPathService.updateMaxNumberByUserId(orgNums,userId);
 
         //获取平均times
         float timesAver=0;
@@ -123,30 +128,4 @@ public class MemberController {
         return "member-table";
     }
 
-    @RequestMapping("/getLastMemberData")
-    public ModelAndView getLastMemberData(HttpSession session){
-        Integer id = ((User)session.getAttribute("USER_INFO")).getId();
-        String orgPath=((User)session.getAttribute("USER_INFO")).getOrgPath();
-
-        //获取stage页data
-
-
-        ModelAndView mv=new ModelAndView();
-
-        mv.setViewName("member-last");
-        return mv;
-    }
-
-    @RequestMapping("/addMemberEachStage")
-    public ModelAndView addMemberEachStage(HttpSession session,Integer maxStage){
-        Integer id = ((User)session.getAttribute("USER_INFO")).getId();
-        String orgPath=((User)session.getAttribute("USER_INFO")).getOrgPath();
-
-        //TODO 统计一下增加的条数！
-        pythonSpider.saveMemberEachStage(id,orgPath,maxStage);
-
-        ModelAndView mv=new ModelAndView();
-        mv.setViewName("member-last");
-        return mv;
-    }
 }
