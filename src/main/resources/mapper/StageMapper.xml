@@ -28,7 +28,7 @@
                 on m.id=mes.member_id
         where mes.user_id=#{userId}
         order by
-            mid(stage,13,20) desc,
+            id asc,
             timestamp         asc
     </select>
 </mapper>

@@ -32,14 +32,15 @@ public class UserController {
     public ModelAndView register(User user) throws Exception {
         ModelAndView mv=new ModelAndView();
         user.setRole(UserRoleEnum.user.name());
+
         try {
             userService.insertUser(user);
             mv.addObject("msg",user.getEmail()+"账号注册成功！");
-            mv.setViewName("index");
+            mv.setViewName("login");
             return mv;
         } catch (Exception e) {
             e.printStackTrace();
-            mv.setViewName("index");
+            mv.setViewName("login");
             mv.addObject("msg",user.getEmail()+"账号已被注册！");
             log.info(user.getEmail()+"账号已被注册！");
             return mv;

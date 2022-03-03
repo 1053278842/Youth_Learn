@@ -289,13 +289,14 @@
                                                     <span class="ml-2 " th:text="${stage.name}">无名氏1</span>
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td th:attr="title=${stage.members.size()}+'/'+${ORG_PATH_MAX_MEMBER_NUMBER}+'|'+${#numbers.formatInteger(1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100,3)}+'%'">
                                                 <div class="progress">
                                                     <div class="progress-bar bg-primary" role="progressbar" th:style="'width:'+${1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100}+'%;'"
-                                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" th:attr="title=${stage.members.size()}+'/'+${ORG_PATH_MAX_MEMBER_NUMBER}+'|'+${#numbers.formatInteger(1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100,2)}+'%'"></div>
+                                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ></div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td th:text="${stage.stageDate}">
+                                                2000-01-01
                                             </td>
                                             <td th:text="${stage.members.size()}"></td>
                                             <td>
@@ -340,10 +341,10 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                     <div class="card chart-card ">
                         <div class="card-header">
-                            <h4>周次-堆叠面积图</h4>
+                            <h4>次数/参与率-折柱图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="scatter" style="width: 600px;height: 400px"></div>
+                            <div id="LineChartAndHistogram" style="width: 600px;height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -364,10 +365,21 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                     <div class="card chart-card ">
                         <div class="card-header">
-                            <h4>次数/参与率-折柱图</h4>
+                            <h4>周次-堆叠面积图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="LineChartAndHistogram" style="width: 600px;height: 400px"></div>
+                            <div id="scatter" style="width: 600px;height: 400px"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card chart-card ">
+                        <div class="card-header">
+                            <h4>周次占比-堆叠条形图</h4>
+                        </div>
+                        <div class="card-body ">
+                            <div id="WeekRateStackAreaChart" style="width: 600px;height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -423,7 +435,7 @@
 <script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
 
 
-<!--每期周次占比学习情况-->
+<!--每期周次堆叠图学习情况-->
 <script th:inline="javascript">
 
     var stageList=[[${STAGE_LIST}]];
@@ -746,6 +758,240 @@
         option && myChart.setOption(option);
     }
 </script>
+<!--周次占比堆叠图-->
+<script th:inline="javascript">
+
+    var stageList=[[${STAGE_LIST}]];
+    if(stageList!=null){
+        const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
+        let xStageName=[];
+
+        //全期里周次的学习总数
+        let yRate_Mon=[];
+        let yRate_Tue=[];
+        let yRate_Wed=[];
+        let yRate_Thu=[];
+        let yRate_Fri=[];
+        let yRate_Sat=[];
+        let yRate_Sun=[];
+
+        for (let i = 0; i < stageList.length; i++) {
+            xStageName[i]=stageList[i]["name"];
+            var oneStageMaxNumber=stageList[i].members.length;
+
+            yRate_Mon[i]=0;
+            yRate_Tue[i]=0;
+            yRate_Wed[i]=0;
+            yRate_Thu[i]=0;
+            yRate_Fri[i]=0;
+            yRate_Sat[i]=0;
+            yRate_Sun[i]=0;
+
+
+            for (let j = 0; j < stageList[i].members.length; j++) {
+                let current_member=stageList[i].members[j];
+                let dateTime=current_member['timestamp'].substr(0,10);
+                let week=DateStringToWeek(dateTime);
+                switch (week) {
+                    case "周一":
+                        yRate_Mon[i]++;
+                        break;
+                    case "周二":
+                        yRate_Tue[i]++;
+                        break;
+                    case "周三":
+                        yRate_Wed[i]++;
+                        break;
+                    case "周四":
+                        yRate_Thu[i]++;
+                        break;
+                    case "周五":
+                        yRate_Fri[i]++;
+                        break;
+                    case "周六":
+                        yRate_Sat[i]++;
+                        break;
+                    case "周日":
+                        yRate_Sun[i]++;
+                        break;
+                }
+            }
+            yRate_Mon[i]=(yRate_Mon[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Tue[i]=(yRate_Tue[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Wed[i]=(yRate_Wed[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Thu[i]=(yRate_Thu[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Fri[i]=(yRate_Fri[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Sat[i]=(yRate_Sat[i]/oneStageMaxNumber).toFixed(4)*100;
+            yRate_Sun[i]=(yRate_Sun[i]/oneStageMaxNumber).toFixed(4)*100;
+        }
+        xStageName.reverse();
+        yRate_Mon.reverse();
+        yRate_Tue.reverse();
+        yRate_Wed.reverse();
+        yRate_Thu.reverse();
+        yRate_Fri.reverse();
+        yRate_Sat.reverse();
+        yRate_Sun.reverse();
+
+        var chartDom = document.getElementById('WeekRateStackAreaChart');
+        var myChart = echarts.init(chartDom);
+        var option;
+        option = {
+
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+
+            },
+            toolbox: {
+                feature: {
+                        saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            dataZoom: [
+                {
+                    type: 'inside'
+                },
+                {
+                    type: 'slider'
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    // boundaryGap: false,
+                    data: xStageName
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '占比',
+                    min: 0,
+                    max: 100,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'Mon',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Mon,
+                },
+                {
+                    name: 'Tue',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Tue,
+                },
+                {
+                    name: 'Wed',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Wed,
+                },
+                {
+                    name: 'Thu',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Thu,
+                },
+                {
+                    name: 'Fri',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Fri,
+                },
+                {
+                    name: 'Sat',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Sat,
+                },
+                {
+                    name: 'Sun',
+                    type: 'bar',
+                    stack: 'total',
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    tooltip: {
+                        valueFormatter: function (value) {
+                            return value + ' %';
+                        }
+                    },
+                    data: yRate_Sun,
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    }
+</script>
 <!--周次占比玫瑰图-->
 <script th:inline="javascript">
 
@@ -791,9 +1037,9 @@
             }
         }
 
+        //Start计算showCard的最大占比周次
         var maxWeekTimes=Math.max(yTimes_Mon,yTimes_Tue,yTimes_Wed,yTimes_Thu,yTimes_Fri,yTimes_Sat,yTimes_Sun);
         var maxWeekStr="";
-
         switch (maxWeekTimes) {
             case yTimes_Mon:
                 maxWeekStr = "周一";
@@ -817,7 +1063,8 @@
                 maxWeekStr = "周日";
                 break;
         }
-        $("#concentrateWeeksShowCard").text(maxWeekTimes);
+        $("#concentrateWeeksShowCard").text(maxWeekStr);
+        //END
 
         var chartDom = document.getElementById('roseChart');
         var myChart = echarts.init(chartDom);
@@ -837,8 +1084,8 @@
             },
             visualMap: {
                 show: false,
-                min: 80,
-                max: 600,
+                min: 0,
+                max: maxWeekTimes,
                 inRange: {
                     colorLightness: [0, 1]
                 }
@@ -887,9 +1134,10 @@
         };
 
         option && myChart.setOption(option);
+
     }
 </script>
-<!--青年大学习折线图-->
+<!--青年大学习折柱图-->
 <script th:inline="javascript">
     var stageList=[[${STAGE_LIST}]];
     if(stageList!=null){
@@ -948,16 +1196,16 @@
                 {
                     type: 'value',
                     name: '参与次数',
-                    min: minY-Math.floor(maxY*1.0/20),
+                    min: Math.max(minY-Math.floor(maxY*1.0/20),0),
                     max: maxMemberNumber,
-                    interval: Math.floor((maxMemberNumber-(minY-Math.floor(maxY*1.0/20)))/5),
+                    interval: Math.floor((maxMemberNumber-Math.max((minY-Math.floor(maxY*1.0/20)),0))/5),
                 },
                 {
                     type: 'value',
                     name: '完成率',
-                    min: (minY-Math.floor(maxY*1.0/20))/maxMemberNumber*100,
+                    min: (Math.max(minY-Math.floor(maxY*1.0/20),0))/maxMemberNumber*100,
                     max: 100,
-                    interval: 50,
+                    interval: 100,
                     axisLabel: {
                         formatter: '{value} %'
                     }
@@ -1024,7 +1272,7 @@
      */
     function showMemberList(index){
         const current_stage=[[${STAGE_LIST}]];
-        const current_stage_memberList=current_stage[index].members;
+        const current_stage_memberList=current_stage[index-1].members;
 
         let str="";
 

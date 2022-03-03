@@ -34,11 +34,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/memberTable").authenticated()
-                .anyRequest().permitAll()
+//                .antMatchers("/memberTable").authenticated()
+                .antMatchers("/register","/login",
+                        "/Org/getTopOrgList","/Org/getOrgsAllStage","/logout","/Org/checkOrgAvailable").permitAll()
+                .antMatchers("/static/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login");
+        http.logout().logoutSuccessUrl("/memberTable");
     }
 
     @Bean
@@ -52,4 +56,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .userDetailsService(service)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
+
 }

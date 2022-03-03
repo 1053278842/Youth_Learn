@@ -35,4 +35,7 @@ public class Stage implements Serializable {
 
     @TableField(value = "members",exist = false)
     List<MemberEachStage> members;
+
+    @TableField(value = "stageDate",exist = false)
+    String stageDate;
 }

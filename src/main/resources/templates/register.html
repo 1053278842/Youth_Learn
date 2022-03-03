@@ -18,6 +18,9 @@
     <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/fonts.css}" href="../static/css/fonts.css">
     <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/auth.css}" href="../static/css/auth.css">
+    <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/font-awesome.min.css}" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css"  th:href="@{~/static/css/style.css}" href="../static/css/style.css">
 
 </head>
 
@@ -33,39 +36,94 @@
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="ad-auth-content">
-                        <form>
+                        <form action="/User/Register" method="POST" onsubmit="return PasswordRepeatCheck()">
                             <a href="index.html" class="ad-auth-logo">
                                 <img th:src="@{~/static/picture/logo2.png}" src="../static/picture/logo2.png" alt="">
                             </a>
                             <h2><span class="primary">Hello,</span>Welcome!</h2>
                             <p>Please Enter Your Details Below to Continue</p>
                             <div class="ad-auth-form">
-								<div class="ad-auth-feilds mb-30">
-                                    <input type="text" placeholder="Enter Name" class="ad-input">
+                                <div class="ad-auth-feilds mb-20">
+                                    <input type="text" placeholder="Enter Name" id="name" name="username" class="ad-input">
                                     <div class="ad-auth-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px">
-										<path fill-rule="evenodd" fill="rgb(154, 190, 237)" d="M13.696,9.759 C12.876,8.942 11.901,8.337 10.837,7.971 C11.989,7.180 12.742,5.850 12.725,4.349 C12.698,1.961 10.713,0.031 8.318,0.062 C5.946,0.093 4.026,2.026 4.026,4.398 C4.026,5.879 4.774,7.189 5.914,7.971 C4.850,8.337 3.875,8.942 3.055,9.759 C1.786,11.025 1.026,12.663 0.878,14.426 C0.849,14.768 1.117,15.063 1.462,15.063 L1.466,15.063 C1.772,15.063 2.024,14.827 2.050,14.523 C2.325,11.285 5.057,8.734 8.375,8.734 C11.694,8.734 14.425,11.285 14.701,14.523 C14.727,14.827 14.979,15.063 15.285,15.063 L15.289,15.063 C15.634,15.063 15.902,14.768 15.873,14.426 C15.725,12.663 14.965,11.025 13.696,9.759 ZM8.375,7.562 C6.625,7.562 5.201,6.143 5.201,4.398 C5.201,2.653 6.625,1.234 8.375,1.234 C10.126,1.234 11.550,2.653 11.550,4.398 C11.550,6.143 10.126,7.562 8.375,7.562 Z"></path>
-										</svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px">
+                                            <path fill-rule="evenodd" fill="rgb(154, 190, 237)"
+                                                d="M13.696,9.759 C12.876,8.942 11.901,8.337 10.837,7.971 C11.989,7.180 12.742,5.850 12.725,4.349 C12.698,1.961 10.713,0.031 8.318,0.062 C5.946,0.093 4.026,2.026 4.026,4.398 C4.026,5.879 4.774,7.189 5.914,7.971 C4.850,8.337 3.875,8.942 3.055,9.759 C1.786,11.025 1.026,12.663 0.878,14.426 C0.849,14.768 1.117,15.063 1.462,15.063 L1.466,15.063 C1.772,15.063 2.024,14.827 2.050,14.523 C2.325,11.285 5.057,8.734 8.375,8.734 C11.694,8.734 14.425,11.285 14.701,14.523 C14.727,14.827 14.979,15.063 15.285,15.063 L15.289,15.063 C15.634,15.063 15.902,14.768 15.873,14.426 C15.725,12.663 14.965,11.025 13.696,9.759 ZM8.375,7.562 C6.625,7.562 5.201,6.143 5.201,4.398 C5.201,2.653 6.625,1.234 8.375,1.234 C10.126,1.234 11.550,2.653 11.550,4.398 C11.550,6.143 10.126,7.562 8.375,7.562 Z">
+                                            </path>
+                                        </svg>
                                     </div>
                                 </div>
-                                <div class="ad-auth-feilds mb-30">
-                                    <input type="text" placeholder="Email Address" class="ad-input">
+                                <div class="ad-auth-feilds mb-20">
+                                    <input type="text" placeholder="Email Address" class="ad-input" id="email" name="email">
                                     <div class="ad-auth-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 483.3 483.3"><path d="M424.3,57.75H59.1c-32.6,0-59.1,26.5-59.1,59.1v249.6c0,32.6,26.5,59.1,59.1,59.1h365.1c32.6,0,59.1-26.5,59.1-59.1    v-249.5C483.4,84.35,456.9,57.75,424.3,57.75z M456.4,366.45c0,17.7-14.4,32.1-32.1,32.1H59.1c-17.7,0-32.1-14.4-32.1-32.1v-249.5    c0-17.7,14.4-32.1,32.1-32.1h365.1c17.7,0,32.1,14.4,32.1,32.1v249.5H456.4z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#9abeed"></path><path d="M304.8,238.55l118.2-106c5.5-5,6-13.5,1-19.1c-5-5.5-13.5-6-19.1-1l-163,146.3l-31.8-28.4c-0.1-0.1-0.2-0.2-0.2-0.3    c-0.7-0.7-1.4-1.3-2.2-1.9L78.3,112.35c-5.6-5-14.1-4.5-19.1,1.1c-5,5.6-4.5,14.1,1.1,19.1l119.6,106.9L60.8,350.95    c-5.4,5.1-5.7,13.6-0.6,19.1c2.7,2.8,6.3,4.3,9.9,4.3c3.3,0,6.6-1.2,9.2-3.6l120.9-113.1l32.8,29.3c2.6,2.3,5.8,3.4,9,3.4    c3.2,0,6.5-1.2,9-3.5l33.7-30.2l120.2,114.2c2.6,2.5,6,3.7,9.3,3.7c3.6,0,7.1-1.4,9.8-4.2c5.1-5.4,4.9-14-0.5-19.1L304.8,238.55z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#9abeed"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 483.3 483.3">
+                                            <path
+                                                d="M424.3,57.75H59.1c-32.6,0-59.1,26.5-59.1,59.1v249.6c0,32.6,26.5,59.1,59.1,59.1h365.1c32.6,0,59.1-26.5,59.1-59.1    v-249.5C483.4,84.35,456.9,57.75,424.3,57.75z M456.4,366.45c0,17.7-14.4,32.1-32.1,32.1H59.1c-17.7,0-32.1-14.4-32.1-32.1v-249.5    c0-17.7,14.4-32.1,32.1-32.1h365.1c17.7,0,32.1,14.4,32.1,32.1v249.5H456.4z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                            <path
+                                                d="M304.8,238.55l118.2-106c5.5-5,6-13.5,1-19.1c-5-5.5-13.5-6-19.1-1l-163,146.3l-31.8-28.4c-0.1-0.1-0.2-0.2-0.2-0.3    c-0.7-0.7-1.4-1.3-2.2-1.9L78.3,112.35c-5.6-5-14.1-4.5-19.1,1.1c-5,5.6-4.5,14.1,1.1,19.1l119.6,106.9L60.8,350.95    c-5.4,5.1-5.7,13.6-0.6,19.1c2.7,2.8,6.3,4.3,9.9,4.3c3.3,0,6.6-1.2,9.2-3.6l120.9-113.1l32.8,29.3c2.6,2.3,5.8,3.4,9,3.4    c3.2,0,6.5-1.2,9-3.5l33.7-30.2l120.2,114.2c2.6,2.5,6,3.7,9.3,3.7c3.6,0,7.1-1.4,9.8-4.2c5.1-5.4,4.9-14-0.5-19.1L304.8,238.55z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ad-auth-feilds mb-20">
+                                    <input type="password" placeholder="Password" class="ad-input" id="password" name="password">
+                                    <div class="ad-auth-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 482.8 482.8">
+                                            <path
+                                                d="M395.95,210.4h-7.1v-62.9c0-81.3-66.1-147.5-147.5-147.5c-81.3,0-147.5,66.1-147.5,147.5c0,7.5,6,13.5,13.5,13.5    s13.5-6,13.5-13.5c0-66.4,54-120.5,120.5-120.5c66.4,0,120.5,54,120.5,120.5v62.9h-275c-14.4,0-26.1,11.7-26.1,26.1v168.1    c0,43.1,35.1,78.2,78.2,78.2h204.9c43.1,0,78.2-35.1,78.2-78.2V236.5C422.05,222.1,410.35,210.4,395.95,210.4z M395.05,404.6    c0,28.2-22.9,51.2-51.2,51.2h-204.8c-28.2,0-51.2-22.9-51.2-51.2V237.4h307.2L395.05,404.6L395.05,404.6z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                            <path
+                                                d="M241.45,399.1c27.9,0,50.5-22.7,50.5-50.5c0-27.9-22.7-50.5-50.5-50.5c-27.9,0-50.5,22.7-50.5,50.5    S213.55,399.1,241.45,399.1z M241.45,325c13,0,23.5,10.6,23.5,23.5s-10.5,23.6-23.5,23.6s-23.5-10.6-23.5-23.5    S228.45,325,241.45,325z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                        </svg>
                                     </div>
                                 </div>
                                 <div class="ad-auth-feilds">
-                                    <input type="password" placeholder="Password" class="ad-input">
+                                    <input type="password" placeholder="Password Again" class="ad-input" id="password-repeat" name="password-repeat">
                                     <div class="ad-auth-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 482.8 482.8"><path d="M395.95,210.4h-7.1v-62.9c0-81.3-66.1-147.5-147.5-147.5c-81.3,0-147.5,66.1-147.5,147.5c0,7.5,6,13.5,13.5,13.5    s13.5-6,13.5-13.5c0-66.4,54-120.5,120.5-120.5c66.4,0,120.5,54,120.5,120.5v62.9h-275c-14.4,0-26.1,11.7-26.1,26.1v168.1    c0,43.1,35.1,78.2,78.2,78.2h204.9c43.1,0,78.2-35.1,78.2-78.2V236.5C422.05,222.1,410.35,210.4,395.95,210.4z M395.05,404.6    c0,28.2-22.9,51.2-51.2,51.2h-204.8c-28.2,0-51.2-22.9-51.2-51.2V237.4h307.2L395.05,404.6L395.05,404.6z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#9abeed"></path><path d="M241.45,399.1c27.9,0,50.5-22.7,50.5-50.5c0-27.9-22.7-50.5-50.5-50.5c-27.9,0-50.5,22.7-50.5,50.5    S213.55,399.1,241.45,399.1z M241.45,325c13,0,23.5,10.6,23.5,23.5s-10.5,23.6-23.5,23.6s-23.5-10.6-23.5-23.5    S228.45,325,241.45,325z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#9abeed"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 482.8 482.8">
+                                            <path
+                                                d="M395.95,210.4h-7.1v-62.9c0-81.3-66.1-147.5-147.5-147.5c-81.3,0-147.5,66.1-147.5,147.5c0,7.5,6,13.5,13.5,13.5    s13.5-6,13.5-13.5c0-66.4,54-120.5,120.5-120.5c66.4,0,120.5,54,120.5,120.5v62.9h-275c-14.4,0-26.1,11.7-26.1,26.1v168.1    c0,43.1,35.1,78.2,78.2,78.2h204.9c43.1,0,78.2-35.1,78.2-78.2V236.5C422.05,222.1,410.35,210.4,395.95,210.4z M395.05,404.6    c0,28.2-22.9,51.2-51.2,51.2h-204.8c-28.2,0-51.2-22.9-51.2-51.2V237.4h307.2L395.05,404.6L395.05,404.6z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                            <path
+                                                d="M241.45,399.1c27.9,0,50.5-22.7,50.5-50.5c0-27.9-22.7-50.5-50.5-50.5c-27.9,0-50.5,22.7-50.5,50.5    S213.55,399.1,241.45,399.1z M241.45,325c13,0,23.5,10.6,23.5,23.5s-10.5,23.6-23.5,23.6s-23.5-10.6-23.5-23.5    S228.45,325,241.45,325z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#9abeed"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ad-auth-feilds mb-20">
+
+                                    <h5 class="from-title mb-1 mt-4">组织信息</h5>
+                                    <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                            style="cursor: pointer;">
+                                            <div class="form-group" id="org_info_container">
+                                                <input type="hidden" name="orgPath" value="">
+                                                <label for="OrgLevel_I" class="col-form-label">一级组织</label>
+                                                <select class="select2 form-control mb-2" id="OrgLevel_I">
+                                                    <option value="" selected="selected">......</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="ad-auth-btn">
-                                <a href="javascript:void(0);" class="ad-btn ad-login-member">Sign up</a>
-                            </div>
-                            <p class="ad-register-text">Already have an account ? <a href="login.html">Login</a></p>
+
+                            <button id="SubmitButton" type="button" class="squer-btn btn btn-light mt-2 mr-2 mb-2" style="
+                                padding: 15px;
+                                padding: 15px 50px;
+                            " onclick="$('form').submit();" disabled="">
+                                <i class="fa fa-spin fa-spinner mr-2"></i>Sign up
+                            </button>
+                            <p class="ad-register-text">Already have an account ? <a href="/login=">Login</a></p>
                         </form>
                     </div>
                 </div>
@@ -76,12 +134,266 @@
         </div>
     </div>
 </body>
-<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
-<script th:inline="javascript">
+<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript"></script>
+
+<script inline="javascript" type="text/javascript">
+    // $(function(){
+    //     if([[${msg}]]!=null){
+    //         alert([[${msg}]]);
+    //     }
+    // })
+    // $('#OrgLevel_I').on('click', function () {
+    //     $(this).append("<option value='0' id ='loading' " + ">loading...</option>")
+    //     $.ajax({
+    //         url: 'http://localhost:5005/province',
+    //         type: "get",
+    //         success: (data) => {
+    //             let address = data.address
+    //             address.forEach(i => {
+    //                 $(this).append("<option value='i'>" + i.name + "</option>")
+    //             });
+    //             $('#loading').remove()
+    //         }
+    //     })
+    //
+    //     $(this).unbind('click');
+    //     console.log("unbind");
+    // })
+
+</script>
+<script type="text/javascript">
     $(function(){
-        if([[${msg}]]!=null){
-            alert([[${msg}]]);
-        }
+        /*获取TopOrgJson,修改一级Select*/
+        getTopOrgListJson();
+        /*按钮默认不可点击*/
+        buttonEnableToggle(false);
+        loaddingButtonToggle(false);
+        warningSelect(false);
     })
+
+    function warningSelect(statu){
+        $("select").each(function () {
+            if(statu){
+                //可用
+                $(this).addClass("new border border-danger");
+                $(this).attr("disabled",true);
+            }else{
+                //不可用
+                $(this).removeClass("new");
+                $(this).removeClass("border");
+                $(this).removeClass("border-danger");
+                $(this).attr("disabled",false);
+            }
+        })
+    }
+
+    function buttonEnableToggle(statu){
+        var button=$("#SubmitButton")
+        if(statu){
+            //可用
+            button.removeClass("btn-light");
+            button.addClass("btn-primary");
+            button.attr("enabled",true);
+        }else{
+            //不可用
+            button.removeClass("btn-primary");
+            button.addClass("btn-light");
+            button.attr("enabled",false);
+        }
+    }
+
+    function loaddingButtonToggle(statu){
+        var i=$("#SubmitButton i")
+        if(statu){
+            //加载中
+            i.addClass("fa-spinner");
+        }else{
+            //非加载
+            i.removeClass("fa-spinner");
+        }
+    }
+
+    function canSaveOrg(currentSelectControl) {
+        const changedValue = currentSelectControl.val();
+        //option text=...时,他的changedValue值为“”
+        if(changedValue!=""&&changedValue>=0) {
+            var allOrgJson = getAllSelectedValue();
+
+            /**
+             * 判断当前select元素是否符合规范，是否可以创建！
+             */
+            $.ajax({
+                type: "post",
+                url: "/Org/checkOrgAvailable",
+                data: allOrgJson,
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (data) {
+                    if(data){
+                        console.log(true);
+                    }
+                    if(!data)
+                        console.log(false);
+                },
+                error: function (data) {
+                    console.log("canSaveOrg方法错误！");
+                }
+            })
+        }else{
+            buttonEnableToggle(false);
+            loaddingButtonToggle(false);
+        }
+    }
+    
+    /*获取TopOrgJson,修改一级Select*/
+    function getTopOrgListJson() {
+        warningSelect(true);
+        loaddingButtonToggle(true);
+        $.ajax({
+            type:"get",
+            url:"/Org/getTopOrgList",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            success:function (data){
+                if(data.length != 0){
+                    for(let i=0; i<data.length; i++){
+                        let option = "<option value=\""+data[i].id+"\"";
+                        option += ">"+data[i].name+"</option>";  //动态添加数据
+                        $("select[id=OrgLevel_I]").append(option);
+                    }
+                }
+                loaddingButtonToggle(false);
+                warningSelect(false);
+            },
+            error:function (data){
+                console.log("错误！getTopOrgListJson()",data);
+                warningSelect(false);
+            }
+        })
+    }
+
+    /*Select值变动打开下一个select*/
+    $("select").change(function(){
+        $(this).change(addSelectControl($(this)));
+        $(this).change(canSaveOrg($(this)));
+    })
+
+    /**
+     * 获得所有select标签的value和selected的text,按照对象并存储到一个数组中。返回一个json数据！
+     * @return 数组内嵌对象 [{"id":"1","name":"直属高校"},{"id":"2","name":"省委数据"}]
+     */
+    function getAllSelectedValue() {
+        let orgs=[];
+        $("select").each(function () {
+            const id= $(this).val();
+            const name= $(this).children("option:selected").text();
+            let org={};
+            org.id=id;
+            org.name=name;
+            org.path=(orgs.length>0?orgs[orgs.length-1].path:"")+"|"+name;
+            orgs.push(org)
+        })
+        return JSON.stringify(orgs);
+    }
+
+    /**
+     * select多级联动添加以及爬虫爬取的模板方法
+     * @param currentSelectControl this,调用该方法的select对象
+     */
+    function addSelectControl(currentSelectControl) {
+        loaddingButtonToggle(true);
+        warningSelect(true);
+        //删除当前selector后的所有select元素
+        $("#"+currentSelectControl.attr("id")+"~ select").remove();
+
+
+        const changedValue = currentSelectControl.val();
+        //option text=...时,他的changedValue值为“”
+        if(changedValue!=""){
+            /*1.调用爬虫,根据所有selectLevel的id和name爬取*/
+            //将所有的select值收集过来
+            const urlPathJson=getAllSelectedValue();
+            /**
+             * 给hiden的org_path input控件赋值
+             * 值为最后一个json的path值
+             */
+            console.log(urlPathJson);
+            const tempObj=JSON.parse( urlPathJson )
+            let path = tempObj[tempObj.length-1]['path']
+            //截掉最前面的“|”
+            path=path.substring(1);
+            $('input[name="orgPath"]').val(path);
+
+            /**
+             * 将所有的select选中信息发送给后台
+             * @success 得到对应org联动列表下的所有期‘组织’数据
+             */
+            $.ajax({
+                type:"post",
+                url:"/Org/getOrgsAllStage",
+                data:urlPathJson,
+                contentType:"application/json;charset=UTF-8",
+                dataType:"json",
+                success:function (data){
+                    /*1 根据返回的json判断是否是member,为组织就继续,否则中断创建*/
+                    /*2.创建一个新的select*/
+                    /*3.填充值*/
+
+                    //获取根据上一个select一个递增唯一的id值
+                    const newId=currentSelectControl.attr("id")+'I';
+                    // console.log(data);
+                    if(data.length==0){
+                        buttonEnableToggle(true);
+                        loaddingButtonToggle(false);
+                        warningSelect(false);
+                        return;
+                    }
+                    let selectStr="";
+                    selectStr+="<select class=\"select2 mb-2 form-control\" id=\"OrgLevel"+newId+"\">";
+                    selectStr+="<option value=\"\" selected=\"selected\">......</option>";
+                    for(let i=0;i<data.length;i++){
+                        selectStr+="<option value=\"999\" >"+data[i]['name']+"</option>";
+                    }
+                    selectStr+="</select>";
+                    $("#org_info_container").append(selectStr);
+
+                    // 给新添加的select绑定changed事件方法
+                    $("#org_info_container select:last-child").change(function(){
+                        $(this).change(addSelectControl($(this)));
+                        $(this).change(canSaveOrg($(this)));
+                    })
+                    loaddingButtonToggle(false);
+                    warningSelect(false);
+                },
+                error:function (data){
+                    console.log("js方法错误！");
+                    warningSelect(false);
+                }
+            })
+
+        }else{
+            loaddingButtonToggle(false);
+            buttonEnableToggle(false);
+            warningSelect(false);
+        }
+    }
+
+    /**
+     * 密码重复校验
+     * 同时对密码不为空和重复进行校验
+     * @result 返回布尔值，并且有alert提示
+     */
+    function PasswordRepeatCheck(){
+        loaddingButtonToggle(true);
+        const p1=$('#password').val();
+        const p2=$('#password-repeat').val();
+        if(p1!=""&&p1==p2){
+            return true;
+        }else{
+            alert('密码为空或者两次输入不一致！');
+            return false;
+        }
+        loaddingButtonToggle(false);
+    }
 </script>
 </html>

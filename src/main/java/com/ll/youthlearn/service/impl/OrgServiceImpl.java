@@ -1,6 +1,7 @@
 package com.ll.youthlearn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ll.youthlearn.entity.Org;
 import com.ll.youthlearn.entity.TopOrg;
 import com.ll.youthlearn.mapper.IOrgMapper;
 import com.ll.youthlearn.mapper.ITopOrgMapper;
@@ -36,5 +37,17 @@ public class OrgServiceImpl implements IOrgService {
     @Override
     public List<TopOrg> selectTopOrgList() throws Exception {
         return topOrgMapper.selectList(new QueryWrapper<TopOrg>().orderByDesc("id"));
+    }
+
+    @Override
+    public Org selectOneByName(String parentStr) {
+        return orgMapper.selectOne(new QueryWrapper<Org>().eq("path",parentStr));
+    }
+
+    @Override
+    public void insertManyOrg(List<Org> results_orgs) {
+        for (Org o : results_orgs) {
+            orgMapper.insert(o);
+        }
     }
 }

@@ -107,4 +107,42 @@ public class PythonSpiderImpl implements IPythonSpider {
         }
         return results_orgs;
     }
+
+    @Override
+    public boolean checkOrgPathAvailable(String orgPath) {
+
+        //拼接param:xxx|xx->["name1","level2Name"]
+        String orgPathStrParam=PythonUtils.RegulatePath(orgPath);
+
+        String pyLocation=location+"CheckOrgPathAvailable.py";
+        String[] args=new String[]{"python", pyLocation,orgPathStrParam};
+
+        final String avail ="True";
+        final String notAvail ="False";
+        //默认不通过
+        String resultStr=notAvail;
+
+        Process proc;
+        try {
+            proc = Runtime.getRuntime().exec(args);
+            //用输入输出流来截取结果
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"gbk"));
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                resultStr=line;
+            }
+            in.close();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(resultStr.equals(avail)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
