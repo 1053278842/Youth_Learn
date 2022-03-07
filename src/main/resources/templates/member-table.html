@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css" >
     <link rel="stylesheet" id="theme-change" type="text/css" href="">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         #SortButton:after{
             content:attr(data);
@@ -205,13 +205,21 @@
                     <div class="card table-card ">
                         <div class="card-header pb-0 ">
                             <h4>组织成员-列表</h4>
-                            <p class="card-desc "> 检索成员 <input id="MaxStage" value="35" type="number" placeholder="During 1~50" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
-                                <a href="#" onclick="addMembersToMySQL()"><code>检索</code></a>
-                                <button style="float:right" class="btn btn-success squer-btn sm-btn mt-2 mr-2" id="AddMemberToggle" onclick="$('#AddMemberToggle_Div').slideToggle();">Add Member</button>
+                            <p class="card-desc ">
+                                检索成员
+                                <input id="MaxStage" value="35" type="number" min="0" max="80" placeholder="During 1~50" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
+                                <a href="#" onclick="addMembersToMySQL()">
+                                    <code>
+                                    <button type="button" class="btn btn-primary squer-btn sm-btn mb-2">检索</button>
+                                    </code>
+                                </a>
+                                <button style="float:right" class="btn btn-success  sm-btn mt-2 mr-2" id="AddMemberToggle" onclick="$('#AddMemberToggle_Div').slideToggle();">
+                                    Add Member
+                                </button>
                             </p>
                             <!--隐藏的addMember栏-->
                             <div class="card-desc" id="AddMemberToggle_Div" style="display: none">
-                                <form action="/Member/addMemberManual" method="post">
+                                <form action="/Member/addMemberManual" method="post" id="addMemberForm">
                                 <table id="example" class="table table-striped advance-table mb-0 vertically-middle ">
                                     <tbody class="dragable-container " id="member_table">
                                     <tr>
@@ -225,7 +233,7 @@
                                             <span class="img-thumb ">
                                                 <span class="ml-2 ">邮 箱：</span>
                                             </span>
-                                            <input class="" type="email" placeholder="example@domain.com" name="email-input" id="email-input">
+                                            <input class="" type="email" placeholder="example@domain.com" name="email-input" id="add-email-input">
                                             <input hidden class="" type="number" name="maxTimes-input" th:value="${35}" id="maxTimes-input">
                                             <input hidden class="" type="text" name="path-input" th:value="${session.USER_INFO.orgPath}" >
                                             <input hidden class="" type="number" name="parentId-input" th:value="${session.USER_INFO.id}">
@@ -233,8 +241,9 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <input type="submit" style="float:right" class="btn btn-primary squer-btn sm-btn mt-2 mr-2"></input>
+                                    <button type="button" onclick="addClassMember()" id="MemberAdd" style="float:right" class="btn btn-primary squer-btn sm-btn mt-2 mr-2"> 添加</button>
                                 </form>
+                                <div hidden class="modal-dialog modal-lg" id="emailTip">请输入正确的邮箱！</div>
                             </div>
                         </div>
                         <div class="card-body ">
@@ -243,6 +252,12 @@
                                     <table id="example" class="table table-striped advance-table mb-0 vertically-middle ">
                                         <thead>
                                         <tr>
+                                            <th class="isAll" onclick="selecteAll()">
+                                                <div class="checkbox" style="margin: 0">
+                                                    <input  id='checkbox' type="checkbox">
+                                                    <label  for='checkbox' >全选</label>
+                                                </div>
+                                            </th>
                                             <th>#</th>
                                             <th>姓 名</th>
                                             <th onclick="SortAscOrDesc(this)" class="ture" th:class="${MEMBER_LIST_STATUS}" th:data="${data}" id="SortButton">完成率</th>
@@ -253,6 +268,12 @@
                                         </thead>
                                         <tbody class="dragable-container " id="member_table">
                                         <tr th:each="member:${MEMBER_LIST}">
+                                            <td>
+                                                <div class="checkbox" >
+                                                    <input  th:attr=" id='checkbox' +${memberStat.count} " type="checkbox">
+                                                    <label  th:attr=" for='checkbox' + ${memberStat.count} " ></label>
+                                                </div>
+                                            </td>
                                             <td th:text="${memberStat.count}">
                                                 1
                                             </td>
@@ -269,7 +290,7 @@
                                             </td>
                                             <td th:text="${#dates.format(member.timestamp,'yyyy-MM-dd HH:mm')}">22/06/2020</td>
                                             <td style="height:48px;">
-                                                <input class="" th:class="${member.id}" type="email" onblur="updateEmail(this)" placeholder="example@domain.com" id="email-input" th:value="${member.email}">
+                                                <input  th:class="${member.id}" type="email" onblur="updateEmail(this)" onfocus="focusEmail(this)" placeholder="example@domain.com" id="email-input" th:value="${member.email}">
                                             </td>
                                             <td>
                                                 <a href="#" onclick="DelMemberById(this.getAttribute('data-name'))" th:data-name="${member.id}">
@@ -287,18 +308,23 @@
                             <nav class="d-inline-block ">
                                 <ul class="pagination mb-0 ">
                                     <li class="page-item disabled ">
-                                        <a class="page-link" href="javascript:void(0);" tabindex="-1"><i
-                                                class="fas fa-chevron-left"></i></a>
+                                        <a class="page-link" href="javascript:void(0);" tabindex="-1">
+                                            <i class="fas fa-chevron-left" style="padding-top: 10px"></i>
+                                        </a>
                                     </li>
-                                    <li class="page-item active "><a class="page-link "
-                                                                     href="javascript:void(0); ">1</a></li>
+                                    <li class="page-item active ">
+                                        <a class="page-link " href="javascript:void(0); ">1</a>
+                                    </li>
                                     <li class="page-item ">
                                         <a class="page-link " href="javascript:void(0); ">2</a>
                                     </li>
-                                    <li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
                                     <li class="page-item ">
-                                        <a class="page-link " href="javascript:void(0); "><i
-                                                class="fas fa-chevron-right "></i></a>
+                                        <a class="page-link " href="javascript:void(0); ">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link " href="javascript:void(0); ">
+                                            <i class="fas fa-chevron-right" style="padding-top: 10px"></i>
+                                        </a>
                                     </li>
                                 </ul>
                             </nav>
@@ -559,12 +585,33 @@
                     };
                     option && myChart.setOption(option);
                 }
-
             </script>
         </div>
     </div>
 </div>
 
+<!-- 添加格式不对的Modal -->
+<div class="modal fade" id="exampleModal-error" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="alert alert-danger" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+            </svg>请输入合法的姓名或邮箱！
+        </div>
+    </div>
+</div>
+
+<!-- 添加成功Modal -->
+<div class="modal fade" id="exampleModal-success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="alert alert-success" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+            </svg>添加成功
+        </div>
+    </div>
+</div>
 
 <!-- Script Start -->
 <script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
@@ -619,7 +666,6 @@
             success: function(data){
                 //载入用户列表
                 $("#page_member_table").html($(data).html());
-
                 //跟新用户表的升降序按钮
                 if(isAsc){
                     $("#SortButton").attr("data"," ↑");
@@ -672,10 +718,13 @@
         const memberId=obj.className;
         const email=$(obj).val();
         //邮箱格式的正则表达式
-        var emailReg=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var emailReg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 
         //邮箱格式不对时不提交数据
         if(!emailReg.test(email)){
+            if(email){
+                $(obj).addClass("redBorder")
+            }
             return;
         }
 
@@ -698,6 +747,10 @@
             }
         })
 
+    }
+
+    function  focusEmail(obj){
+        $(obj).removeClass("redBorder")
     }
 
     /**
@@ -728,6 +781,38 @@
                 }
             })
         }
+    }
+
+</script>
+
+<script>
+    // 添加同学的规则判断
+    function addClassMember (){
+        // 邮箱的正则表达式
+        let emailReg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        // 中文名字的正则表达式
+        let nameReg  = /^[\u4e00-\u9fa5]{2,6}$/
+        //测试是否满足正则
+        let emailFlag = emailReg.test($("#add-email-input").val())
+        let nameFlag = nameReg.test($("#name-input").val())
+        // 提示框
+
+        //满足姓名和邮箱的正则
+        if (emailFlag && nameFlag){
+            $('#exampleModal-success').modal('show')
+            setTimeout(()=>{
+                $("#addMemberForm").submit()
+            },1000)
+        }else{
+            //不满足
+            $('#exampleModal-error').modal('show')
+        }
+    }
+
+    // 全选按钮的正则
+    function selecteAll (){
+         let flag = $(".isAll .checkbox input").is(':checked')
+         $("#member_table .checkbox input").prop("checked",flag)
     }
 </script>
 

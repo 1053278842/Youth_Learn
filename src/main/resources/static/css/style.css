@@ -7003,4 +7003,13 @@ ul.colors li p {
 		right: 20px;
 	}
 }
+.isAll{
+    cursor: pointer;
+}
+.isAll:hover{
+    color: #00acee;
+}
 
+.redBorder{
+    border: 1px solid #d71d52;
+}
