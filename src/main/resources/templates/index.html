@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-<!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
     <title>青学统计</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -20,11 +20,14 @@
     <link rel="icon" type="image/x-icon" th:href="@{~/static/favicon.ico}" href="../static/favicon.ico">
     <!--Start Style -->
     <link rel="stylesheet" type="text/css" th:href="@{~/static/css/fonts.css}" href="../static/css/fonts.css">
-    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/font-awesome.min.css}" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/bootstrap.min.css}"
+        href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/font-awesome.min.css}"
+        href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}"
+        href="../static/css/icofont.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css">
-	<link rel="stylesheet" id="theme-change" type="text/css" href="">
+    <link rel="stylesheet" id="theme-change" type="text/css" href="">
 
 
 </head>
@@ -67,70 +70,78 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <form action="/User/Register" method="POST" onsubmit="return PasswordRepeatCheck()">
-                                <div class="card-header">
-                                    <h4>创建</h4>
-                                    <p class="card-desc">你可以在这里创建所需管理的组织.</p>
-                                </div>
-                                <div class="card-body">
-                                    <form class="separate-form">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <h5 class="from-title mb-1">个人信息</h5>
-                                            <div class="row">
-                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="member-name" class="col-form-label">名  称</label>
-                                                        <input class="form-control" type="text" placeholder="Enter Your Name" id="name" name="username">
+                                    <div class="card-header">
+                                        <h4>创建</h4>
+                                        <p class="card-desc">你可以在这里创建所需管理的组织.</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="separate-form">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <h5 class="from-title mb-1">个人信息</h5>
+                                                <div class="row">
+                                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                        <div class="form-group">
+                                                            <label for="member-name" class="col-form-label">名 称</label>
+                                                            <input class="form-control" type="text"
+                                                                placeholder="Enter Your Name" id="name" name="username">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                        <div class="form-group">
+                                                            <label for="member-email" class="col-form-label">邮 箱</label>
+                                                            <input class="form-control" type="email"
+                                                                placeholder="Enter Your Email" id="email" name="email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                        <div class="form-group">
+                                                            <label for="member-password" class="col-form-label">密
+                                                                码</label>
+                                                            <input class="form-control" type="password"
+                                                                placeholder="Enter Your Password" id="password"
+                                                                name="password">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                        <div class="form-group">
+                                                            <label for="member-password-repeat"
+                                                                class="col-form-label">重复密码</label>
+                                                            <input class="form-control" type="password"
+                                                                placeholder="Enter Your Password Again"
+                                                                id="password-repeat">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="member-email" class="col-form-label">邮  箱</label>
-                                                        <input class="form-control" type="email" placeholder="Enter Your Email" id="email" name="email">
+                                                <hr class="mt-4 mb-4">
+                                                <h5 class="from-title mb-1">组织信息</h5>
+                                                <div class="row">
+                                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                        <div class="form-group" id="org_info_container">
+                                                            <input type="hidden" name="orgPath" value="">
+                                                            <label for="org" class="col-form-label">一级组织</label>
+                                                            <select class="select2 form-control" id="OrgLevel_I">
+                                                                <option value="" selected="selected">......</option>
+                                                            </select>
+                                                            <!--                                                        <select class="select2 form-control" id="OrgLevel2">-->
+                                                            <!--                                                            <option value="" selected="selected">直属单位</option>-->
+                                                            <!--                                                        </select>-->
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="member-password" class="col-form-label">密  码</label>
-                                                        <input class="form-control" type="password" placeholder="Enter Your Password" id="password" name="password">
+                                                <!--按钮-->
+                                                <div class="form-group">
+                                                    <div class="checkbox">
+                                                        <input id="checkbox3" type="checkbox">
+                                                        <label for="checkbox3">记住我</label>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="member-password-repeat" class="col-form-label">重复密码</label>
-                                                        <input class="form-control" type="password" placeholder="Enter Your Password Again" id="password-repeat">
-                                                    </div>
+                                                <div class="form-group mb-0">
+                                                    <button class="btn btn-primary" type="button">reset</button>
+                                                    <input class="btn btn-danger" type="submit">
                                                 </div>
                                             </div>
-                                            <hr class="mt-4 mb-4">
-                                            <h5 class="from-title mb-1">组织信息</h5>
-                                            <div class="row">
-                                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group" id="org_info_container">
-                                                        <input type="hidden" name="orgPath" value="">
-                                                        <label for="org" class="col-form-label">一级组织</label>
-                                                        <select class="select2 form-control" id="OrgLevel_I">
-                                                            <option value="" selected="selected">......</option>
-                                                        </select>
-<!--                                                        <select class="select2 form-control" id="OrgLevel2">-->
-<!--                                                            <option value="" selected="selected">直属单位</option>-->
-<!--                                                        </select>-->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--按钮-->
-                                            <div class="form-group">
-                                                <div class="checkbox">
-                                                    <input id="checkbox3" type="checkbox">
-                                                    <label for="checkbox3">记住我</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-0">
-                                                <button class="btn btn-primary" type="button">reset</button>
-                                                <input class="btn btn-danger" type="submit">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                        </form>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -145,22 +156,22 @@
     </div>
 
 
-	
-	
+
+
     <!-- Script Start -->
-	<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+    <script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
     <script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
     <script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
-	<script th:src="@{~/static/js/swiper.min.js}" src="../static/js/swiper.min.js"></script>
+    <script th:src="@{~/static/js/swiper.min.js}" src="../static/js/swiper.min.js"></script>
     <script th:src="@{~/static/js/apexcharts.min.js}" src="../static/js/apexcharts.min.js"></script>
     <script th:src="@{~/static/js/control-chart-apexcharts.js}" src="../static/js/control-chart-apexcharts.js"></script>
-	<!-- Page Specific -->
+    <!-- Page Specific -->
     <script th:src="@{~/static/js/nice-select.min.js}" src="../static/js/nice-select.min.js"></script>
     <!-- Custom Script -->
     <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
     <!--我的Script-->
     <script>
-        $(function(){
+        $(function () {
             /*获取TopOrgJson,修改一级Select*/
             getTopOrgListJson();
         })
@@ -168,27 +179,27 @@
         /*获取TopOrgJson,修改一级Select*/
         function getTopOrgListJson() {
             $.ajax({
-                type:"get",
-                url:"/Org/getTopOrgList",
-                contentType:"application/json;charset=UTF-8",
-                dataType:"json",
-                success:function (data){
-                    if(data.length != 0){
-                        for(var i=0; i<data.length; i++){
-                            var option = "<option value=\""+data[i].id+"\"";
-                            option += ">"+data[i].name+"</option>";  //动态添加数据
+                type: "get",
+                url: "/Org/getTopOrgList",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.length != 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var option = "<option value=\"" + data[i].id + "\"";
+                            option += ">" + data[i].name + "</option>"; //动态添加数据
                             $("select[id=OrgLevel_I]").append(option);
                         }
                     }
                 },
-                error:function (data){
-                    console.log("错误！getTopOrgListJson()",data);
+                error: function (data) {
+                    console.log("错误！getTopOrgListJson()", data);
                 }
             })
         }
 
         /*Select值变动打开下一个select*/
-        $("select").change(function(){
+        $("select").change(function () {
             $(this).change(addSelectControl($(this)));
         })
 
@@ -197,14 +208,14 @@
          * @return 数组内嵌对象 [{"id":"1","name":"直属高校"},{"id":"2","name":"省委数据"}]
          */
         function getAllSelectedValue() {
-            let orgs=[];
+            let orgs = [];
             $("select").each(function () {
-                const id= $(this).val();
-                const name= $(this).children("option:selected").text();
-                let org={};
-                org.id=id;
-                org.name=name;
-                org.path=(orgs.length>0?orgs[orgs.length-1].path:"")+"|"+name;
+                const id = $(this).val();
+                const name = $(this).children("option:selected").text();
+                let org = {};
+                org.id = id;
+                org.name = name;
+                org.path = (orgs.length > 0 ? orgs[orgs.length - 1].path : "") + "|" + name;
                 orgs.push(org)
             })
             return JSON.stringify(orgs);
@@ -216,24 +227,24 @@
          */
         function addSelectControl(currentSelectControl) {
             //删除当前selector后的所有select元素
-            $("#"+currentSelectControl.attr("id")+"~ select").remove();
+            $("#" + currentSelectControl.attr("id") + "~ select").remove();
 
 
             const changedValue = currentSelectControl.val();
             //option text=...时,他的changedValue值为“”
-            if(changedValue!=""){
+            if (changedValue != "") {
                 /*1.调用爬虫,根据所有selectLevel的id和name爬取*/
                 //将所有的select值收集过来
-                const urlPathJson=getAllSelectedValue();
+                const urlPathJson = getAllSelectedValue();
                 /**
                  * 给hiden的org_path input控件赋值
                  * 值为最后一个json的path值
                  */
                 console.log(urlPathJson);
-                const tempObj=JSON.parse( urlPathJson )
-                let path = tempObj[tempObj.length-1]['path']
+                const tempObj = JSON.parse(urlPathJson)
+                let path = tempObj[tempObj.length - 1]['path']
                 //截掉最前面的“|”
-                path=path.substring(1);
+                path = path.substring(1);
                 $('input[name="orgPath"]').val(path);
 
                 /**
@@ -241,38 +252,38 @@
                  * @success 得到对应org联动列表下的所有期‘组织’数据
                  */
                 $.ajax({
-                    type:"post",
-                    url:"/Org/getOrgsAllStage",
-                    data:urlPathJson,
-                    contentType:"application/json;charset=UTF-8",
-                    dataType:"json",
-                    success:function (data){
+                    type: "post",
+                    url: "/Org/getOrgsAllStage",
+                    data: urlPathJson,
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (data) {
                         /*1 根据返回的json判断是否是member,为组织就继续,否则中断创建*/
                         /*2.创建一个新的select*/
                         /*3.填充值*/
 
                         //获取根据上一个select一个递增唯一的id值
-                        const newId=currentSelectControl.attr("id")+'I';
+                        const newId = currentSelectControl.attr("id") + 'I';
                         // console.log(data);
-                        if(data.length==0){
+                        if (data.length == 0) {
                             return;
                         }
-                        let selectStr="";
-                        selectStr+="<select class=\"select2 form-control\" id=\"OrgLevel"+newId+"\">";
-                        selectStr+="<option value=\"\" selected=\"selected\">......</option>";
-                        for(let i=0;i<data.length;i++){
-                            selectStr+="<option value=\"999\" >"+data[i]['name']+"</option>";
+                        let selectStr = "";
+                        selectStr += "<select class=\"select2 form-control\" id=\"OrgLevel" + newId + "\">";
+                        selectStr += "<option value=\"\" selected=\"selected\">......</option>";
+                        for (let i = 0; i < data.length; i++) {
+                            selectStr += "<option value=\"999\" >" + data[i]['name'] + "</option>";
                         }
-                        selectStr+="</select>";
+                        selectStr += "</select>";
                         $("#org_info_container").append(selectStr);
 
                         // 给新添加的select绑定changed事件方法
-                        $("#org_info_container select:last-child").change(function(){
+                        $("#org_info_container select:last-child").change(function () {
                             $(this).change(addSelectControl($(this)));
                         })
 
                     },
-                    error:function (data){
+                    error: function (data) {
                         console.log("js方法错误！");
                     }
                 })
@@ -285,12 +296,12 @@
          * 同时对密码不为空和重复进行校验
          * @result 返回布尔值，并且有alert提示
          */
-        function PasswordRepeatCheck(){
-            const p1=$('#password').val();
-            const p2=$('#password-repeat').val();
-            if(p1!=""&&p1==p2){
+        function PasswordRepeatCheck() {
+            const p1 = $('#password').val();
+            const p2 = $('#password-repeat').val();
+            if (p1 != "" && p1 == p2) {
                 return true;
-            }else{
+            } else {
                 alert('密码为空或者两次输入不一致！');
                 return false;
             }
