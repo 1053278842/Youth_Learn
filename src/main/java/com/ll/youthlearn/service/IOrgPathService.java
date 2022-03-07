@@ -1,5 +1,9 @@
 package com.ll.youthlearn.service;
 
+import com.ll.youthlearn.entity.OrgPath;
+
+import java.util.List;
+
 /**
  * |       |\__/,|   (`\
  * |    _.|o o  |_   ) )
@@ -18,4 +22,24 @@ public interface IOrgPathService {
      * @param userId 更新条件
      */
     void updateMaxNumberByUserId(Integer maxNumber,Integer userId);
+
+    /**
+     * 基础的对象插入
+     * @param newOrgPath OrgPath 对象
+     */
+    void insert(OrgPath newOrgPath);
+
+    /**
+     * 根据Id返回list
+     * @param id
+     * @return
+     */
+    List<OrgPath> selectListById(Integer id);
+
+    /**
+     * 根据ID返回一个
+     * @param orgPathId
+     * @return
+     */
+    OrgPath selectOneById(Integer orgPathId);
 }

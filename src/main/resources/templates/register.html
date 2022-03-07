@@ -84,7 +84,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <div class="ad-auth-feilds">
+                                <div class="ad-auth-feilds" mb-20>
                                     <input type="password" placeholder="Password Again" class="ad-input" id="password-repeat" name="password-repeat">
                                     <div class="ad-auth-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 482.8 482.8">
@@ -99,30 +99,8 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <div class="ad-auth-feilds mb-20">
-
-                                    <h5 class="from-title mb-1 mt-4">组织信息</h5>
-                                    <div class="row">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                            style="cursor: pointer;">
-                                            <div class="form-group" id="org_info_container">
-                                                <input type="hidden" name="orgPath" value="">
-                                                <label for="OrgLevel_I" class="col-form-label">一级组织</label>
-                                                <select class="select2 form-control mb-2" id="OrgLevel_I">
-                                                    <option value="" selected="selected">......</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-
-                            <button id="SubmitButton" type="button" class="squer-btn btn btn-light mt-2 mr-2 mb-2" style="
-                                padding: 15px;
-                                padding: 15px 50px;
-                            " onclick="$('form').submit();" disabled="">
-                                <i class="fa fa-spin fa-spinner mr-2"></i>Sign up
-                            </button>
+                            <input id="SubmitButton" class="squer-btn btn btn-primary mt-4 mr-2 mb-2 " value="Register" type="submit">
                             <p class="ad-register-text">Already have an account ? <a href="/login=">Login</a></p>
                         </form>
                     </div>
@@ -133,258 +111,21 @@
             </div>
         </div>
     </div>
-</body>
-<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript"></script>
+    <script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript"></script>
 
-<script inline="javascript" type="text/javascript">
-    // $(function(){
-    //     if([[${msg}]]!=null){
-    //         alert([[${msg}]]);
-    //     }
-    // })
-    // $('#OrgLevel_I').on('click', function () {
-    //     $(this).append("<option value='0' id ='loading' " + ">loading...</option>")
-    //     $.ajax({
-    //         url: 'http://localhost:5005/province',
-    //         type: "get",
-    //         success: (data) => {
-    //             let address = data.address
-    //             address.forEach(i => {
-    //                 $(this).append("<option value='i'>" + i.name + "</option>")
-    //             });
-    //             $('#loading').remove()
-    //         }
-    //     })
-    //
-    //     $(this).unbind('click');
-    //     console.log("unbind");
-    // })
-
-</script>
-<script type="text/javascript">
-    $(function(){
-        /*获取TopOrgJson,修改一级Select*/
-        getTopOrgListJson();
-        /*按钮默认不可点击*/
-        buttonEnableToggle(false);
-        loaddingButtonToggle(false);
-        warningSelect(false);
-    })
-
-    function warningSelect(statu){
-        $("select").each(function () {
-            if(statu){
-                //可用
-                $(this).addClass("new border border-danger");
-                $(this).attr("disabled",true);
-            }else{
-                //不可用
-                $(this).removeClass("new");
-                $(this).removeClass("border");
-                $(this).removeClass("border-danger");
-                $(this).attr("disabled",false);
-            }
-        })
-    }
-
-    function buttonEnableToggle(statu){
-        var button=$("#SubmitButton")
-        if(statu){
-            //可用
-            button.removeClass("btn-light");
-            button.addClass("btn-primary");
-            button.attr("enabled",true);
-        }else{
-            //不可用
-            button.removeClass("btn-primary");
-            button.addClass("btn-light");
-            button.attr("enabled",false);
-        }
-    }
-
-    function loaddingButtonToggle(statu){
-        var i=$("#SubmitButton i")
-        if(statu){
-            //加载中
-            i.addClass("fa-spinner");
-        }else{
-            //非加载
-            i.removeClass("fa-spinner");
-        }
-    }
-
-    function canSaveOrg(currentSelectControl) {
-        const changedValue = currentSelectControl.val();
-        //option text=...时,他的changedValue值为“”
-        if(changedValue!=""&&changedValue>=0) {
-            var allOrgJson = getAllSelectedValue();
-
-            /**
-             * 判断当前select元素是否符合规范，是否可以创建！
-             */
-            $.ajax({
-                type: "post",
-                url: "/Org/checkOrgAvailable",
-                data: allOrgJson,
-                contentType: "application/json;charset=UTF-8",
-                dataType: "json",
-                success: function (data) {
-                    if(data){
-                        console.log(true);
-                    }
-                    if(!data)
-                        console.log(false);
-                },
-                error: function (data) {
-                    console.log("canSaveOrg方法错误！");
-                }
-            })
-        }else{
-            buttonEnableToggle(false);
-            loaddingButtonToggle(false);
-        }
-    }
-    
-    /*获取TopOrgJson,修改一级Select*/
-    function getTopOrgListJson() {
-        warningSelect(true);
-        loaddingButtonToggle(true);
-        $.ajax({
-            type:"get",
-            url:"/Org/getTopOrgList",
-            contentType:"application/json;charset=UTF-8",
-            dataType:"json",
-            success:function (data){
-                if(data.length != 0){
-                    for(let i=0; i<data.length; i++){
-                        let option = "<option value=\""+data[i].id+"\"";
-                        option += ">"+data[i].name+"</option>";  //动态添加数据
-                        $("select[id=OrgLevel_I]").append(option);
-                    }
-                }
-                loaddingButtonToggle(false);
-                warningSelect(false);
-            },
-            error:function (data){
-                console.log("错误！getTopOrgListJson()",data);
-                warningSelect(false);
-            }
-        })
-    }
-
-    /*Select值变动打开下一个select*/
-    $("select").change(function(){
-        $(this).change(addSelectControl($(this)));
-        $(this).change(canSaveOrg($(this)));
-    })
-
-    /**
-     * 获得所有select标签的value和selected的text,按照对象并存储到一个数组中。返回一个json数据！
-     * @return 数组内嵌对象 [{"id":"1","name":"直属高校"},{"id":"2","name":"省委数据"}]
-     */
-    function getAllSelectedValue() {
-        let orgs=[];
-        $("select").each(function () {
-            const id= $(this).val();
-            const name= $(this).children("option:selected").text();
-            let org={};
-            org.id=id;
-            org.name=name;
-            org.path=(orgs.length>0?orgs[orgs.length-1].path:"")+"|"+name;
-            orgs.push(org)
-        })
-        return JSON.stringify(orgs);
-    }
-
-    /**
-     * select多级联动添加以及爬虫爬取的模板方法
-     * @param currentSelectControl this,调用该方法的select对象
-     */
-    function addSelectControl(currentSelectControl) {
-        loaddingButtonToggle(true);
-        warningSelect(true);
-        //删除当前selector后的所有select元素
-        $("#"+currentSelectControl.attr("id")+"~ select").remove();
-
-
-        const changedValue = currentSelectControl.val();
-        //option text=...时,他的changedValue值为“”
-        if(changedValue!=""){
-            /*1.调用爬虫,根据所有selectLevel的id和name爬取*/
-            //将所有的select值收集过来
-            const urlPathJson=getAllSelectedValue();
-            /**
-             * 给hiden的org_path input控件赋值
-             * 值为最后一个json的path值
-             */
-            console.log(urlPathJson);
-            const tempObj=JSON.parse( urlPathJson )
-            let path = tempObj[tempObj.length-1]['path']
-            //截掉最前面的“|”
-            path=path.substring(1);
-            $('input[name="orgPath"]').val(path);
-
-            /**
-             * 将所有的select选中信息发送给后台
-             * @success 得到对应org联动列表下的所有期‘组织’数据
-             */
-            $.ajax({
-                type:"post",
-                url:"/Org/getOrgsAllStage",
-                data:urlPathJson,
-                contentType:"application/json;charset=UTF-8",
-                dataType:"json",
-                success:function (data){
-                    /*1 根据返回的json判断是否是member,为组织就继续,否则中断创建*/
-                    /*2.创建一个新的select*/
-                    /*3.填充值*/
-
-                    //获取根据上一个select一个递增唯一的id值
-                    const newId=currentSelectControl.attr("id")+'I';
-                    // console.log(data);
-                    if(data.length==0){
-                        buttonEnableToggle(true);
-                        loaddingButtonToggle(false);
-                        warningSelect(false);
-                        return;
-                    }
-                    let selectStr="";
-                    selectStr+="<select class=\"select2 mb-2 form-control\" id=\"OrgLevel"+newId+"\">";
-                    selectStr+="<option value=\"\" selected=\"selected\">......</option>";
-                    for(let i=0;i<data.length;i++){
-                        selectStr+="<option value=\"999\" >"+data[i]['name']+"</option>";
-                    }
-                    selectStr+="</select>";
-                    $("#org_info_container").append(selectStr);
-
-                    // 给新添加的select绑定changed事件方法
-                    $("#org_info_container select:last-child").change(function(){
-                        $(this).change(addSelectControl($(this)));
-                        $(this).change(canSaveOrg($(this)));
-                    })
-                    loaddingButtonToggle(false);
-                    warningSelect(false);
-                },
-                error:function (data){
-                    console.log("js方法错误！");
-                    warningSelect(false);
-                }
-            })
-
-        }else{
-            loaddingButtonToggle(false);
-            buttonEnableToggle(false);
-            warningSelect(false);
-        }
-    }
-
+<script>
     /**
      * 密码重复校验
      * 同时对密码不为空和重复进行校验
      * @result 返回布尔值，并且有alert提示
      */
     function PasswordRepeatCheck(){
-        loaddingButtonToggle(true);
+        const name=$("#name").val();
+        const email=$("#email").val();
+        if(name==""||email==""){
+            return false;
+        }
+
         const p1=$('#password').val();
         const p2=$('#password-repeat').val();
         if(p1!=""&&p1==p2){
@@ -393,7 +134,8 @@
             alert('密码为空或者两次输入不一致！');
             return false;
         }
-        loaddingButtonToggle(false);
     }
 </script>
+</body>
+
 </html>
