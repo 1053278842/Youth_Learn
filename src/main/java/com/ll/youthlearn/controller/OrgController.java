@@ -45,7 +45,39 @@ public class OrgController {
     @ResponseBody
     @RequestMapping("/getOrgsAllStage")
     public List<Org> getOrgsAllStageByNames(@RequestBody Org[] orgs ){
+
+        //获取父组织的id主键,作为子组织的parent_id
+        String path=orgs[orgs.length-1].getPath();
+        String parentStr = orgs[orgs.length-1].getName();
+        Integer parentId = orgService.selectOneByName(path).getId();
+
         List<Org> results_orgs = pythonSpider.getOrgJsonByName(orgs);
+
+        for (Org o:results_orgs) {
+            o.setParentId(parentId);
+            o.setPath(path+"|"+o.getName());
+        }
+
+        try {
+            orgService.insertManyOrg(results_orgs);
+        } catch (Exception e) {
+
+        }
+
         return results_orgs;
+    }
+
+    /**
+     * 检查当前org路径是否可以满足只包含2层子基础路径
+     * @param orgs 前端传入的当前所有select中组成的org
+     * @return 满足：True
+     */
+    @ResponseBody
+    @RequestMapping("/checkOrgAvailable")
+    public boolean checkOrgAvailable(@RequestBody Org[] orgs ){
+//        String orgPath = orgs[orgs.length-1].getPath();
+//        boolean results = pythonSpider.checkOrgPathAvailable(orgPath);
+//        log.warn(results?"T":"F");
+        return false;
     }
 }

@@ -57,6 +57,22 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(encoder.encode(user.getPassword()));
         userMapper.insert(user);
 
+
+//        //maxStage的范围
+//        int maxStage= PythonUtils.RegulateNumberRange(35,0,80);
+//        //拼接param:xxx|xx->["name1","level2Name"]
+//        String orgPathStrParam=PythonUtils.RegulatePath(user.getOrgPath());
+//
+//        //转换id参数
+//        String userStrId=String.valueOf(user.getId());
+//        String maxStageStr=String.valueOf(maxStage);
+//
+//        String pyLocation=location+"GetMemberByPathToMySQL.py";
+//        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr};
+//
+//        PythonUtils.RunPythonFile(args);
+
+
         OrgPath orgPath=new OrgPath();
         orgPath.setUserId(user.getId());
         //TODO 实现user与path表的一对多关系

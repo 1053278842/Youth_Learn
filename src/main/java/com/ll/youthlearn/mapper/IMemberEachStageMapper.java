@@ -3,6 +3,7 @@ package com.ll.youthlearn.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ll.youthlearn.entity.MemberEachStage;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * |       |\__/,|   (`\
@@ -16,11 +17,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
-//    /**
-//     * 根据ID查找member
-//     * @param stage_id 对应stage表中的主键id
-//     * @return 返回单个member对象
-//     */
-//    @Select("SELECT id,name,stage FROM t_stage")
-//    Member selectOneByStageId(int stage_id);
+    /**
+     * 删除
+     * @param userId rt
+     * @param maxStageNumber rt
+     */
+    void deleteByUserIdAndMaxStageNumber( @Param("userId") Integer userId, @Param("maxStageNumber") Integer maxStageNumber);
 }

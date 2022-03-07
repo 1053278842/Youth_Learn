@@ -45,4 +45,11 @@ public interface IPythonSpider {
      * @return 返回org级下的35期内曾出现过的组织列表。以List<org>每个org的Name属性中。
      */
     List<Org> getOrgJsonByName(Org[] orgs);
+
+    /**
+     * 检查是否符合路径的要求
+     * @param orgPath org列表 [org1,org2]；正常情况下是按照级别顺序排列的path，如[org1:安徽,org2:六安]
+     * @return Ture/False
+     */
+    boolean checkOrgPathAvailable(String orgPath);
 }

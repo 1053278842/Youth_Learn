@@ -27,4 +27,6 @@ public class Org implements Serializable {
     private String name;
     @TableField("path")
     private String path;
+    @TableField("parent_id")
+    private Integer parentId;
 }

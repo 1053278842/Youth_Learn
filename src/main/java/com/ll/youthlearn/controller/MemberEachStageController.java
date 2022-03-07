@@ -2,8 +2,9 @@ package com.ll.youthlearn.controller;
 
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
+import com.ll.youthlearn.service.IMemberEachStageService;
+import com.ll.youthlearn.service.IMemberService;
 import com.ll.youthlearn.service.IOrgPathService;
-import com.ll.youthlearn.service.impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,16 +28,17 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/MemberEachStage")
 public class MemberEachStageController {
 
-    private final IOrgPathService orgPathService;
-
     @Resource(name = "pythonSpider")
     private IPythonSpider pythonSpider;
 
-    private final MemberServiceImpl memberService;
+    private final IOrgPathService orgPathService;
+    private final IMemberEachStageService memberEachStageService;
+    private final IMemberService memberService;
 
-    public MemberEachStageController(MemberServiceImpl memberService, IOrgPathService orgPathService) {
+    public MemberEachStageController(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
+        this.memberEachStageService = memberEachStageService;
     }
 
 
@@ -46,6 +48,9 @@ public class MemberEachStageController {
 
         Integer id = ((User)session.getAttribute("USER_INFO")).getId();
         String orgPath=((User)session.getAttribute("USER_INFO")).getOrgPath();
+
+        //删除多余的memberEachStage数据,只在maxStage>MySQL:maxStage情况下发生
+        memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,maxStage);
 
         pythonSpider.saveMemberEachStage(id,orgPath,maxStage);
 
