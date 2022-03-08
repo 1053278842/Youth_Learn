@@ -29,7 +29,7 @@ public class StageServiceImpl implements IStageService {
     }
 
     @Override
-    public List<Stage> findStagesByUserId(int userId) {
-        return stageMapper.selectStageListByUserId(userId);
+    public List<Stage> findStagesByUserId(int userId, Integer pathId) {
+        return stageMapper.selectStageListByUserId(userId,pathId);
     }
 }

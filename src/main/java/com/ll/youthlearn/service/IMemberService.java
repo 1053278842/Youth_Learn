@@ -18,11 +18,12 @@ public interface IMemberService {
     /**
      * 根据当前用户的id，获得所有和当前用户关联的memberList
      * @param userId  当前用户id
+     * @param pathId
      * @param isAsc Ture则升序排列，反之
      * @return  返回与当前用户关联的member列表
      * @throws Exception
      */
-    List<Member> selectMemberByUserIdAndOrder(int userId,boolean isAsc) throws Exception;
+    List<Member> selectMemberByUserIdAndOrder(int userId, Integer pathId, boolean isAsc) throws Exception;
 
     /**
      *  根据传入的id修改对应member的email字段值

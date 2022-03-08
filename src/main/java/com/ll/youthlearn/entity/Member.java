@@ -40,6 +40,9 @@ public class Member implements Serializable {
     @TableField("path")
     private String path;
 
+    @TableField("path_id")
+    private Integer pathId;
+
     @TableField("parent_user_id")
     private Integer parentUserId;
 

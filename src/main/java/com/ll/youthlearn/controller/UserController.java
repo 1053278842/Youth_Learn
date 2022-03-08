@@ -1,8 +1,10 @@
 package com.ll.youthlearn.controller;
 
+import com.ll.youthlearn.entity.Member;
 import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.enums.UserRoleEnum;
+import com.ll.youthlearn.service.IMemberService;
 import com.ll.youthlearn.service.IOrgPathService;
 import com.ll.youthlearn.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * |       |\__/,|   (`\
@@ -27,24 +30,59 @@ import javax.servlet.http.HttpSession;
 @Controller
 @Slf4j
 public class UserController {
-    
+
+    private final IMemberService memberService;
     private final IUserService userService;
 
     private final IOrgPathService orgPathService;
 
-    public UserController(IOrgPathService orgPathService, IUserService userService) {
+    public UserController(IOrgPathService orgPathService, IUserService userService, IMemberService memberService) {
         this.orgPathService = orgPathService;
         this.userService = userService;
+        this.memberService = memberService;
     }
 
     @ResponseBody
     @RequestMapping("/User/switchPath")
-    public String switchPath(HttpSession session,@RequestParam(value = "id") Integer orgPathId){
+    public String switchPath(HttpSession session,@RequestParam(value = "id") Integer orgPathId) throws Exception {
+        User current_user=(User)session.getAttribute("USER_INFO");
+
+        //更新Session
+        OrgPath switchOrgPath=orgPathService.selectOneById(orgPathId);
+
+        Integer userId = current_user.getId();
+        OrgPath current_OrgPath= switchOrgPath;
+        Integer pathId=current_OrgPath.getId();
+
+        //TODO 不做持久化处理，设置为isExits=false
+        //获取member列表，同时作为信息源
+        List<Member> memberList=memberService.selectMemberByUserIdAndOrder(userId,pathId,false);
+        //获取组织人数
+        Integer orgNums=memberList.size();
+        //将组织人数存储到相关表中：t_org_path::maxMemberNumber
+        orgPathService.updateMaxNumberByPathId(orgNums,pathId);
+        current_OrgPath.setMaxMemberNumber(orgNums);
+
+        current_user.setCurrent_path(current_OrgPath);
+        session.setAttribute("USER_INFO",current_user);
+
+        return "success";
+    }
+
+    @RequestMapping("/User/delById")
+    public ModelAndView getAllStageByUid(Integer pathId, HttpSession session){
+
+        ModelAndView mv=new ModelAndView();
+
+        orgPathService.delByPathId(pathId);
 
         User current_user=(User)session.getAttribute("USER_INFO");
-        current_user.setCurrent_path(orgPathService.selectOneById(orgPathId));
+        current_user.setPaths(orgPathService.selectListById(current_user.getId()));
+        current_user.setCurrent_path(current_user.getPaths().get(0));
         session.setAttribute("USER_INFO",current_user);
-        return "success";
+
+        mv.setViewName("/index");
+        return mv;
     }
 
     @RequestMapping("/User/addOrgPath")
@@ -59,12 +97,11 @@ public class UserController {
 
         OrgPath newOrgPath=new OrgPath();
         Integer id= current_user.getId();
-        String orgPath=user.getOrgPath();
+        String orgPath=current_user.getCurrent_path().getOrgPath();
         newOrgPath.setUserId(id);
         newOrgPath.setOrgPath(orgPath);
         newOrgPath.setMaxMemberNumber(0);
 
-        log.warn(newOrgPath.toString());
         try {
             orgPathService.insert(newOrgPath);
         } catch (Exception e) {
@@ -85,6 +122,7 @@ public class UserController {
 
         try {
             userService.insertUser(user);
+            log.info(user.getEmail()+"账号注册成功！");
             mv.addObject("msg",user.getEmail()+"账号注册成功！");
             mv.setViewName("login");
             return mv;

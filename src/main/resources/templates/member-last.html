@@ -260,7 +260,10 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
                     <div class="card table-card ">
                         <div class="card-header pb-0 ">
-                            <h4>期次-列表</h4>
+                            <h4>期次-列表
+                                <span th:if="${session.USER_INFO.current_path}"
+                                      th:text="${#strings.listSplit(session.USER_INFO.current_path?.orgPath,'|')[#lists.size(#strings.listSplit(session.USER_INFO.current_path?.orgPath,'|'))-1]}"></span>
+                            </h4>
                             <p class="card-desc "> 检索期次 <input id="MaxStage" value="35" type="number" placeholder="During 1~50" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
                                 <a href="#" onclick="addMembersEachStageToMySQL()"><code>检索</code></a>
                             </p>
@@ -1308,7 +1311,7 @@
      */
     function addMembersEachStageToMySQL() {
         const maxStage=$('#MaxStage').val();
-        const orgPath_Str=[[${session.USER_INFO.orgPath}]];
+        const orgPath_Str=[[${session.USER_INFO.current_path.orgPath}]];
         const user_id=[[${session.USER_INFO.id}]];
         $.ajax({
             url:"/MemberEachStage/addMemberEachStage",

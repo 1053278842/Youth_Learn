@@ -19,7 +19,8 @@ public interface IStageService {
      * select * from t_stage right join t_member_each_stage on t_stage.id=stage_id;
      * 根据用户 的userId查找到stage...
      * @param userId ,.
+     * @param pathId
      * @return ad
      */
-    List<Stage> findStagesByUserId(int userId);
+    List<Stage> findStagesByUserId(int userId,Integer pathId);
 }

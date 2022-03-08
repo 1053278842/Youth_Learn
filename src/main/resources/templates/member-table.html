@@ -204,7 +204,10 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
                     <div class="card table-card ">
                         <div class="card-header pb-0 ">
-                            <h4>组织成员-列表</h4>
+                            <h4>组织成员-列表
+                                <span th:if="${session.USER_INFO.current_path}"
+                                      th:text="${#strings.listSplit(session.USER_INFO.current_path?.orgPath,'|')[#lists.size(#strings.listSplit(session.USER_INFO.current_path?.orgPath,'|'))-1]}"></span>
+                            </h4>
                             <p class="card-desc ">
                                 检索成员
                                 <input id="MaxStage" value="35" type="number" min="0" max="80" placeholder="During 1~50" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
@@ -235,7 +238,7 @@
                                             </span>
                                             <input class="" type="email" placeholder="example@domain.com" name="email-input" id="add-email-input">
                                             <input hidden class="" type="number" name="maxTimes-input" th:value="${35}" id="maxTimes-input">
-                                            <input hidden class="" type="text" name="path-input" th:value="${session.USER_INFO.orgPath}" >
+                                            <input hidden class="" type="text" name="path-input" th:value="${session.USER_INFO.current_path.orgPath}" >
                                             <input hidden class="" type="number" name="parentId-input" th:value="${session.USER_INFO.id}">
                                         </td>
                                     </tr>
@@ -686,7 +689,8 @@
      */
     function addMembersToMySQL() {
         const maxStage=$('#MaxStage').val();
-        const orgPath_Str=[[${session.USER_INFO.orgPath}]];
+        const orgPath_Str=[[${session.USER_INFO.current_path.orgPath}]];
+        const orgPath_Id=[[${session.USER_INFO.current_path.id}]];
         const user_id=[[${session.USER_INFO.id}]];
         $.ajax({
             url:"/Member/addMemberByPath",
@@ -694,7 +698,8 @@
             data: {
                 "id":user_id,
                 "orgPath":orgPath_Str,
-                "maxStage":maxStage
+                "maxStage":maxStage,
+                "pathId":orgPath_Id
             },
             // contentType:"application/json;charset=UTF-8",
             success: function(data){

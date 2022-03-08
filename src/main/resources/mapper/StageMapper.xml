@@ -26,9 +26,10 @@
                 on s.id=mes.stage_id
             inner join t_member m
                 on m.id=mes.member_id
-        where mes.user_id=#{userId}
+        where mes.user_id=#{userId} and m.path_id=#{pathId}
         order by
-            id asc,
-            timestamp         asc
+            s.stage_date DESC,
+            s.stage DESC,
+            timestamp asc
     </select>
 </mapper>

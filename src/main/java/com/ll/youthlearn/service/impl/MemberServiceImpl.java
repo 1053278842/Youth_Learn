@@ -33,11 +33,11 @@ public class MemberServiceImpl implements IMemberService{
 
 
     @Override
-    public List<Member> selectMemberByUserIdAndOrder(int userId,boolean isAsc) throws Exception {
+    public List<Member> selectMemberByUserIdAndOrder(int userId, Integer pathId, boolean isAsc) throws Exception {
         if(isAsc){
-            return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).orderByAsc("times"));
+            return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).eq("path_id",pathId).orderByAsc("times"));
         }else{
-            return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).orderByDesc("times"));
+            return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).eq("path_id",pathId).orderByDesc("times"));
         }
     }
 

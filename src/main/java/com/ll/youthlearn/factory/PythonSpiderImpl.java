@@ -34,7 +34,7 @@ public class PythonSpiderImpl implements IPythonSpider {
     }
 
     @Override
-    public void saveMemberOfOnePath(int id,String orgPath,int maxStage) {
+    public void saveMemberOfOnePath(int id,String orgPath,int maxStage,int pathId) {
         //maxStage的范围
         maxStage=PythonUtils.RegulateNumberRange(maxStage,0,80);
 
@@ -44,9 +44,10 @@ public class PythonSpiderImpl implements IPythonSpider {
         //转换id参数
         String userStrId=String.valueOf(id);
         String maxStageStr=String.valueOf(maxStage);
+        String pathIdStr=String.valueOf(pathId);
 
         String pyLocation=location+"GetMemberByPathToMySQL.py";
-        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr};
+        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr,pathIdStr};
 
         PythonUtils.RunPythonFile(args);
     }

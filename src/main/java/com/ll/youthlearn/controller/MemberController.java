@@ -1,6 +1,7 @@
 package com.ll.youthlearn.controller;
 
 import com.ll.youthlearn.entity.Member;
+import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IOrgPathService;
 import com.ll.youthlearn.service.impl.MemberServiceImpl;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -49,18 +51,19 @@ public class MemberController {
      * @ps ajax调用时新生页面会调用不到model值，推测是因为model内的值都给fragment中的片段填充了。解决办法是多设置几个model变量
      */
     @RequestMapping("/getMembersJson")
-    public ModelAndView getMemberJson(int userId, boolean isAsc) throws Exception {
+    public ModelAndView getMemberJson(int userId, boolean isAsc, HttpSession session) throws Exception {
+
+        User currentUser=(User)session.getAttribute("USER_INFO");
+        Integer pathId=currentUser.getCurrent_path().getId();
 
         ModelAndView mv=new ModelAndView();
 
         //获取member列表，同时作为信息源
-        List<Member> memberList=memberService.selectMemberByUserIdAndOrder(userId,isAsc);
+        List<Member> memberList=memberService.selectMemberByUserIdAndOrder(userId,pathId,isAsc);
 
         //获取组织人数
         Integer orgNums=memberList.size();
 
-        //将组织人数存储到相关表中：t_org_path::maxMemberNumber
-        orgPathService.updateMaxNumberByUserId(orgNums,userId);
 
         //获取平均times
         float timesAver=0;
@@ -122,9 +125,9 @@ public class MemberController {
     }
 
     @RequestMapping("/addMemberByPath")
-    public String addMemberByPath(@RequestParam(value = "id") int id,@RequestParam(value = "orgPath") String orgPath,int maxStage){
+    public String addMemberByPath(@RequestParam(value = "id") int id,@RequestParam(value = "orgPath") String orgPath,int maxStage,Integer pathId){
 
-        pythonSpider.saveMemberOfOnePath(id,orgPath,maxStage);
+        pythonSpider.saveMemberOfOnePath(id,orgPath,maxStage,pathId);
         return "member-table";
     }
 

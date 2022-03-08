@@ -32,8 +32,8 @@ public class OrgPathServiceImpl implements IOrgPathService {
 
 
     @Override
-    public void updateMaxNumberByUserId(Integer maxNumber, Integer userId) {
-        orgPathMapper.update(null,new UpdateWrapper<OrgPath>().eq("user_id",userId).set("max_member_number",maxNumber));
+    public void updateMaxNumberByPathId(Integer maxNumber, Integer pathId) {
+        orgPathMapper.update(null,new UpdateWrapper<OrgPath>().eq("id",pathId).set("max_member_number",maxNumber));
     }
 
     @Override
@@ -43,11 +43,16 @@ public class OrgPathServiceImpl implements IOrgPathService {
 
     @Override
     public List<OrgPath> selectListById(Integer id) {
-        return orgPathMapper.selectList(new QueryWrapper<OrgPath>().eq("user_id",id));
+        return orgPathMapper.selectList(new QueryWrapper<OrgPath>().eq("user_id",id).orderByAsc("org_path"));
     }
 
     @Override
     public OrgPath selectOneById(Integer orgPathId) {
         return orgPathMapper.selectOne(new QueryWrapper<OrgPath>().eq("id",orgPathId));
+    }
+
+    @Override
+    public void delByPathId(Integer pathId) {
+        orgPathMapper.deleteById(pathId);
     }
 }

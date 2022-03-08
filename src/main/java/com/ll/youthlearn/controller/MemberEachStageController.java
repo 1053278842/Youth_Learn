@@ -47,11 +47,12 @@ public class MemberEachStageController {
     public String addMemberEachStage(HttpSession session,Integer maxStage){
 
         Integer id = ((User)session.getAttribute("USER_INFO")).getId();
-        String orgPath=((User)session.getAttribute("USER_INFO")).getOrgPath();
+        String orgPath=((User)session.getAttribute("USER_INFO")).getCurrent_path().getOrgPath();
 
         //删除多余的memberEachStage数据,只在maxStage>MySQL:maxStage情况下发生
         memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,maxStage);
 
+        log.warn(id+orgPath+maxStage);
         pythonSpider.saveMemberEachStage(id,orgPath,maxStage);
 
         return "";

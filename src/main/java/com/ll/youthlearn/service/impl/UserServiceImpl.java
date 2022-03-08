@@ -1,6 +1,5 @@
 package com.ll.youthlearn.service.impl;
 
-import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.mapper.IOrgPathMapper;
 import com.ll.youthlearn.mapper.ITopOrgMapper;
@@ -56,27 +55,10 @@ public class UserServiceImpl implements IUserService {
     public void insertUser(User user) throws Exception {
         user.setPassword(encoder.encode(user.getPassword()));
         userMapper.insert(user);
+    }
 
+    @Override
+    public void refreshUserSession() {
 
-//        //maxStage的范围
-//        int maxStage= PythonUtils.RegulateNumberRange(35,0,80);
-//        //拼接param:xxx|xx->["name1","level2Name"]
-//        String orgPathStrParam=PythonUtils.RegulatePath(user.getOrgPath());
-//
-//        //转换id参数
-//        String userStrId=String.valueOf(user.getId());
-//        String maxStageStr=String.valueOf(maxStage);
-//
-//        String pyLocation=location+"GetMemberByPathToMySQL.py";
-//        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr};
-//
-//        PythonUtils.RunPythonFile(args);
-
-
-        OrgPath orgPath=new OrgPath();
-        orgPath.setUserId(user.getId());
-        //TODO 实现user与path表的一对多关系
-        orgPath.setOrgPath(user.getOrgPath());
-        orgPathMapper.insert(orgPath);
     }
 }

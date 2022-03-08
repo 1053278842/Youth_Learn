@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -32,6 +33,8 @@ public class Stage implements Serializable {
     @TableField("stage")
     private String stage;
 
+    @TableField("stage_date")
+    private Timestamp stageDateInsertTime;
 
     @TableField(value = "members",exist = false)
     List<MemberEachStage> members;

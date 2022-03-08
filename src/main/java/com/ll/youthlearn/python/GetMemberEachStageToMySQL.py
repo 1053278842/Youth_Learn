@@ -47,13 +47,12 @@ def getOrgByNameStage(orgNames,stage,dataList):
 if __name__=="__main__":
     
     #获取java传来的值
-    # userId=1
-    # maxStage=50
-    # orgNames=eval("['团省委', '机关', '学校部']")
-    # orgNames=eval("['直属高校', '合肥学院', '人工智能与大数据学院','2019级信息管理与信息系统(对口)班']")
     userId=sys.argv[1]
     orgNames=eval(sys.argv[2])
     maxStage=sys.argv[3]
+    # orgNames=eval("['直属高校','黄山学院','文化与传播学院','2017级戏剧影视文学团支部']")
+    # maxStage=35
+    # userId=1
 
 
     t1=time.time()
@@ -66,7 +65,7 @@ if __name__=="__main__":
     t2=time.time()
     conn = getConn()
     cursor=conn.cursor()
-    sql = 'select stage,id from t_stage order by mid(stage,13,20)+1 desc limit 0,'+str(maxStage)
+    sql = 'select stage,id from t_stage ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit 0,'+str(maxStage)
     cursor.execute(sql)
     allStage=cursor.fetchall()
     allStageDict={}
@@ -127,9 +126,9 @@ if __name__=="__main__":
         addTime=member['addtime']
         stageId = allStageDict[member['stage']]
         # print(org['addtime'],org['username'])
-        #TODO 这里需要改一下这个2000-01-01的固定值，可能又隐患bug
+        #TODO 这里需要改一下这个1900-01-01的固定值，可能又隐患bug
         if addTime is None:
-            stamptime=datetime.datetime.strptime("2000-01-01","%Y-%m-%d")
+            stamptime=datetime.datetime.strptime("1900-01-01","%Y-%m-%d")
         else:
             stamptime=datetime.datetime.strptime(addTime,"%Y-%m-%d")
         # print(stamptime)

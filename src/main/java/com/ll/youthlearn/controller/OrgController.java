@@ -67,17 +67,4 @@ public class OrgController {
         return results_orgs;
     }
 
-    /**
-     * 检查当前org路径是否可以满足只包含2层子基础路径
-     * @param orgs 前端传入的当前所有select中组成的org
-     * @return 满足：True
-     */
-    @ResponseBody
-    @RequestMapping("/checkOrgAvailable")
-    public boolean checkOrgAvailable(@RequestBody Org[] orgs ){
-//        String orgPath = orgs[orgs.length-1].getPath();
-//        boolean results = pythonSpider.checkOrgPathAvailable(orgPath);
-//        log.warn(results?"T":"F");
-        return false;
-    }
 }

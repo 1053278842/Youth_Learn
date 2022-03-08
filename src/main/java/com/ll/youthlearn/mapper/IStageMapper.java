@@ -3,6 +3,7 @@ package com.ll.youthlearn.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ll.youthlearn.entity.Stage;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,7 +22,8 @@ public interface IStageMapper extends BaseMapper<Stage> {
     /**
      * 获取当前用户管理下的所有Stage；其中还包含了每个stage的MemberList，使用懒加载
      * @param userId 当前用户的id
+     * @param pathId 当前用户路径的id
      * @return 返回Stage列表
      */
-    List<Stage> selectStageListByUserId(int userId);
+    List<Stage> selectStageListByUserId(@Param("userId") int userId,@Param("pathId") Integer pathId);
 }

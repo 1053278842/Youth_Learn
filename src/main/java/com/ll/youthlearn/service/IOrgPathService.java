@@ -19,9 +19,9 @@ public interface IOrgPathService {
     /**
      * 每当刷新member-table页时，会对t_org_path得到maxMemberNumber列进行更新操作!
      * @param maxNumber 更新的值
-     * @param userId 更新条件
+     * @param pathId 更新条件
      */
-    void updateMaxNumberByUserId(Integer maxNumber,Integer userId);
+    void updateMaxNumberByPathId(Integer maxNumber,Integer pathId);
 
     /**
      * 基础的对象插入
@@ -30,8 +30,8 @@ public interface IOrgPathService {
     void insert(OrgPath newOrgPath);
 
     /**
-     * 根据Id返回list
-     * @param id
+     * 根据Id返回list,根据name排序
+     * @param id 用户id
      * @return
      */
     List<OrgPath> selectListById(Integer id);
@@ -42,4 +42,10 @@ public interface IOrgPathService {
      * @return
      */
     OrgPath selectOneById(Integer orgPathId);
+
+    /**
+     * 根据用户的Id以及对应path的Id单条删除
+     * @param pathId
+     */
+    void delByPathId( Integer pathId);
 }

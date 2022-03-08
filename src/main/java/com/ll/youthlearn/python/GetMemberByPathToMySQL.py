@@ -54,6 +54,7 @@ if __name__=="__main__":
     userId=sys.argv[1]
     orgNames=eval(sys.argv[2])
     maxStage=sys.argv[3]
+    pathId=sys.argv[4]
 
     t1=time.time()
     t2=time.time()
@@ -110,7 +111,7 @@ if __name__=="__main__":
     # 拼接SQL语句，批量插入member
     t2=time.time()
     cursor=conn.cursor()
-    sql = 'insert into t_member (name,timestamp,times,path,parent_user_id,maxTimes) values '
+    sql = 'insert into t_member (name,timestamp,times,path,parent_user_id,maxTimes,path_id) values '
     for key,value in finalDict.items():
         userName=key
         addTime=value[0]
@@ -121,8 +122,8 @@ if __name__=="__main__":
         else:
             stamptime=datetime.datetime.strptime(addTime,"%Y-%m-%d")
         # print(stamptime)
-        sql+='("%s","%s","%s","%s","%s","%s"),'%(
-            userName,stamptime,times,orgNames,userId,maxTimes
+        sql+='("%s","%s","%s","%s","%s","%s","%s"),'%(
+            userName,stamptime,times,orgNames,userId,maxTimes,pathId
         )
     # 去掉最后一个','!
     sql=sql[0:-1]

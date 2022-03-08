@@ -43,8 +43,11 @@ public class UserAuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", username));
-        user.setPaths(orgPathMapper.selectList(new QueryWrapper<OrgPath>().eq("user_id",user.getId())));
-        user.setCurrent_path(user.getPaths().get(0));
+        user.setPaths(orgPathMapper.selectList(new QueryWrapper<OrgPath>().eq("user_id",user.getId()).orderByAsc("org_path")));
+        //判空
+        if(user.getPaths().size()!=0){
+            user.setCurrent_path(user.getPaths().get(0));
+        }
         //TODO session不安全
         session.setAttribute("USER_INFO",user);
         if (user==null){

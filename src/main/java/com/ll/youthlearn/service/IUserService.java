@@ -20,4 +20,5 @@ public interface IUserService {
 
     void insertUser(User user) throws Exception;
 
+    void refreshUserSession();
 }
