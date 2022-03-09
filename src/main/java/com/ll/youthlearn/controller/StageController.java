@@ -61,11 +61,14 @@ public class StageController {
 
     @RequestMapping("/getAllStageByUid")
     public ModelAndView getAllStageByUid(HttpSession session) throws Exception {
+
+        //获取当前周的期次
+        Stage currentStage=stageService.findNewestStage();
+
         User current_user=(User)session.getAttribute("USER_INFO");
         Integer userId = current_user.getId();
         OrgPath current_OrgPath= current_user.getCurrent_path();
         Integer pathId=current_OrgPath.getId();
-
 
         Integer maxMemberNumber=0;
         if(current_OrgPath!=null){
@@ -76,11 +79,14 @@ public class StageController {
             }
         }
 
-        //TODO 更新User的Current_Path,应为只有第一次登录时才会更新！
-
         ModelAndView mv=new ModelAndView();
 
         List<Stage> stages=stageService.findStagesByUserId(userId,pathId);
+        //去除lastStageList中包含currentStage的情况,因为列表按照时间排序,故只判断第一个元素
+        if(stages.get(0).getId()==currentStage.getId()){
+            stages.remove(0);
+        }
+
         //设置stage对象的stageDate
         //规则：存在member的情况下,stageDate等于member所在日期内的周一的日期
         for (Stage s:stages) {

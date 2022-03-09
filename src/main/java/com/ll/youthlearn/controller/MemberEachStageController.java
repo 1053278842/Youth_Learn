@@ -5,6 +5,7 @@ import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IMemberEachStageService;
 import com.ll.youthlearn.service.IMemberService;
 import com.ll.youthlearn.service.IOrgPathService;
+import com.ll.youthlearn.service.IStageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * |       |\__/,|   (`\
@@ -34,11 +36,13 @@ public class MemberEachStageController {
     private final IOrgPathService orgPathService;
     private final IMemberEachStageService memberEachStageService;
     private final IMemberService memberService;
+    private final IStageService stageService;
 
-    public MemberEachStageController(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService) {
+    public MemberEachStageController(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService, IStageService stageService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
         this.memberEachStageService = memberEachStageService;
+        this.stageService = stageService;
     }
 
 
@@ -54,6 +58,17 @@ public class MemberEachStageController {
 
         log.warn(id+orgPath+maxStage);
         pythonSpider.saveMemberEachStage(id,orgPath,maxStage);
+
+        return "";
+    }
+
+    /**
+     * 该接口自动执行
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getCurrentStageMember")
+    public String getCurrentStageMember(HttpSession session,Integer maxStage) throws IOException {
 
         return "";
     }

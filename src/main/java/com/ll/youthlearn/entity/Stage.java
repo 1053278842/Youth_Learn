@@ -39,6 +39,7 @@ public class Stage implements Serializable {
     @TableField(value = "members",exist = false)
     List<MemberEachStage> members;
 
+    /**用于memberTable页的周次统计**/
     @TableField(value = "stageDate",exist = false)
     String stageDate;
 }

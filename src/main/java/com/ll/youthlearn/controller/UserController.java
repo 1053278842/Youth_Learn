@@ -56,7 +56,7 @@ public class UserController {
 
         //TODO 不做持久化处理，设置为isExits=false
         //获取member列表，同时作为信息源
-        List<Member> memberList=memberService.selectMemberByUserIdAndOrder(userId,pathId,false);
+        List<Member> memberList=memberService.selectMemberByUserIdAndPathId(userId,pathId,false);
         //获取组织人数
         Integer orgNums=memberList.size();
         //将组织人数存储到相关表中：t_org_path::maxMemberNumber

@@ -1,11 +1,14 @@
 package com.ll.youthlearn.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ll.youthlearn.entity.Stage;
 import com.ll.youthlearn.mapper.IStageMapper;
 import com.ll.youthlearn.service.IStageService;
+import com.ll.youthlearn.utils.DateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -32,4 +35,19 @@ public class StageServiceImpl implements IStageService {
     public List<Stage> findStagesByUserId(int userId, Integer pathId) {
         return stageMapper.selectStageListByUserId(userId,pathId);
     }
+
+    @Override
+    public Stage findNewestStage() {
+
+        Timestamp currentTs = new Timestamp(System.currentTimeMillis());
+
+        String MonTs;
+        String SunTs;
+
+        MonTs= DateUtils.getWeekMondayDate("yyyy-MM-dd HH:mm:ss",currentTs);
+        SunTs = DateUtils.getWeekSundayDate("yyyy-MM-dd HH:mm:ss",currentTs);
+
+        return stageMapper.selectOne(new QueryWrapper<Stage>().between("stage_date",MonTs,SunTs).orderByDesc("stage").last("limit 0,1"));
+    }
+
 }

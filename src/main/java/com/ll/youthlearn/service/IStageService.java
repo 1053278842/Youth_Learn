@@ -23,4 +23,10 @@ public interface IStageService {
      * @return ad
      */
     List<Stage> findStagesByUserId(int userId,Integer pathId);
+
+    /**
+     * 根据传入的当前时间范围，获取最新的Stage对象
+     * @return
+     */
+    Stage findNewestStage();
 }

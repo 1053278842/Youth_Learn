@@ -23,7 +23,7 @@ public interface IMemberService {
      * @return  返回与当前用户关联的member列表
      * @throws Exception
      */
-    List<Member> selectMemberByUserIdAndOrder(int userId, Integer pathId, boolean isAsc) throws Exception;
+    List<Member> selectMemberByUserIdAndPathId(int userId, Integer pathId, boolean isAsc) throws Exception;
 
     /**
      *  根据传入的id修改对应member的email字段值
@@ -39,6 +39,7 @@ public interface IMemberService {
      * @param memberId
      * @param memberId
      * @return 返回删除结果 int
+     * @throws Exception
      */
     int deleteOneWithId(Integer memberId) throws Exception;
 
@@ -51,6 +52,14 @@ public interface IMemberService {
      * @param maxTimes
      * @param path
      * @return
+     * @throws Exception
      */
     int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) throws Exception;
+
+    /**
+     * 根据pathID返回多条结果
+     * @param pathId
+     * @return
+     */
+    List<Member> selectByPathId(Integer pathId);
 }

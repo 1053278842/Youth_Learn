@@ -48,4 +48,10 @@ public interface IOrgPathService {
      * @param pathId
      */
     void delByPathId( Integer pathId);
+
+    /**
+     * 返回所有
+     * @return
+     */
+    List<OrgPath> selectList();
 }

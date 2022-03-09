@@ -28,6 +28,37 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
+        //去掉时分秒
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        String first_day_week = sdf.format(cal.getTime());
+
+        return first_day_week;
+    }
+
+    /**
+     * 传入日期即可获得该日期所在周的周一日期
+     * @param format 日期格式形如: yyyy-MM-dd HH:mm:ss / yyyy-MM-dd
+     * @param date   所要提取的日期，Date类型
+     * @return  format指定的字符串格式化日期
+     */
+    public static String getWeekSundayDate(String format,Date date){
+        DateFormat sdf = new SimpleDateFormat(format);
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(date);
+        //去掉时分秒
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+
+        //时间延长至周日
+        cal.add(Calendar.DATE,7);
+
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         String first_day_week = sdf.format(cal.getTime());
 

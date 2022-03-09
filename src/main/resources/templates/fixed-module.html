@@ -70,10 +70,6 @@
                             </ul>
                         </div>
                     </div>
-                    <script>
-                        var cop=$("#CurrentOrgPath").val();
-                        $("#CurrentOrgPath").val(cop.split("|").lastIndexOf())
-                    </script>
                     <script th:inline="javascript">
                         function switchCurrentOrgPath(id){
                             $.ajax({

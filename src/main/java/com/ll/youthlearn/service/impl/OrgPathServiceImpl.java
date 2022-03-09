@@ -55,4 +55,9 @@ public class OrgPathServiceImpl implements IOrgPathService {
     public void delByPathId(Integer pathId) {
         orgPathMapper.deleteById(pathId);
     }
+
+    @Override
+    public List<OrgPath> selectList() {
+        return orgPathMapper.selectList(null);
+    }
 }

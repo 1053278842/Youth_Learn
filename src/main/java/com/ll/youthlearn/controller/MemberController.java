@@ -59,7 +59,7 @@ public class MemberController {
         ModelAndView mv=new ModelAndView();
 
         //获取member列表，同时作为信息源
-        List<Member> memberList=memberService.selectMemberByUserIdAndOrder(userId,pathId,isAsc);
+        List<Member> memberList=memberService.selectMemberByUserIdAndPathId(userId,pathId,isAsc);
 
         //获取组织人数
         Integer orgNums=memberList.size();

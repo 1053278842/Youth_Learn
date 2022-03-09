@@ -33,7 +33,7 @@ public class MemberServiceImpl implements IMemberService{
 
 
     @Override
-    public List<Member> selectMemberByUserIdAndOrder(int userId, Integer pathId, boolean isAsc) throws Exception {
+    public List<Member> selectMemberByUserIdAndPathId(int userId, Integer pathId, boolean isAsc) throws Exception {
         if(isAsc){
             return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId).eq("path_id",pathId).orderByAsc("times"));
         }else{
@@ -64,5 +64,10 @@ public class MemberServiceImpl implements IMemberService{
         member.setPath(path);
         member.setParentUserId(parentId);
         return memberMapper.insert(member);
+    }
+
+    @Override
+    public List<Member> selectByPathId(Integer pathId) {
+        return memberMapper.selectList(new QueryWrapper<Member>().eq("path_id",pathId));
     }
 }
