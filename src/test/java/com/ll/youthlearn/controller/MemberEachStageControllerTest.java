@@ -67,6 +67,7 @@ class MemberEachStageControllerTest {
             //根据OrgPath列表进行爬虫抓取,抓到member_each_stage表中
             //TODO 使用多线程
             for (OrgPath op : orgPathListNoRepeat ) {
+                //爬虫Start
                 String url="dxx.ahyouth.org.cn/api/peopleRankStage";
                 url = UrlRegularUtils.setRequestProtocolHeader(url,false);
                 url = UrlRegularUtils.setStage(url,stage.getStage());
@@ -76,6 +77,7 @@ class MemberEachStageControllerTest {
                 Integer stageId = stage.getId();
                 Integer userId = op.getUserId();
                 Integer pathId = op.getId();
+                //爬虫End
 
                 String jsonData = SpiderUtils.getHttpJson(url);
                 if(jsonData!=null){
@@ -96,9 +98,11 @@ class MemberEachStageControllerTest {
 
                     //插入
                     for (int i = 0; i < jsonArray.size(); i++) {
-                        Member member = memberHashMap.get(jsonArray.getJSONObject(i));
+                        Member member = memberHashMap.get(jsonArray.getJSONObject(i).get("username"));
+                        System.out.println("存在问题！");
                         //json数据中的用户不在member表中的情况
                         if(member==null){
+                            //TODO 對這裏的member進行插入操作。member表修改爲邏輯刪除，這裏的數據如果不在邏輯刪除列表中的話，則添加！
                             continue;
                         }
 
