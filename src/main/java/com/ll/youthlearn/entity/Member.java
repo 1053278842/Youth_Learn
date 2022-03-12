@@ -49,4 +49,10 @@ public class Member implements Serializable {
     @TableField("maxTimes")
     private Integer maxTimes;
 
+    /**
+     * 0->假，非0->真。为0时正常显示，非0时为逻辑删除
+     */
+    @TableField("isDelete")
+    private Integer isDelete;
+
 }

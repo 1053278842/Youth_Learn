@@ -51,7 +51,7 @@ if __name__=="__main__":
     # 数据库连接
     conn = getConn()
     cursor=conn.cursor()
-    sql = ' select stage from ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit 0,35'
+    sql = ' select stage from t_stage ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit 0,35'
     cursor.execute(sql)
     allStage=cursor.fetchall()
     # print("获取stage耗时:",time.time()-t2)

@@ -82,6 +82,12 @@ public class StageController {
         ModelAndView mv=new ModelAndView();
 
         List<Stage> stages=stageService.findStagesByUserId(userId,pathId);
+        if(stages==null||stages.size()==0){
+            mv.addObject("STAGE_LIST",stages);
+            mv.addObject("ORG_PATH_MAX_MEMBER_NUMBER",maxMemberNumber);
+            mv.setViewName("member-last");
+            return mv;
+        }
         //去除lastStageList中包含currentStage的情况,因为列表按照时间排序,故只判断第一个元素
         if(stages.get(0).getId()==currentStage.getId()){
             stages.remove(0);

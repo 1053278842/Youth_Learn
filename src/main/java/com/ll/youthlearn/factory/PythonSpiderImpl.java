@@ -53,7 +53,7 @@ public class PythonSpiderImpl implements IPythonSpider {
     }
 
     @Override
-    public void saveMemberEachStage(int id,String orgPath,int maxStage) {
+    public void saveMemberEachStage(int id, String orgPath, int maxStage, Integer pathId) {
         maxStage=PythonUtils.RegulateNumberRange(maxStage,0,80);
 
         //拼接param:xxx|xx->["name1","level2Name"]
@@ -62,9 +62,10 @@ public class PythonSpiderImpl implements IPythonSpider {
         //转换id参数
         String userStrId=String.valueOf(id);
         String maxStageStr=String.valueOf(maxStage);
+        String pathStr=String.valueOf(pathId);
 
         String pyLocation=location+"GetMemberEachStageToMySQL.py";
-        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr};
+        String[] args=new String[]{"python", pyLocation,userStrId,orgPathStrParam,maxStageStr,pathStr};
 
         PythonUtils.RunPythonFile(args);
     }

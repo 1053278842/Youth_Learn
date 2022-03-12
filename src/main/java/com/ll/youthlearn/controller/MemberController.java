@@ -1,6 +1,7 @@
 package com.ll.youthlearn.controller;
 
 import com.ll.youthlearn.entity.Member;
+import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IOrgPathService;
@@ -79,6 +80,12 @@ public class MemberController {
             effectiveStatisticsStage=memberList.get(0).getMaxTimes();
         }
 
+
+        //更新maxNumber
+        currentUser.getCurrent_path().setMaxMemberNumber(orgNums);
+        orgPathService.updateMaxNumberByPathId(orgNums,pathId);
+        session.setAttribute("USER_INFO",currentUser);
+
         mv.addObject("MEMBER_LIST",memberList);
         mv.addObject("MEMBER_LIST_NUMBER",orgNums);
         mv.addObject("MEMBER_LIST_AverTimes",timesAver);
@@ -111,8 +118,17 @@ public class MemberController {
      */
     @ResponseBody
     @RequestMapping("/delMemberById")
-    public int delMemberById(Integer memberId) throws Exception {
+    public int delMemberById(Integer memberId,HttpSession session) throws Exception {
         int resultInt=memberService.deleteOneWithId(memberId);
+
+        User currentUser=(User)session.getAttribute("USER_INFO");
+        OrgPath orgPath=currentUser.getCurrent_path();
+        Integer delBeforeValue = orgPath.getMaxMemberNumber();
+        orgPath.setMaxMemberNumber(delBeforeValue-1);
+        currentUser.setCurrent_path(orgPath);
+
+        session.setAttribute("USER_INFO",currentUser);
+
         return resultInt;
     }
 

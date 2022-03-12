@@ -50,14 +50,15 @@ public class MemberEachStageController {
     @RequestMapping("/addMemberEachStage")
     public String addMemberEachStage(HttpSession session,Integer maxStage){
 
+        //TODO BUG:maxStage指定不准，如果存在最新stage,则总显示条数会-1,修改为指定范围
         Integer id = ((User)session.getAttribute("USER_INFO")).getId();
+        Integer pathId = ((User)session.getAttribute("USER_INFO")).getCurrent_path().getId();
         String orgPath=((User)session.getAttribute("USER_INFO")).getCurrent_path().getOrgPath();
 
         //删除多余的memberEachStage数据,只在maxStage>MySQL:maxStage情况下发生
         memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,maxStage);
 
-        log.warn(id+orgPath+maxStage);
-        pythonSpider.saveMemberEachStage(id,orgPath,maxStage);
+        pythonSpider.saveMemberEachStage(id,orgPath,maxStage,pathId);
 
         return "";
     }

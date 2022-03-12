@@ -64,7 +64,7 @@
                                 </li>
                                 <li th:each="path:${session.USER_INFO.paths}">
                                     <a href="javascript:void(0);" th:data-path-id="${path.id}" onclick="switchCurrentOrgPath(this.getAttribute('data-path-id'))">
-                                        <p th:text="${#strings.listSplit(path.orgPath,'|')[#lists.size(#strings.listSplit(path.orgPath,'|'))-1]}">Null</p>
+                                        <p th:text="${#strings.listSplit(path.orgPath,'|')[#lists.size(#strings.listSplit(path.orgPath,'|'))-1]+' : '+path.maxMemberNumber}">Null</p>
                                     </a>
                                 </li>
                             </ul>

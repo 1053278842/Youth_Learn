@@ -77,6 +77,7 @@ class MemberEachStageControllerTest {
                 Integer stageId = stage.getId();
                 Integer userId = op.getUserId();
                 Integer pathId = op.getId();
+                String orgPath=op.getOrgPath();
                 //爬虫End
 
                 String jsonData = SpiderUtils.getHttpJson(url);
@@ -90,23 +91,34 @@ class MemberEachStageControllerTest {
                     //TODO 对新用户进行add操作
 
                     //获取memberList,作为限制的依据
-                    List<Member> memberList = memberService.selectByPathId(pathId);
+                    List<Member> memberList = memberService.selectByPathIdIgnoreIsDelete(pathId);
                     HashMap<String,Member> memberHashMap=new HashMap<>();
                     for (Member member:memberList) {
                         memberHashMap.put(member.getName(),member);
                     }
 
-                    //插入
+                    //插入新用户和新member_each_stage
                     for (int i = 0; i < jsonArray.size(); i++) {
-                        Member member = memberHashMap.get(jsonArray.getJSONObject(i).get("username"));
-                        System.out.println("存在问题！");
+                        Member member = memberHashMap.get((String)jsonArray.getJSONObject(i).get("username"));
                         //json数据中的用户不在member表中的情况
                         if(member==null){
-                            //TODO 對這裏的member進行插入操作。member表修改爲邏輯刪除，這裏的數據如果不在邏輯刪除列表中的話，則添加！
+                            //TODO 单条插入改写成批量插入,提升速度
+                            //爬取到的用户不存在于member表中（包括isDelete标记的member）,是新的用户。进行插入新用户操作
+                            Member newMember=new Member();
+                            newMember.setName((String)jsonArray.getJSONObject(i).get("username"));
+                            newMember.setMaxTimes(0);
+                            newMember.setTimes(0);
+                            newMember.setPath(orgPath);
+                            newMember.setPathId(pathId);
+                            newMember.setParentUserId(userId);
+                            memberService.insertOne(newMember);
+
+                            System.out.println(MessageFormat.format("新插入用户：{0},路径{1}",(String)jsonArray.getJSONObject(i).get("username"),orgPath));
                             continue;
                         }
 
                         Integer memberId=memberHashMap.get(jsonArray.getJSONObject(i).get("username")).getId();
+                        //插入member_stage_each
                     }
                 }
             }

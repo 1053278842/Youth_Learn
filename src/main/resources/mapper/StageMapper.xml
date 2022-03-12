@@ -19,14 +19,14 @@
         </collection>
     </resultMap>
     <select id="selectStageListByUserId" resultMap="StageMapper" parameterType="int">
-        select  s.id, s.name, stage,mes.id as mid, member_id, mes.timestamp, stage_id, user_id, m.name as member_name
+        select  s.id, s.name, stage,mes.id as mid, member_id, mes.timestamp, stage_id, user_id, m.name as member_name, m.isDelete
         from
                 t_stage s
             right join t_member_each_stage mes
                 on s.id=mes.stage_id
             inner join t_member m
                 on m.id=mes.member_id
-        where mes.user_id=#{userId} and m.path_id=#{pathId}
+        where mes.user_id=#{userId} and m.path_id=#{pathId} and m.isDelete=0
         order by
             s.stage_date DESC,
             s.stage DESC,

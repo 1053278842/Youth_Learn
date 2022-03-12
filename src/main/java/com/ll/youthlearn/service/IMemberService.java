@@ -57,9 +57,16 @@ public interface IMemberService {
     int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) throws Exception;
 
     /**
-     * 根据pathID返回多条结果
+     * 根据pathID返回多条结果,注意。该方法会会忽略isDelete的状态，返回全部的pathId的member
      * @param pathId
      * @return
      */
-    List<Member> selectByPathId(Integer pathId);
+    List<Member> selectByPathIdIgnoreIsDelete(Integer pathId);
+
+    /**
+     * 插入一个Member
+     * @param newMember
+     * @return
+     */
+    int insertOne(Member newMember);
 }

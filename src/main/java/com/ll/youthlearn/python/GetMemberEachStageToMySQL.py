@@ -46,13 +46,15 @@ def getOrgByNameStage(orgNames,stage,dataList):
 
 if __name__=="__main__":
     
-    #获取java传来的值
+    # 获取java传来的值
     userId=sys.argv[1]
     orgNames=eval(sys.argv[2])
     maxStage=sys.argv[3]
-    # orgNames=eval("['直属高校','黄山学院','文化与传播学院','2017级戏剧影视文学团支部']")
+    pathId=sys.argv[4]
+    # orgNames=eval("['系统团委','安徽省消防救援总队团委','黄山市消防救援支队团委','屯光特勤站团支部']")
     # maxStage=35
     # userId=1
+    # pathId=9
 
 
     t1=time.time()
@@ -101,7 +103,7 @@ if __name__=="__main__":
     # 数据库连接
     t2=time.time()
     cursor=conn.cursor()
-    sql = 'select name,id from t_member where parent_user_id ='+str(userId)
+    sql = 'select name,id from t_member where parent_user_id ='+str(userId)+" AND path_id="+str(pathId)
     cursor.execute(sql)
     fixedMember=cursor.fetchall()
     fixedMemberDict={}
@@ -116,10 +118,10 @@ if __name__=="__main__":
     cursor=conn.cursor()
     sql = 'insert into t_member_each_stage (member_id,timestamp,stage_id,user_id) values '
     for member in dataList:
-        # 数据不属于用户预先规划好的时,放弃存储该条数据
-        if member['username'] not in fixedMemberDict:
+        # 数据不属于用户预先规划好的时,放弃存储该条数据.后期要修改为新用户自动添加到member中，并建立each关系
+        if member['username'] not in fixedMemberDict.keys():
             continue
-        if member['stage'] not in allStageDict:
+        if member['stage'] not in allStageDict.keys():
             continue
 
         member_id=fixedMemberDict[member['username']]

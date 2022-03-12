@@ -54,6 +54,9 @@ public class UserController {
         OrgPath current_OrgPath= switchOrgPath;
         Integer pathId=current_OrgPath.getId();
 
+        //更新path
+        current_user.setPaths(orgPathService.selectListById(userId));
+
         //TODO 不做持久化处理，设置为isExits=false
         //获取member列表，同时作为信息源
         List<Member> memberList=memberService.selectMemberByUserIdAndPathId(userId,pathId,false);
@@ -86,7 +89,7 @@ public class UserController {
     }
 
     @RequestMapping("/User/addOrgPath")
-    public ModelAndView addOrgPath(User user, HttpSession session){
+    public ModelAndView addOrgPath(@RequestParam(value = "orgPath") String path, HttpSession session){
         ModelAndView mv=new ModelAndView();
         mv.setViewName("redirect:/index");
 
@@ -97,7 +100,7 @@ public class UserController {
 
         OrgPath newOrgPath=new OrgPath();
         Integer id= current_user.getId();
-        String orgPath=current_user.getCurrent_path().getOrgPath();
+        String orgPath=path;
         newOrgPath.setUserId(id);
         newOrgPath.setOrgPath(orgPath);
         newOrgPath.setMaxMemberNumber(0);

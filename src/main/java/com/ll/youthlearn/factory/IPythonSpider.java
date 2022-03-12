@@ -37,8 +37,9 @@ public interface IPythonSpider {
      * @param id    用户即user对象的id属性
      * @param orgPath   user对象的orgPath，格式为"xxx|xxx"
      * @param maxStage  查找范围，指定了从当前期开始，持续X期的数据，注意有0-80的范围限制！
+     * @param pathId
      */
-    void saveMemberEachStage(int id,String orgPath,int maxStage);
+    void saveMemberEachStage(int id, String orgPath, int maxStage, Integer pathId);
 
     /**
      * 爬取Org数据，根据固定格式传入的orgs进行35期范围内的org爬取。主要业务是创建账号时所用的联动查询！
