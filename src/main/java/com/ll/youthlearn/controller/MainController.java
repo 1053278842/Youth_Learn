@@ -42,5 +42,8 @@ public class MainController {
     public String memberLast() {
         return "member-last";
     }
-
+    @RequestMapping("/memberCurrent")
+    public String memberCurrent() {
+        return "member-current";
+    }
 }

@@ -2,6 +2,8 @@ package com.ll.youthlearn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.ll.youthlearn.entity.MemberEachStage;
+import com.ll.youthlearn.entity.Org;
 import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.mapper.IOrgPathMapper;
 import com.ll.youthlearn.service.IOrgPathService;
@@ -59,5 +61,10 @@ public class OrgPathServiceImpl implements IOrgPathService {
     @Override
     public List<OrgPath> selectList() {
         return orgPathMapper.selectList(null);
+    }
+
+    @Override
+    public List<OrgPath> selectListByOrgPathStr(String currentOrgPathStr) {
+        return orgPathMapper.selectList(new QueryWrapper<OrgPath>().eq("org_path",currentOrgPathStr));
     }
 }

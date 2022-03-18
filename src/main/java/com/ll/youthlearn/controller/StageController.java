@@ -89,7 +89,7 @@ public class StageController {
             return mv;
         }
         //去除lastStageList中包含currentStage的情况,因为列表按照时间排序,故只判断第一个元素
-        if(stages.get(0).getId()==currentStage.getId()){
+        if(currentStage!=null&&(stages.get(0).getId()==currentStage.getId())){
             stages.remove(0);
         }
 
@@ -98,9 +98,12 @@ public class StageController {
         for (Stage s:stages) {
             if(s.getMembers()!=null&&s.getMembers().size()!=0){
                 Timestamp memberDate=s.getMembers().get(0).getTimestamp();
-                Date date = new Date(memberDate.getTime());
 
-                String first_day_week = DateUtils.getWeekMondayDate("yyyy-MM-dd",date);
+                String first_day_week="";
+                if(memberDate!=null){
+                    Date date = new Date(memberDate.getTime());
+                    first_day_week = DateUtils.getWeekMondayDate("yyyy-MM-dd",date);
+                }
 
                 s.setStageDate(first_day_week);
             }else{

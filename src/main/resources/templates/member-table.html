@@ -344,7 +344,7 @@
                             <h4>青年大学习参与率-扇形图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="scatter" style="width: 600px;height: 400px"></div>
+                            <div id="scatter" style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -355,240 +355,252 @@
                             <h4>青年大学习参与率-折柱图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="LineChartAndHistogram" style="width: 600px;height: 400px"></div>
+                            <div id="LineChartAndHistogram" style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- footer -->
             <div th:include="fixed-module::footer"></div>
-
-            <div id="flag"></div>
             <script th:inline="javascript">
-
-                var memberModelList=[[${MEMBER_LIST}]];
-                if(memberModelList!=null){
-                    var l1=0;
-                    var l2=0;
-                    var l3=0;
-                    var l4=0;
-                    var l5=0;
-                    var l6=0;
-                    for (i=0;i<memberModelList.length;i++){
-                        var times = memberModelList[i]["times"];
-                        var maxTimes = memberModelList[i]["maxTimes"];
-                        var completionRate=parseInt(times*1.0/maxTimes*10);
-                        switch (completionRate) {
-                            case 10:
-                                l1++;
-                                break;
-                            case 9:
-                            case 8:
-                                l2++;
-                                break;
-                            case 7:
-                            case 6:
-                                l3++;
-                                break;
-                            case 5:
-                            case 4:
-                                l4++;
-                                break;
-                            case 3:
-                            case 2:
-                                l5++;
-                                break;
-                            case 1:
-                            case 0:
-                                l6++;
-                                break;
+                function scatterEcharts(){
+                    var memberModelList=[[${MEMBER_LIST}]];
+                    if(memberModelList!=null){
+                        var l1=0;
+                        var l2=0;
+                        var l3=0;
+                        var l4=0;
+                        var l5=0;
+                        var l6=0;
+                        for (i=0;i<memberModelList.length;i++){
+                            var times = memberModelList[i]["times"];
+                            var maxTimes = memberModelList[i]["maxTimes"];
+                            var completionRate=parseInt(times*1.0/maxTimes*10);
+                            switch (completionRate) {
+                                case 10:
+                                    l1++;
+                                    break;
+                                case 9:
+                                case 8:
+                                    l2++;
+                                    break;
+                                case 7:
+                                case 6:
+                                    l3++;
+                                    break;
+                                case 5:
+                                case 4:
+                                    l4++;
+                                    break;
+                                case 3:
+                                case 2:
+                                    l5++;
+                                    break;
+                                case 1:
+                                case 0:
+                                    l6++;
+                                    break;
+                            }
                         }
-                    }
 
-                    var chartDom = document.getElementById('scatter');
-                    var myChart = echarts.init(chartDom);
-                    var option;
-                    option = {
-                        title: {
-                            text: '成员学习情况饼图',
-                            subtext: '大学习完成率',
-                            left: 'center'
-                        },
-                        tooltip: {
-                            trigger: 'item'
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            left: 'left'
-                        },
-                        // color:['#03aa62', '#038C65', '#02735E','#025959','#012E40','#011526'],
-                        series: [
-                            {
-                                name: '成员学习情况饼图',
-                                type: 'pie',
-                                radius: '70%',
-                                data: [
-                                    { value: l1, name: '100%    完成数： ' },
-                                    { value: l2, name: '80%~99% 完成数： ' },
-                                    { value: l3, name: '60%~79% 完成数： ' },
-                                    { value: l4, name: '40%~59% 完成数： ' },
-                                    { value: l5, name: '20%~39% 完成数： ' },
-                                    { value: l6, name: ' 0%~19% 完成数： ' }
-                                ],
-                                emphasis: {
-                                    itemStyle: {
-                                        shadowBlur: 10,
-                                        shadowOffsetX: 0,
-                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                    }
-                                },
-                                label:{
-                                    show:false,
-                                },
-                                labelLine:{
-                                    show:false
-                                },
-
-                            }
-                        ]
-                    };
-
-                    option && myChart.setOption(option);
-                }
-            </script>
-            <script th:inline="javascript">
-                var memberModelList=[[${MEMBER_LIST}]];
-                if(memberModelList!=null){
-                    var l1=0;
-                    var l2=0;
-                    var l3=0;
-                    var l4=0;
-                    var l5=0;
-                    var maxYaxis=10;
-                    var maxTimes=memberModelList[0]["maxTimes"];
-                    var averTimes=[[${MEMBER_LIST_AverTimes}]]/100*100;
-                    for (i=0;i<memberModelList.length;i++){
-                        var times = memberModelList[i]["times"];
-                        var completionRate=times*1.0/maxTimes*100;
-                        if(completionRate>=80){
-                            l1++;
-                        }else if(completionRate>=60){
-                            l2++
-                        }else if(completionRate>=40){
-                            l3++
-                        }else if(completionRate>=20){
-                            l4++
-                        }else if(completionRate>=0){
-                            l5++
-                        }
-                    }
-                    var tempList=[l1,l2,l3,l4,l5];
-                    for(ii=0;ii<tempList.length;ii++){
-                        if(tempList[ii]>maxYaxis){
-                            maxYaxis=tempList[ii]
-                        }
-                    }
-                    maxYaxis+=parseInt(maxYaxis/10);
-
-                    var chartDom = document.getElementById('LineChartAndHistogram');
-                    var myChart = echarts.init(chartDom);
-                    var option;
-                    option = {
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                crossStyle: {
-                                    color: '#999'
-                                }
-                            }
-                        },
-                        toolbox: {
-                            feature: {
-                                dataView: { show: true, readOnly: false },
-                                magicType: { show: true, type: ['line'] },
-                                restore: { show: true },
-                                saveAsImage: { show: true }
-                            }
-                        },
-                        title: {
-                            text: '成员学习情况折柱图',
-                            left: 'center'
-                        },
-                        xAxis: [
-                            {
-                                type: 'category',
-                                data: ['0-20(%)', '20-40(%)', '40-60(%)', '60-80(%)', '80-100(%)'],
-                                axisPointer: {
-                                    type: 'shadow'
-                                }
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                type: 'value',
-                                name: '参与次数',
-                                min: 0,
-                                max: maxYaxis,
-                                interval: Math.floor(maxYaxis*1.0/10),
+                        var chartDom = document.getElementById('scatter');
+                        var myChart = echarts.init(chartDom);
+                        var option;
+                        option = {
+                            title: {
+                                text: '成员学习情况饼图',
+                                subtext: '大学习完成率',
+                                left: 'center'
                             },
-                            {
-                                type: 'value',
-                                name: '完成率',
-                                min: 0,
-                                max: 100,
-                                interval: 50,
-                                axisLabel: {
-                                    formatter: '{value} %'
-                                }
-                            }
-                        ],
-                        series: [
-                            {
-                                name: '参与次数',
-                                type: 'bar',
-                                tooltip: {
-                                    valueFormatter: function (value) {
-                                        return value + ' 次';
-                                    }
-                                },
-                                data: [
-                                    l5,l4,l3,l2,l1
-                                ],
-                                markLine: {
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                left: 'left'
+                            },
+                            // color:['#03aa62', '#038C65', '#02735E','#025959','#012E40','#011526'],
+                            series: [
+                                {
+                                    name: '成员学习情况饼图',
+                                    type: 'pie',
+                                    radius: '70%',
                                     data: [
-                                        { name: '', yAxis: averTimes, symbol: 'circle' }
-                                    ]
-                                },
-                            },
-                            {
-                                name: '完成率',
-                                type: 'line',
-                                yAxisIndex: 1,
-                                tooltip: {
-                                    valueFormatter: function (value) {
-                                        return value + ' %';
-                                    }
-                                },
-                                data: [
-                                    (l5*1.0/maxYaxis*100).toFixed(2),
-                                    (l4*1.0/maxYaxis*100).toFixed(2),
-                                    (l3*1.0/maxYaxis*100).toFixed(2),
-                                    (l2*1.0/maxYaxis*100).toFixed(2),
-                                    (l1*1.0/maxYaxis*100).toFixed(2),
-                                ],
-                                markPoint:{
-                                    data:[
-                                        { type: 'max', name: 'Max' },
-                                        { type: 'min', name: 'Min' }
-                                    ]
+                                        { value: l1, name: '100%    完成数： ' },
+                                        { value: l2, name: '80%~99% 完成数： ' },
+                                        { value: l3, name: '60%~79% 完成数： ' },
+                                        { value: l4, name: '40%~59% 完成数： ' },
+                                        { value: l5, name: '20%~39% 完成数： ' },
+                                        { value: l6, name: ' 0%~19% 完成数： ' }
+                                    ],
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    },
+                                    label:{
+                                        show:false,
+                                    },
+                                    labelLine:{
+                                        show:false
+                                    },
+
                                 }
-                            }
-                        ]
-                    };
-                    option && myChart.setOption(option);
+                            ]
+                        };
+
+                        option && myChart.setOption(option);
+                        window.addEventListener('resize', () => {
+                            console.log('resize')
+                            myChart.resize()
+                        })
+                    }
                 }
+                function LineChartAndHistogram(){
+                    var memberModelList=[[${MEMBER_LIST}]];
+                    if(memberModelList!=null){
+                        var l1=0;
+                        var l2=0;
+                        var l3=0;
+                        var l4=0;
+                        var l5=0;
+                        var maxYaxis=10;
+                        var maxTimes=memberModelList[0]["maxTimes"];
+                        var averTimes=[[${MEMBER_LIST_AverTimes}]]/100*100;
+                        for (i=0;i<memberModelList.length;i++){
+                            var times = memberModelList[i]["times"];
+                            var completionRate=times*1.0/maxTimes*100;
+                            if(completionRate>=80){
+                                l1++;
+                            }else if(completionRate>=60){
+                                l2++
+                            }else if(completionRate>=40){
+                                l3++
+                            }else if(completionRate>=20){
+                                l4++
+                            }else if(completionRate>=0){
+                                l5++
+                            }
+                        }
+                        var tempList=[l1,l2,l3,l4,l5];
+                        for(ii=0;ii<tempList.length;ii++){
+                            if(tempList[ii]>maxYaxis){
+                                maxYaxis=tempList[ii]
+                            }
+                        }
+                        maxYaxis+=parseInt(maxYaxis/10);
+
+                        var chartDom = document.getElementById('LineChartAndHistogram');
+                        var myChart = echarts.init(chartDom);
+                        var option;
+                        option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    crossStyle: {
+                                        color: '#999'
+                                    }
+                                }
+                            },
+                            toolbox: {
+                                feature: {
+                                    dataView: { show: true, readOnly: false },
+                                    magicType: { show: true, type: ['line'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            title: {
+                                text: '成员学习情况折柱图',
+                                left: 'center'
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: ['0-20(%)', '20-40(%)', '40-60(%)', '60-80(%)', '80-100(%)'],
+                                    axisPointer: {
+                                        type: 'shadow'
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '参与次数',
+                                    min: 0,
+                                    max: maxYaxis,
+                                    interval: Math.floor(maxYaxis*1.0/10),
+                                },
+                                {
+                                    type: 'value',
+                                    name: '完成率',
+                                    min: 0,
+                                    max: 100,
+                                    interval: 50,
+                                    axisLabel: {
+                                        formatter: '{value} %'
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '参与次数',
+                                    type: 'bar',
+                                    tooltip: {
+                                        valueFormatter: function (value) {
+                                            return value + ' 次';
+                                        }
+                                    },
+                                    data: [
+                                        l5,l4,l3,l2,l1
+                                    ],
+                                    markLine: {
+                                        data: [
+                                            { name: '', yAxis: averTimes, symbol: 'circle' }
+                                        ]
+                                    },
+                                },
+                                {
+                                    name: '完成率',
+                                    type: 'line',
+                                    yAxisIndex: 1,
+                                    tooltip: {
+                                        valueFormatter: function (value) {
+                                            return value + ' %';
+                                        }
+                                    },
+                                    data: [
+                                        (l5*1.0/maxYaxis*100).toFixed(2),
+                                        (l4*1.0/maxYaxis*100).toFixed(2),
+                                        (l3*1.0/maxYaxis*100).toFixed(2),
+                                        (l2*1.0/maxYaxis*100).toFixed(2),
+                                        (l1*1.0/maxYaxis*100).toFixed(2),
+                                    ],
+                                    markPoint:{
+                                        data:[
+                                            { type: 'max', name: 'Max' },
+                                            { type: 'min', name: 'Min' }
+                                        ]
+                                    }
+                                }
+                            ]
+                        };
+                        option && myChart.setOption(option);
+                        window.addEventListener('resize', () => {
+                            console.log('resize')
+                            myChart.resize()
+                        })
+                    }
+                }
+                $(function(){
+                    scatterEcharts();
+                    LineChartAndHistogram();
+                })
             </script>
+            <div id="flag"></div>
         </div>
     </div>
 </div>
@@ -623,6 +635,9 @@
 <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
 <!--引入Echarts-->
 <script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
+
+
+
 </body>
 
 <!--MyScript-->
@@ -820,5 +835,4 @@
          $("#member_table .checkbox input").prop("checked",flag)
     }
 </script>
-
 </html>

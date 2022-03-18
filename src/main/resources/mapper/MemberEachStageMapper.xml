@@ -4,6 +4,50 @@
 
 <mapper namespace="com.ll.youthlearn.mapper.IMemberEachStageMapper">
 
+    <resultMap id="mesMap" type="com.ll.youthlearn.entity.MemberEachStage">
+        <id property="id" column="id"></id>
+        <result property="member_id"    column="member_id"></result>
+        <result property="timestamp"    column="timestamp"></result>
+        <result property="stage_id"     column="stage_id"></result>
+        <result property="user_id"      column="user_id"></result>
+        <association property="member" javaType="com.ll.youthlearn.entity.Member">
+            <id         property="id"           column="mid"></id>
+            <result     property="name"         column="name"></result>
+            <result     property="email"        column="email"></result>
+            <result     property="timestamp"    column="m_timestamp"></result>
+            <result     property="times"        column="times"></result>
+            <result     property="path"         column="path"></result>
+            <result     property="pathId"       column="path_id"></result>
+            <result     property="maxTimes"     column="maxTimes"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectMesContainRelationshipByOneOrgParam" parameterType="int" resultMap="mesMap">
+        select id, member_id, timestamp, stage_id, user_id,
+               mid, name, email, m_timestamp, times, path, path_id, parent_user_id, maxtimes, isdelete
+        from t_member_each_stage mes
+            inner join
+            (
+                select id as mid, name, email, timestamp as m_timestamp, times, path, path_id, parent_user_id, maxtimes, isdelete
+                from t_member m
+                where path_id=#{pathId} and
+                      parent_user_id=#{userId}
+            ) m
+                on mes.member_id=m.mid
+        where stage_id=#{stageId}
+        order by timestamp asc
+    </select>
+
+    <insert id="insertMany" parameterType="java.util.List">
+        insert into t_member_each_stage
+            ( member_id, stage_id, user_id)
+        values
+        <foreach collection="list" item="m" separator=",">
+           (#{m.member_id},#{m.stage_id},#{m.user_id})
+        </foreach>
+        on duplicate KEY UPDATE member_id=member_id
+    </insert>
+
     <delete id="deleteByUserIdAndMaxStageNumber">
         delete from t_member_each_stage where user_id=#{userId} and stage_id in (
             select stage_id from (

@@ -1,8 +1,10 @@
-package com.ll.youthlearn.controller;
+package com.ll.youthlearn.config;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.ll.youthlearn.entity.*;
+import com.ll.youthlearn.entity.Member;
+import com.ll.youthlearn.entity.MemberEachStage;
+import com.ll.youthlearn.entity.OrgPath;
+import com.ll.youthlearn.entity.Stage;
 import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IMemberEachStageService;
 import com.ll.youthlearn.service.IMemberService;
@@ -12,16 +14,16 @@ import com.ll.youthlearn.utils.JsonRegularUtils;
 import com.ll.youthlearn.utils.SpiderUtils;
 import com.ll.youthlearn.utils.UrlRegularUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * |       |\__/,|   (`\
@@ -30,13 +32,13 @@ import java.util.*;
  * if sudden problems,please don't look for me,Thank you~
  *
  * @Author :      Liu Long
- * @CreateTime :  2022/2/16 22:11
+ * @CreateTime :  2022/3/17 0:55
  * @Description :
  */
-@Controller
+@Configuration
+@EnableScheduling
 @Slf4j
-@RequestMapping("/MemberEachStage")
-public class MemberEachStageController {
+public class StaticScheduleTask {
 
     @Resource(name = "pythonSpider")
     private IPythonSpider pythonSpider;
@@ -46,126 +48,18 @@ public class MemberEachStageController {
     private final IMemberService memberService;
     private final IStageService stageService;
 
-    public MemberEachStageController(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService, IStageService stageService) {
+    public StaticScheduleTask(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService, IStageService stageService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
         this.memberEachStageService = memberEachStageService;
         this.stageService = stageService;
     }
 
-    /**
-     * 仅抓取当期青年大学习的数据
-     * sidebar中跳转至member-current.html页面的跳转方法，会且必须传递Model数据
-     * @param httpSession 获取当前用户信息用
-     * @return 跳转到member-current.html
-     */
-    @RequestMapping("/goMemberCurrent")
-    public ModelAndView goMemberCurrent(HttpSession httpSession) throws Exception {
+    @Scheduled(cron = "0 0 0/4 ? * ?  ")
+    private void catchCurrentStageMemberEachStage() throws UnsupportedEncodingException {
 
-        User user = (User)httpSession.getAttribute("USER_INFO");
+        log.info("每4小时一次的数据爬取开始！");
 
-        ModelAndView mv=new ModelAndView();
-        mv.setViewName("member-current");
-
-        //获取当期Stage对象
-        Stage stage= stageService.findNewestStage();
-        if(stage!=null){
-
-            List<MemberEachStage> mesList=memberEachStageService.selectByOneOrg(stage.getId(),user.getId(),user.getCurrent_path().getId());
-
-            //初始化日期结构
-            /*
-            01 02 03 04 05 06
-            11 12 13 14 15 16
-            21 22 23 24 25 26
-            31 32 33 34 35 36
-            41 42 43 44 45 46
-            51 52 53 54 55 56
-            61 62 63 64 65 66
-             */
-            final int timeCount=6;
-            final int weekDayCount=7;
-            List<Integer[]> calendarList=new ArrayList();
-            for (int week = 0; week < weekDayCount; week++) {
-                for (int time = 0; time < timeCount; time++) {
-                    calendarList.add(new Integer[]{week,time,0});
-                }
-            }
-            for (MemberEachStage mes: mesList){
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(mes.getTimestamp());
-
-                //周次
-                Integer hour=cal.get(Calendar.HOUR_OF_DAY);
-                cal.setFirstDayOfWeek(Calendar.MONDAY);
-                Integer weekDay=cal.get(Calendar.DAY_OF_WEEK);
-
-                Double hourIndex=Math.floor(hour/(24/timeCount));
-                //-1 -> 为了消除calendar sunday为每周第一天的误差; -1 -> 消除index下标和实际统计1的误差
-                Integer weekDayIndex=weekDay-2;
-
-                Integer localIndex=(hourIndex.intValue())+weekDayIndex*timeCount;
-                calendarList.get(localIndex)[2]++;
-            }
-            String jsonDataStr=JSON.toJSONString(calendarList);
-
-            //获取未参与学习的学生
-            List<Member> memberList=memberService.selectMemberByUserIdAndPathId(user.getId(),user.getCurrent_path().getId(),false);
-            HashMap<Integer,Member> membersMap=new HashMap<>(memberList.size());
-            for (Member m: memberList ) {
-                membersMap.put(m.getId(),m);
-            }
-            //和mesList的member比对,不存在于mes中的就是没学习的学生
-            for (MemberEachStage mes: mesList ) {
-                membersMap.remove(mes.getMember().getId());
-            }
-            List<Member> noStudyMemberList=new ArrayList<>();
-            for (Map.Entry<Integer,Member> entry : membersMap.entrySet()) {
-                noStudyMemberList.add(entry.getValue());
-            }
-            mv.addObject("MEMBER_LIST",mesList);
-            mv.addObject("NO_STUDY_MEMBER_LIST",noStudyMemberList);
-            mv.addObject("CALENDAR_JSON", jsonDataStr);
-        }else{
-            //TODO 提示没有当前期
-        }
-
-        return mv;
-    }
-
-
-    @ResponseBody
-    @RequestMapping("/addMemberEachStage")
-    public String addMemberEachStage(HttpSession session,Integer maxStage){
-
-        //判断当前时间下，是否存在最新的期次，即是否属于寒暑假放假期间
-        Stage stage=stageService.findNewestStage();
-        Integer inNewStage=1;
-        if(stage==null){
-            inNewStage=0;
-        }
-
-
-        //TODO BUG:maxStage指定不准，如果存在最新stage,则总显示条数会-1,修改为指定范围
-        Integer id = ((User)session.getAttribute("USER_INFO")).getId();
-        Integer pathId = ((User)session.getAttribute("USER_INFO")).getCurrent_path().getId();
-        String orgPath=((User)session.getAttribute("USER_INFO")).getCurrent_path().getOrgPath();
-
-        //删除多余的memberEachStage数据,只在maxStage>MySQL:maxStage情况下发生
-        memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,maxStage);
-
-        pythonSpider.saveMemberEachStage(id,orgPath,maxStage,pathId,inNewStage);
-
-        return "";
-    }
-
-    /**
-     * 该接口自动执行
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/getCurrentStageMember")
-    public String getCurrentStageMember() throws IOException {
         pythonSpider.saveAllStage();
         //判断当前时间下，是否存在最新的期次，即是否属于寒暑假放假期间
         Stage stage=stageService.findNewestStage();
@@ -221,8 +115,8 @@ public class MemberEachStageController {
                     //循环遍历其他组织
                     for (OrgPath op:orgPathRlatList) {
                         //打印
-                        System.out.println(MessageFormat.format("当前组织：{0},当前期次：{1},爬取到成员数量：{2}",
-                                op.getOrgPath(),stage.getName(),jsonArray.size()));
+//                        System.out.println(MessageFormat.format("当前组织：{0},当前期次：{1},爬取到成员数量：{2}",
+//                                op.getOrgPath(),stage.getName(),jsonArray.size()));
 
                         //插入和检索需要的主键Id
                         Integer stageId = stage.getId();
@@ -253,7 +147,7 @@ public class MemberEachStageController {
                                 newMember.setParentUserId(userId);
                                 memberService.insertOne(newMember);
 
-                                System.out.println(MessageFormat.format("新插入用户：{0},路径{1}",(String)jsonArray.getJSONObject(i).get("username"),orgPath));
+                                log.info(MessageFormat.format("新插入用户：{0},路径{1}",(String)jsonArray.getJSONObject(i).get("username"),orgPath));
                                 continue;
                             }
 
@@ -266,7 +160,6 @@ public class MemberEachStageController {
                             memberEachStage.setTimestamp(null);
 
                             mesList.add(memberEachStage);
-                            System.out.println("memberId");
                         }
                     }
                 }
@@ -276,8 +169,7 @@ public class MemberEachStageController {
                 memberEachStageService.insertMany(mesList);
             }
         }else{
-            System.out.println("未找到最新期次,更新最新期次中断");
+            log.warn("未找到最新期次,更新最新期次中断");
         }
-        return "success";
     }
 }

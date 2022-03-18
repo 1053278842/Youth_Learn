@@ -5,6 +5,8 @@ import com.ll.youthlearn.entity.MemberEachStage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * |       |\__/,|   (`\
  * |    _.|o o  |_   ) )
@@ -23,4 +25,22 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
      * @param maxStageNumber rt
      */
     void deleteByUserIdAndMaxStageNumber( @Param("userId") Integer userId, @Param("maxStageNumber") Integer maxStageNumber);
+
+    /**
+     * 批量插入列表
+     * @param mesList MemberEachStage对象列表
+     */
+    void insertMany(List<MemberEachStage> mesList);
+
+    /**
+     * 根据单组织的三维限制id,检索出单个用户、单个组织路径下、单个期次下的成员情况
+     * @param stageId 期次id
+     * @param userId 用户id
+     * @param orgPathId 组织路径id
+     * @return  List<MemberEachStage> + OneToOne关系下Member
+     */
+    List<MemberEachStage> selectMesContainRelationshipByOneOrgParam(
+            @Param("stageId") int stageId, @Param("userId") Integer userId,
+            @Param("pathId") Integer orgPathId
+    );
 }

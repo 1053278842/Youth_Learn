@@ -347,7 +347,7 @@
                             <h4>次数/参与率-折柱图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="LineChartAndHistogram" style="width: 600px;height: 400px"></div>
+                            <div id="LineChartAndHistogram" style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -357,7 +357,7 @@
                             <h4>周次-玫瑰图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="roseChart" style="width: 600px;height: 400px"></div>
+                            <div id="roseChart"  style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -371,7 +371,7 @@
                             <h4>周次-堆叠面积图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="scatter" style="width: 600px;height: 400px"></div>
+                            <div id="scatter"  style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -382,7 +382,7 @@
                             <h4>周次占比-堆叠条形图</h4>
                         </div>
                         <div class="card-body ">
-                            <div id="WeekRateStackAreaChart" style="width: 600px;height: 400px"></div>
+                            <div id="WeekRateStackAreaChart"  style="height: 400px"></div>
                         </div>
                     </div>
                 </div>
@@ -400,7 +400,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle2">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalCenterTitle2">详细成员-列表</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -438,830 +438,853 @@
 <script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
 
 
-<!--每期周次堆叠图学习情况-->
+<!--Echarts图标-->
 <script th:inline="javascript">
+    <!--每期周次堆叠图学习情况-->
+    function scatterEcharts(){
+        var stageList=[[${STAGE_LIST}]];
+        if(stageList!=null){
+            const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
+            let xStageName=[];
 
-    var stageList=[[${STAGE_LIST}]];
-    if(stageList!=null){
-        const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
-        let xStageName=[];
+            //全期里周次的学习总数
+            let yTimes_Mon=[];
+            let yTimes_Tue=[];
+            let yTimes_Wed=[];
+            let yTimes_Thu=[];
+            let yTimes_Fri=[];
+            let yTimes_Sat=[];
+            let yTimes_Sun=[];
 
-        //全期里周次的学习总数
-        let yTimes_Mon=[];
-        let yTimes_Tue=[];
-        let yTimes_Wed=[];
-        let yTimes_Thu=[];
-        let yTimes_Fri=[];
-        let yTimes_Sat=[];
-        let yTimes_Sun=[];
+            for (let i = 0; i < stageList.length; i++) {
+                xStageName[i]=stageList[i]["name"];
+                yTimes_Mon[i]=0;
+                yTimes_Tue[i]=0;
+                yTimes_Wed[i]=0;
+                yTimes_Thu[i]=0;
+                yTimes_Fri[i]=0;
+                yTimes_Sat[i]=0;
+                yTimes_Sun[i]=0;
 
-        for (let i = 0; i < stageList.length; i++) {
-            xStageName[i]=stageList[i]["name"];
-            yTimes_Mon[i]=0;
-            yTimes_Tue[i]=0;
-            yTimes_Wed[i]=0;
-            yTimes_Thu[i]=0;
-            yTimes_Fri[i]=0;
-            yTimes_Sat[i]=0;
-            yTimes_Sun[i]=0;
-
-            for (let j = 0; j < stageList[i].members.length; j++) {
-                let current_member=stageList[i].members[j];
-                let dateTime=current_member['timestamp'].substr(0,10);
-                let week=DateStringToWeek(dateTime);
-                switch (week) {
-                    case "周一":
-                        yTimes_Mon[i]++;
-                        break;
-                    case "周二":
-                        yTimes_Tue[i]++;
-                        break;
-                    case "周三":
-                        yTimes_Wed[i]++;
-                        break;
-                    case "周四":
-                        yTimes_Thu[i]++;
-                        break;
-                    case "周五":
-                        yTimes_Fri[i]++;
-                        break;
-                    case "周六":
-                        yTimes_Sat[i]++;
-                        break;
-                    case "周日":
-                        yTimes_Sun[i]++;
-                        break;
-                }
-            }
-        }
-        xStageName.reverse();
-        yTimes_Mon.reverse();
-        yTimes_Tue.reverse();
-        yTimes_Wed.reverse();
-        yTimes_Thu.reverse();
-        yTimes_Fri.reverse();
-        yTimes_Sat.reverse();
-        yTimes_Sun.reverse();
-
-        var chartDom = document.getElementById('scatter');
-        var myChart = echarts.init(chartDom);
-        var option;
-        option = {
-            title: {
-                text: ''
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#6a7985'
+                for (let j = 0; j < stageList[i].members.length; j++) {
+                    let current_member=stageList[i].members[j];
+                    let dateTime=current_member['timestamp'].substr(0,10);
+                    let week=DateStringToWeek(dateTime);
+                    switch (week) {
+                        case "周一":
+                            yTimes_Mon[i]++;
+                            break;
+                        case "周二":
+                            yTimes_Tue[i]++;
+                            break;
+                        case "周三":
+                            yTimes_Wed[i]++;
+                            break;
+                        case "周四":
+                            yTimes_Thu[i]++;
+                            break;
+                        case "周五":
+                            yTimes_Fri[i]++;
+                            break;
+                        case "周六":
+                            yTimes_Sat[i]++;
+                            break;
+                        case "周日":
+                            yTimes_Sun[i]++;
+                            break;
                     }
                 }
-            },
-            legend: {
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            dataZoom: [
-                {
-                    type: 'inside'
-                },
-                {
-                    type: 'slider'
-                }
-            ],
-            xAxis: [
-                {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: xStageName
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: 'Mon',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    label: {
-                        show: true,
-                        position: 'top'
-                    },
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#125bb6'
-                            },
-                            {
-                                offset: 1,
-                                color: '#022147'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Mon
-                },
-                {
-                    name: 'Tue',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#19a8d4'
-                            },
-                            {
-                                offset: 1,
-                                color: '#034C60'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Tue
-                },
-                {
-                    name: 'Wed',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#86ffb6'
-                            },
-                            {
-                                offset: 1,
-                                color: '#38714D'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Wed
-                },
-                {
-                    name: 'Thu',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#fff2b0'
-                            },
-                            {
-                                offset: 1,
-                                color: '#7C714E'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Thu
-                },
-                {
-                    name: 'Fri',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#ff5f48'
-                            },
-                            {
-                                offset: 1,
-                                color: '#75251B'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Fri
-                },
-                {
-                    name: 'Sat',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    label: {
-                        show: true,
-                        position: 'top'
-                    },
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#ff261a'
-                            },
-                            {
-                                offset: 1,
-                                color: '#730803'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Sat
-                },
-                {
-                    name: 'Sun',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    label: {
-                        show: true,
-                        position: 'top'
-                    },
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: '#bd54fd'
-                            },
-                            {
-                                offset: 1,
-                                color: '#510987'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: yTimes_Sun
-                }
-            ]
-        };
-
-        option && myChart.setOption(option);
-    }
-</script>
-<!--周次占比堆叠图-->
-<script th:inline="javascript">
-
-    var stageList=[[${STAGE_LIST}]];
-    if(stageList!=null){
-        const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
-        let xStageName=[];
-
-        //全期里周次的学习总数
-        let yRate_Mon=[];
-        let yRate_Tue=[];
-        let yRate_Wed=[];
-        let yRate_Thu=[];
-        let yRate_Fri=[];
-        let yRate_Sat=[];
-        let yRate_Sun=[];
-
-        for (let i = 0; i < stageList.length; i++) {
-            xStageName[i]=stageList[i]["name"];
-            var oneStageMaxNumber=stageList[i].members.length;
-
-            yRate_Mon[i]=0;
-            yRate_Tue[i]=0;
-            yRate_Wed[i]=0;
-            yRate_Thu[i]=0;
-            yRate_Fri[i]=0;
-            yRate_Sat[i]=0;
-            yRate_Sun[i]=0;
-
-
-            for (let j = 0; j < stageList[i].members.length; j++) {
-                let current_member=stageList[i].members[j];
-                let dateTime=current_member['timestamp'].substr(0,10);
-                let week=DateStringToWeek(dateTime);
-                switch (week) {
-                    case "周一":
-                        yRate_Mon[i]++;
-                        break;
-                    case "周二":
-                        yRate_Tue[i]++;
-                        break;
-                    case "周三":
-                        yRate_Wed[i]++;
-                        break;
-                    case "周四":
-                        yRate_Thu[i]++;
-                        break;
-                    case "周五":
-                        yRate_Fri[i]++;
-                        break;
-                    case "周六":
-                        yRate_Sat[i]++;
-                        break;
-                    case "周日":
-                        yRate_Sun[i]++;
-                        break;
-                }
             }
-            yRate_Mon[i]=(yRate_Mon[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Tue[i]=(yRate_Tue[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Wed[i]=(yRate_Wed[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Thu[i]=(yRate_Thu[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Fri[i]=(yRate_Fri[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Sat[i]=(yRate_Sat[i]/oneStageMaxNumber).toFixed(4)*100;
-            yRate_Sun[i]=(yRate_Sun[i]/oneStageMaxNumber).toFixed(4)*100;
-        }
-        xStageName.reverse();
-        yRate_Mon.reverse();
-        yRate_Tue.reverse();
-        yRate_Wed.reverse();
-        yRate_Thu.reverse();
-        yRate_Fri.reverse();
-        yRate_Sat.reverse();
-        yRate_Sun.reverse();
+            xStageName.reverse();
+            yTimes_Mon.reverse();
+            yTimes_Tue.reverse();
+            yTimes_Wed.reverse();
+            yTimes_Thu.reverse();
+            yTimes_Fri.reverse();
+            yTimes_Sat.reverse();
+            yTimes_Sun.reverse();
 
-        var chartDom = document.getElementById('WeekRateStackAreaChart');
-        var myChart = echarts.init(chartDom);
-        var option;
-        option = {
-
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#6a7985'
+            var chartDom = document.getElementById('scatter');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
                     }
-                }
-            },
-            legend: {
-
-            },
-            toolbox: {
-                feature: {
+                },
+                legend: {
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                },
+                toolbox: {
+                    feature: {
                         saveAsImage: {}
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            dataZoom: [
-                {
-                    type: 'inside'
+                    }
                 },
-                {
-                    type: 'slider'
-                }
-            ],
-            xAxis: [
-                {
-                    type: 'category',
-                    // boundaryGap: false,
-                    data: xStageName
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    name: '占比',
-                    min: 0,
-                    max: 100,
-                    axisLabel: {
-                        formatter: '{value} %'
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    },
+                    {
+                        type: 'slider'
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xStageName
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Mon',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#125bb6'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#022147'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Mon
+                    },
+                    {
+                        name: 'Tue',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#19a8d4'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#034C60'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Tue
+                    },
+                    {
+                        name: 'Wed',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#86ffb6'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#38714D'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Wed
+                    },
+                    {
+                        name: 'Thu',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#fff2b0'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#7C714E'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Thu
+                    },
+                    {
+                        name: 'Fri',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#ff5f48'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#75251B'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Fri
+                    },
+                    {
+                        name: 'Sat',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#ff261a'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#730803'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Sat
+                    },
+                    {
+                        name: 'Sun',
+                        type: 'line',
+                        stack: 'Total',
+                        smooth: true,
+                        lineStyle: {
+                            width: 0
+                        },
+                        showSymbol: false,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: '#bd54fd'
+                                },
+                                {
+                                    offset: 1,
+                                    color: '#510987'
+                                }
+                            ])
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: yTimes_Sun
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
+        }
+    }
+    <!--周次占比堆叠图-->
+    function WeekRateStackAreaChart(){
+        var stageList=[[${STAGE_LIST}]];
+        if(stageList!=null){
+            const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
+            let xStageName=[];
+
+            //全期里周次的学习总数
+            let yRate_Mon=[];
+            let yRate_Tue=[];
+            let yRate_Wed=[];
+            let yRate_Thu=[];
+            let yRate_Fri=[];
+            let yRate_Sat=[];
+            let yRate_Sun=[];
+
+            for (let i = 0; i < stageList.length; i++) {
+                xStageName[i]=stageList[i]["name"];
+                var oneStageMaxNumber=stageList[i].members.length;
+
+                yRate_Mon[i]=0;
+                yRate_Tue[i]=0;
+                yRate_Wed[i]=0;
+                yRate_Thu[i]=0;
+                yRate_Fri[i]=0;
+                yRate_Sat[i]=0;
+                yRate_Sun[i]=0;
+
+
+                for (let j = 0; j < stageList[i].members.length; j++) {
+                    let current_member=stageList[i].members[j];
+                    let dateTime=current_member['timestamp'].substr(0,10);
+                    let week=DateStringToWeek(dateTime);
+                    switch (week) {
+                        case "周一":
+                            yRate_Mon[i]++;
+                            break;
+                        case "周二":
+                            yRate_Tue[i]++;
+                            break;
+                        case "周三":
+                            yRate_Wed[i]++;
+                            break;
+                        case "周四":
+                            yRate_Thu[i]++;
+                            break;
+                        case "周五":
+                            yRate_Fri[i]++;
+                            break;
+                        case "周六":
+                            yRate_Sat[i]++;
+                            break;
+                        case "周日":
+                            yRate_Sun[i]++;
+                            break;
                     }
                 }
-            ],
-            series: [
-                {
-                    name: 'Mon',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Mon,
-                },
-                {
-                    name: 'Tue',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Tue,
-                },
-                {
-                    name: 'Wed',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Wed,
-                },
-                {
-                    name: 'Thu',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Thu,
-                },
-                {
-                    name: 'Fri',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Fri,
-                },
-                {
-                    name: 'Sat',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Sat,
-                },
-                {
-                    name: 'Sun',
-                    type: 'bar',
-                    stack: 'total',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yRate_Sun,
-                }
-            ]
-        };
+                yRate_Mon[i]=(yRate_Mon[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Tue[i]=(yRate_Tue[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Wed[i]=(yRate_Wed[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Thu[i]=(yRate_Thu[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Fri[i]=(yRate_Fri[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Sat[i]=(yRate_Sat[i]/oneStageMaxNumber).toFixed(4)*100;
+                yRate_Sun[i]=(yRate_Sun[i]/oneStageMaxNumber).toFixed(4)*100;
+            }
+            xStageName.reverse();
+            yRate_Mon.reverse();
+            yRate_Tue.reverse();
+            yRate_Wed.reverse();
+            yRate_Thu.reverse();
+            yRate_Fri.reverse();
+            yRate_Sat.reverse();
+            yRate_Sun.reverse();
 
-        option && myChart.setOption(option);
+            var chartDom = document.getElementById('WeekRateStackAreaChart');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    },
+                    {
+                        type: 'slider'
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        // boundaryGap: false,
+                        data: xStageName
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '占比',
+                        min: 0,
+                        max: 100,
+                        axisLabel: {
+                            formatter: '{value} %'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Mon',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Mon,
+                    },
+                    {
+                        name: 'Tue',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Tue,
+                    },
+                    {
+                        name: 'Wed',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Wed,
+                    },
+                    {
+                        name: 'Thu',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Thu,
+                    },
+                    {
+                        name: 'Fri',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Fri,
+                    },
+                    {
+                        name: 'Sat',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Sat,
+                    },
+                    {
+                        name: 'Sun',
+                        type: 'bar',
+                        stack: 'total',
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yRate_Sun,
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
+        }
     }
-</script>
-<!--周次占比玫瑰图-->
-<script th:inline="javascript">
+    <!--周次占比玫瑰图-->
+    function roseChart(){
+        var stageList=[[${STAGE_LIST}]];
+        if(stageList!=null){
+            //全期里周次的学习总数
+            let yTimes_Mon=0;
+            let yTimes_Tue=0;
+            let yTimes_Wed=0;
+            let yTimes_Thu=0;
+            let yTimes_Fri=0;
+            let yTimes_Sat=0;
+            let yTimes_Sun=0;
 
-    var stageList=[[${STAGE_LIST}]];
-    if(stageList!=null){
-        //全期里周次的学习总数
-        let yTimes_Mon=0;
-        let yTimes_Tue=0;
-        let yTimes_Wed=0;
-        let yTimes_Thu=0;
-        let yTimes_Fri=0;
-        let yTimes_Sat=0;
-        let yTimes_Sun=0;
-
-        for (let i = 0; i < stageList.length; i++) {
-            for (let j = 0; j < stageList[i].members.length; j++) {
-                let current_member=stageList[i].members[j];
-                let dateTime=current_member['timestamp'].substr(0,10);
-                let week=DateStringToWeek(dateTime);
-                switch (week) {
-                    case "周一":
-                        yTimes_Mon++;
-                        break;
-                    case "周二":
-                        yTimes_Tue++;
-                        break;
-                    case "周三":
-                        yTimes_Wed++;
-                        break;
-                    case "周四":
-                        yTimes_Thu++;
-                        break;
-                    case "周五":
-                        yTimes_Fri++;
-                        break;
-                    case "周六":
-                        yTimes_Sat++;
-                        break;
-                    case "周日":
-                        yTimes_Sun++;
-                        break;
+            for (let i = 0; i < stageList.length; i++) {
+                for (let j = 0; j < stageList[i].members.length; j++) {
+                    let current_member=stageList[i].members[j];
+                    let dateTime=current_member['timestamp'].substr(0,10);
+                    let week=DateStringToWeek(dateTime);
+                    switch (week) {
+                        case "周一":
+                            yTimes_Mon++;
+                            break;
+                        case "周二":
+                            yTimes_Tue++;
+                            break;
+                        case "周三":
+                            yTimes_Wed++;
+                            break;
+                        case "周四":
+                            yTimes_Thu++;
+                            break;
+                        case "周五":
+                            yTimes_Fri++;
+                            break;
+                        case "周六":
+                            yTimes_Sat++;
+                            break;
+                        case "周日":
+                            yTimes_Sun++;
+                            break;
+                    }
                 }
             }
-        }
 
-        //Start计算showCard的最大占比周次
-        var maxWeekTimes=Math.max(yTimes_Mon,yTimes_Tue,yTimes_Wed,yTimes_Thu,yTimes_Fri,yTimes_Sat,yTimes_Sun);
-        var maxWeekStr="";
-        switch (maxWeekTimes) {
-            case yTimes_Mon:
-                maxWeekStr = "周一";
-                break;
-            case yTimes_Tue:
-                maxWeekStr = "周二";
-                break;
-            case yTimes_Wed:
-                maxWeekStr = "周三";
-                break;
-            case yTimes_Thu:
-                maxWeekStr = "周四";
-                break;
-            case yTimes_Fri:
-                maxWeekStr = "周五";
-                break;
-            case yTimes_Sat:
-                maxWeekStr = "周六";
-                break;
-            case yTimes_Sun:
-                maxWeekStr = "周日";
-                break;
-        }
-        $("#concentrateWeeksShowCard").text(maxWeekStr);
-        //END
+            //Start计算showCard的最大占比周次
+            var maxWeekTimes=Math.max(yTimes_Mon,yTimes_Tue,yTimes_Wed,yTimes_Thu,yTimes_Fri,yTimes_Sat,yTimes_Sun);
+            var maxWeekStr="";
+            switch (maxWeekTimes) {
+                case yTimes_Mon:
+                    maxWeekStr = "周一";
+                    break;
+                case yTimes_Tue:
+                    maxWeekStr = "周二";
+                    break;
+                case yTimes_Wed:
+                    maxWeekStr = "周三";
+                    break;
+                case yTimes_Thu:
+                    maxWeekStr = "周四";
+                    break;
+                case yTimes_Fri:
+                    maxWeekStr = "周五";
+                    break;
+                case yTimes_Sat:
+                    maxWeekStr = "周六";
+                    break;
+                case yTimes_Sun:
+                    maxWeekStr = "周日";
+                    break;
+            }
+            $("#concentrateWeeksShowCard").text(maxWeekStr);
+            //END
 
-        var chartDom = document.getElementById('roseChart');
-        var myChart = echarts.init(chartDom);
-        var option;
-        option = {
-            backgroundColor: '#2c343c',
-            title: {
-                text: '总周次学习占比',
-                left: 'center',
-                top: 20,
-                textStyle: {
-                    color: '#ccc'
-                }
-            },
-            tooltip: {
-                trigger: 'item'
-            },
-            visualMap: {
-                show: false,
-                min: 0,
-                max: maxWeekTimes,
-                inRange: {
-                    colorLightness: [0, 1]
-                }
-            },
-            series: [
-                {
-                    name: 'Access From',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '50%'],
-                    data: [
-                        { value: yTimes_Mon, name: '周一' },
-                        { value: yTimes_Tue, name: '周二' },
-                        { value: yTimes_Wed, name: '周三' },
-                        { value: yTimes_Thu, name: '周四' },
-                        { value: yTimes_Fri, name: '周五' },
-                        { value: yTimes_Sat, name: '周六' },
-                        { value: yTimes_Sun, name: '周日' },
-                    ].sort(function (a, b) {
-                        return a.value - b.value;
-                    }),
-                    roseType: 'radius',
-                    label: {
-                        color: 'rgba(255, 255, 255, 0.3)'
-                    },
-                    labelLine: {
-                        lineStyle: {
+            var chartDom = document.getElementById('roseChart');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+                backgroundColor: '#2c343c',
+                title: {
+                    text: '总周次学习占比',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#ccc'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                visualMap: {
+                    show: false,
+                    min: 0,
+                    max: maxWeekTimes,
+                    inRange: {
+                        colorLightness: [0, 1]
+                    }
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '50%'],
+                        data: [
+                            { value: yTimes_Mon, name: '周一' },
+                            { value: yTimes_Tue, name: '周二' },
+                            { value: yTimes_Wed, name: '周三' },
+                            { value: yTimes_Thu, name: '周四' },
+                            { value: yTimes_Fri, name: '周五' },
+                            { value: yTimes_Sat, name: '周六' },
+                            { value: yTimes_Sun, name: '周日' },
+                        ].sort(function (a, b) {
+                            return a.value - b.value;
+                        }),
+                        roseType: 'radius',
+                        label: {
                             color: 'rgba(255, 255, 255, 0.3)'
                         },
-                        smooth: 0.2,
-                        length: 10,
-                        length2: 20
-                    },
-                    itemStyle: {
-                        color: '#c23531',
-                        shadowBlur: 200,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    },
-                    animationType: 'scale',
-                    animationEasing: 'elasticOut',
-                    animationDelay: function (idx) {
-                        return Math.random() * 200;
+                        labelLine: {
+                            lineStyle: {
+                                color: 'rgba(255, 255, 255, 0.3)'
+                            },
+                            smooth: 0.2,
+                            length: 10,
+                            length2: 20
+                        },
+                        itemStyle: {
+                            color: '#c23531',
+                            shadowBlur: 200,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+                        animationType: 'scale',
+                        animationEasing: 'elasticOut',
+                        animationDelay: function (idx) {
+                            return Math.random() * 200;
+                        }
                     }
-                }
-            ]
-        };
+                ]
+            };
 
-        option && myChart.setOption(option);
-
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
+        }
     }
-</script>
-<!--青年大学习折柱图-->
-<script th:inline="javascript">
-    var stageList=[[${STAGE_LIST}]];
-    if(stageList!=null){
-        const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
-        let xData=[];
-        let yData=[];
-        let yLineData=[];
-        for (let i = 0; i < stageList.length; i++) {
-            xData[i]=stageList[i]["name"];
-            yData[i]=stageList[i]["members"].length;
-        }
-        xData.reverse();
-        yData.reverse();
+    <!--青年大学习折柱图-->
+    function LineChartAndHistogramEcharts(){
+        var stageList=[[${STAGE_LIST}]];
+        if(stageList!=null){
+            const maxMemberNumber=[[${ORG_PATH_MAX_MEMBER_NUMBER}]];
+            let xData=[];
+            let yData=[];
+            let yLineData=[];
+            for (let i = 0; i < stageList.length; i++) {
+                xData[i]=stageList[i]["name"];
+                yData[i]=stageList[i]["members"].length;
+            }
+            xData.reverse();
+            yData.reverse();
 
-        var maxY=Math.max(...yData);
-        var minY=Math.min(...yData);
-        for (let i = 0; i < yData.length; i++) {
-            yLineData[i]=(yData[i]*1.0/maxMemberNumber*100).toFixed(2);
-        }
+            var maxY=Math.max(...yData);
+            var minY=Math.min(...yData);
+            for (let i = 0; i < yData.length; i++) {
+                yLineData[i]=(yData[i]*1.0/maxMemberNumber*100).toFixed(2);
+            }
 
-        var chartDom = document.getElementById('LineChartAndHistogram');
-        var myChart = echarts.init(chartDom);
-        var option;
-        option = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    crossStyle: {
-                        color: '#999'
-                    }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
-            },
-            title: {
-                text: '每期学习情况折柱图',
-                left: 'center'
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: xData,
+            var chartDom = document.getElementById('LineChartAndHistogram');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+                tooltip: {
+                    trigger: 'axis',
                     axisPointer: {
-                        type: 'shadow'
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    name: '参与次数',
-                    min: Math.max(minY-Math.floor(maxY*1.0/20),0),
-                    max: maxMemberNumber,
-                    interval: Math.floor((maxMemberNumber-Math.max((minY-Math.floor(maxY*1.0/20)),0))/5),
-                },
-                {
-                    type: 'value',
-                    name: '完成率',
-                    min: (Math.max(minY-Math.floor(maxY*1.0/20),0))/maxMemberNumber*100,
-                    max: 100,
-                    interval: 100,
-                    axisLabel: {
-                        formatter: '{value} %'
-                    }
-                }
-            ],
-            series: [
-                {
-                    name: '参与次数',
-                    type: 'bar',
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' 次';
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
                         }
-                    },
-                    data: yData,
-                    markLine: {
-                        data: [
-                            { type: 'average', name: 'Avg' }
-                        ]
-                    },
-                },
-                {
-                    name: '完成率',
-                    type: 'line',
-                    yAxisIndex: 1,
-                    tooltip: {
-                        valueFormatter: function (value) {
-                            return value + ' %';
-                        }
-                    },
-                    data: yLineData,
-                    markPoint:{
-                        data:[
-                            { type: 'max', name: 'Max' },
-                            { type: 'min', name: 'Min' }
-                        ]
                     }
-                }
-            ]
-        };
-        option && myChart.setOption(option);
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                title: {
+                    text: '每期学习情况折柱图',
+                    left: 'center'
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: xData,
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '参与次数',
+                        min: Math.max(minY-Math.floor(maxY*1.0/20),0),
+                        max: maxMemberNumber,
+                        interval: Math.floor((maxMemberNumber-Math.max((minY-Math.floor(maxY*1.0/20)),0))/5),
+                    },
+                    {
+                        type: 'value',
+                        name: '完成率',
+                        min: (Math.max(minY-Math.floor(maxY*1.0/20),0))/maxMemberNumber*100,
+                        max: 100,
+                        interval: 100,
+                        axisLabel: {
+                            formatter: '{value} %'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '参与次数',
+                        type: 'bar',
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' 次';
+                            }
+                        },
+                        data: yData,
+                        markLine: {
+                            data: [
+                                { type: 'average', name: 'Avg' }
+                            ]
+                        },
+                    },
+                    {
+                        name: '完成率',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + ' %';
+                            }
+                        },
+                        data: yLineData,
+                        markPoint:{
+                            data:[
+                                { type: 'max', name: 'Max' },
+                                { type: 'min', name: 'Min' }
+                            ]
+                        }
+                    }
+                ]
+            };
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
 
-        //Start 替换卡片,在这里计算平均达成率
-        let sumYData=0;
-        for (let i = 0; i < yData.length; i++) {
-            sumYData+=yData[i];
+            //Start 替换卡片,在这里计算平均达成率
+            let sumYData=0;
+            for (let i = 0; i < yData.length; i++) {
+                sumYData+=yData[i];
+            }
+            const AverTimes=(sumYData/yData.length/maxMemberNumber*100).toFixed(2);
+            $("#averReachRateEachStageShowCard").text(AverTimes+" (%)");
+            //End
         }
-        const AverTimes=(sumYData/yData.length/maxMemberNumber*100).toFixed(2);
-        $("#averReachRateEachStageShowCard").text(AverTimes+" (%)");
-        //End
     }
 
+    $(function(){
+        scatterEcharts();
+        WeekRateStackAreaChart();
+        roseChart();
+        LineChartAndHistogramEcharts();
+    })
 </script>
+
+
 
 </body>
 

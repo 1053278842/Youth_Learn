@@ -5,6 +5,7 @@ import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.IOrgPathService;
+import com.ll.youthlearn.service.IStageService;
 import com.ll.youthlearn.service.impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,15 +35,19 @@ public class MemberController {
 
     private final IOrgPathService orgPathService;
 
+    private final IStageService stageService;
+
     @Resource(name = "pythonSpider")
     private IPythonSpider pythonSpider;
 
     private final MemberServiceImpl memberService;
 
-    public MemberController(MemberServiceImpl memberService, IOrgPathService orgPathService) {
+    public MemberController(MemberServiceImpl memberService, IOrgPathService orgPathService, IStageService stageService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
+        this.stageService = stageService;
     }
+
 
     /**
      * 根据传入的用户主键id，返回联动相关的member列表

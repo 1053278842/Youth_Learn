@@ -1,9 +1,12 @@
 package com.ll.youthlearn.service.impl;
 
+import com.ll.youthlearn.entity.MemberEachStage;
 import com.ll.youthlearn.mapper.IMemberEachStageMapper;
 import com.ll.youthlearn.service.IMemberEachStageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * |       |\__/,|   (`\
@@ -29,4 +32,15 @@ public class MemberEachStageServiceImpl implements IMemberEachStageService {
     public void deleteMemberEachStageByUserIdAndMaxStage(Integer userId, Integer maxStage) {
         memberEachStageMapper.deleteByUserIdAndMaxStageNumber(userId,maxStage);
     }
+
+    @Override
+    public void insertMany(List<MemberEachStage> mesList) {
+        memberEachStageMapper.insertMany(mesList);
+    }
+
+    @Override
+    public List<MemberEachStage> selectByOneOrg(int stageId, Integer userId, Integer orgPathId) {
+        return memberEachStageMapper.selectMesContainRelationshipByOneOrgParam(stageId, userId, orgPathId);
+    }
+
 }

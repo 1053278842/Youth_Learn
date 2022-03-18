@@ -51,6 +51,7 @@ if __name__=="__main__":
     orgNames=eval(sys.argv[2])
     maxStage=sys.argv[3]
     pathId=sys.argv[4]
+    isNewStage=sys.argv[5]
     # orgNames=eval("['系统团委','安徽省消防救援总队团委','黄山市消防救援支队团委','屯光特勤站团支部']")
     # maxStage=35
     # userId=1
@@ -67,7 +68,7 @@ if __name__=="__main__":
     t2=time.time()
     conn = getConn()
     cursor=conn.cursor()
-    sql = 'select stage,id from t_stage ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit 0,'+str(maxStage)
+    sql = 'select stage,id from t_stage ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit '+str(isNewStage)+','+str(maxStage)
     cursor.execute(sql)
     allStage=cursor.fetchall()
     allStageDict={}

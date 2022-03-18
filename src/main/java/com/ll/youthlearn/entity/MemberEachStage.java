@@ -42,4 +42,7 @@ public class MemberEachStage implements Serializable {
 
     @TableField(value = "memberName",exist = false)
     private String memberName;
+
+    @TableField(value = "member",exist = false)
+    private Member member;
 }

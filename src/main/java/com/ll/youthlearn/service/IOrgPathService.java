@@ -54,4 +54,11 @@ public interface IOrgPathService {
      * @return
      */
     List<OrgPath> selectList();
+
+    /**
+     * 根据orgPath字段的返回匹配的Mes对象列表
+     * @param currentOrgPathStr
+     * @return
+     */
+    List<OrgPath> selectListByOrgPathStr(String currentOrgPathStr);
 }
