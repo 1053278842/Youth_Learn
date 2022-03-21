@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IMemberService {
     /**
-     * 根据当前用户的id，获得所有和当前用户关联的memberList
+     * 根据当前用户的id，获得所有和当前用户关联的memberList，isDelete=0
      * @param userId  当前用户id
      * @param pathId
      * @param isAsc Ture则升序排列，反之

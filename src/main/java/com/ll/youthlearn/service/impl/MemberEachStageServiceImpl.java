@@ -43,4 +43,9 @@ public class MemberEachStageServiceImpl implements IMemberEachStageService {
         return memberEachStageMapper.selectMesContainRelationshipByOneOrgParam(stageId, userId, orgPathId);
     }
 
+    @Override
+    public List<MemberEachStage> selectListByMemberId(Integer memberId) {
+        return memberEachStageMapper.selectListByMemberId(memberId);
+    }
+
 }

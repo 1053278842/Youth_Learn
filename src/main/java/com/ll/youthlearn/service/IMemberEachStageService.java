@@ -38,4 +38,10 @@ public interface IMemberEachStageService {
     List<MemberEachStage> selectByOneOrg(int stageId, Integer userId, Integer orgPathId);
 
 
+    /**
+     * 根据memberID获取该成员在所有期次(包括该组织成立时间之前)的学习信息
+     * @param memberId
+     * @return
+     */
+    List<MemberEachStage> selectListByMemberId(Integer memberId);
 }

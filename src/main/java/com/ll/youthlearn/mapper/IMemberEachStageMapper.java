@@ -43,4 +43,11 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
             @Param("stageId") int stageId, @Param("userId") Integer userId,
             @Param("pathId") Integer orgPathId
     );
+
+    /**
+     * 左连接stage,orderBy stage的时间。升序
+     * @param memberId
+     * @return
+     */
+    List<MemberEachStage> selectListByMemberId(Integer memberId);
 }

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -53,6 +54,89 @@ public class MemberEachStageController {
         this.stageService = stageService;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/getOneMemberEachStatus")
+    public String getOneMemberEachStatus(Integer memberId) throws Exception {
+
+        //升序数据
+        List<MemberEachStage> mesList = memberEachStageService.selectListByMemberId(memberId);
+        if(mesList.size()==0){
+            return "";
+        }
+
+        List<Object> dataList=new ArrayList<>();
+        int xAxis=0;
+        int yAxis=0;
+
+        //和前端对应的坐标参数、状态参数
+        final int XMAXBOUND=20;
+        final int STATUS_STUDY=-1;
+        final int STATUS_NO_STUDY=0;
+        final int STATUS_STUDY_OVERTIME=1;
+
+        for(int i=0;i< mesList.size();i++){
+            MemberEachStage mes=mesList.get(i);
+            Integer studyStatus=STATUS_STUDY;
+            //mes无数据即为无记录,相当于没有学习记录
+            if(mes.getId()==0){
+                studyStatus=STATUS_NO_STUDY;
+            }else{
+                //有记录时：判断该条记录的状态：未学习/学习/超时学习
+                Calendar cal = Calendar.getInstance();
+                cal.setFirstDayOfWeek(Calendar.MONDAY);
+
+                //防止越界,忽略最后一个元素
+                if(i<mesList.size()-1){
+                    //获取当期后存在的&最近日期的一个mes对象
+                    MemberEachStage mesAfterOneRow=null;
+                    //不存在为空的情况
+                    List<MemberEachStage> AfterList=mesList.subList(i+1,mesList.size());
+                    
+                    long minValueTime=new Timestamp(System.currentTimeMillis()).getTime();
+                    for (int j = 0; j < AfterList .size(); j++) {
+                        if (j == AfterList .size() - 1) {
+                            continue;
+                        }
+                        MemberEachStage tempMes=AfterList .get(j + 1);
+                        //判空
+                        if(tempMes.getId()!=0){
+                            long nextTime = tempMes.getTimestamp().getTime();
+                            if (nextTime < minValueTime) {
+                                minValueTime = nextTime;
+                                mesAfterOneRow=tempMes;
+                            }
+                        }
+                    }
+
+                    //BUG 三期：A 完成 B 超时完成 C 刚开始,其中C是最新一期. 又或者用户超时某一期后,不曾继续学习其他期次. 此种情况下超时被系统判断为正常学习！
+                    if(mesAfterOneRow!=null&&mesAfterOneRow.getId()!=0){
+
+                        if(mes.getTimestamp().getTime()>mesAfterOneRow.getTimestamp().getTime()){
+                            studyStatus=STATUS_STUDY_OVERTIME;
+                        }else{
+                            cal.setTime(mes.getTimestamp());
+                            cal.setFirstDayOfWeek(Calendar.MONDAY);
+                            int weekDay=cal.get(Calendar.WEEK_OF_YEAR);
+                            cal.setTime(mesAfterOneRow.getTimestamp());
+                            cal.setFirstDayOfWeek(Calendar.MONDAY);
+                            int weekDayAfter=cal.get(Calendar.WEEK_OF_YEAR);
+                            studyStatus=(weekDay==weekDayAfter?STATUS_STUDY_OVERTIME:STATUS_STUDY);
+                        }
+                    }
+                }
+            }
+
+            Integer[] tempPoint = new Integer[]{xAxis,yAxis,studyStatus};
+            xAxis++;
+            if(xAxis>=XMAXBOUND){
+                xAxis=0;
+                yAxis++;
+            }
+            dataList.add(new Object[]{tempPoint,mes.getStage().getName()});
+        }
+        return JSON.toJSONString(dataList);
+    }
     /**
      * 仅抓取当期青年大学习的数据
      * sidebar中跳转至member-current.html页面的跳转方法，会且必须传递Model数据
@@ -73,7 +157,7 @@ public class MemberEachStageController {
 
             List<MemberEachStage> mesList=memberEachStageService.selectByOneOrg(stage.getId(),user.getId(),user.getCurrent_path().getId());
 
-            //初始化日期结构
+            //初始化日期结构s
             /*
             01 02 03 04 05 06
             11 12 13 14 15 16

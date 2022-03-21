@@ -20,7 +20,25 @@
             <result     property="pathId"       column="path_id"></result>
             <result     property="maxTimes"     column="maxTimes"></result>
         </association>
+        <association property="stage" javaType="com.ll.youthlearn.entity.Stage">
+            <result property="name"     column="s_name"></result>
+        </association>
     </resultMap>
+
+    <select id="selectListByMemberId" parameterType="int" resultMap="mesMap">
+        SELECT
+            t_stage.`name` as s_name,
+            mes.id, member_id, timestamp, stage_id, user_id
+        FROM
+            t_stage
+                left JOIN
+            (SELECT * FROM t_member_each_stage WHERE t_member_each_stage.member_id = #{memberId}) mes
+            ON
+                t_stage.id = mes.stage_id
+
+        ORDER BY
+            t_stage.stage_date ASC
+    </select>
 
     <select id="selectMesContainRelationshipByOneOrgParam" parameterType="int" resultMap="mesMap">
         select id, member_id, timestamp, stage_id, user_id,
@@ -31,7 +49,8 @@
                 select id as mid, name, email, timestamp as m_timestamp, times, path, path_id, parent_user_id, maxtimes, isdelete
                 from t_member m
                 where path_id=#{pathId} and
-                      parent_user_id=#{userId}
+                      parent_user_id=#{userId} AND
+                      isDelete=0
             ) m
                 on mes.member_id=m.mid
         where stage_id=#{stageId}

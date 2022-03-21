@@ -23,7 +23,7 @@
         from
             t_stage s
                 left join (select timestamp, stage_id, user_id ,id as mesId, member_id from t_member_each_stage where user_id=#{userId} and member_id
-                                not in(select id from t_member where parent_user_id=${userId} and path_id=#{pathId} and isDelete=1)) mes
+                        IN ( SELECT id FROM t_member WHERE parent_user_id = #{userId} AND path_id = #{pathId} AND isDelete = 0 )) mes
                           on s.id=mes.stage_id
                 left join (select id as mid ,name as member_name, isDelete ,path_id from t_member where path_id=#{pathId} and isDelete=0 ) m
                           on m.mid=mes.member_id

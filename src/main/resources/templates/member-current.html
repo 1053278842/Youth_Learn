@@ -255,7 +255,6 @@
                 </div>
             </div>
 
-
             <div class="row ">
                 <!-- Dragable Table Card-->
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -338,7 +337,7 @@
                                                                 <div class="action-option ">
                                                                     <ul>
                                                                         <li>
-                                                                            <a th:data-index="${m.id}" th:onclick="showMemberCharts(this.getAttribute('data-index'))" href="javascript:void(0); "><i class="far fa-edit mr-2 "></i>曲线</a>
+                                                                            <a th:data-index="${m.member.id}" th:onclick="updateAndShowTipsBox(this.getAttribute('data-index'))" href="javascript:void(0);" data-toggle="modal" data-target="#longc"><i class="far fa-edit mr-2 "></i>曲线</a>
                                                                         </li>
                                                                         <li>
                                                                             <a href="javascript:void(0); "><i class="far fa-trash-alt mr-2 "></i>提醒</a>
@@ -394,7 +393,7 @@
                                                                 <div class="action-option ">
                                                                     <ul>
                                                                         <li>
-                                                                            <a href="javascript:void(0); "><i class="far fa-edit mr-2 "></i>曲线</a>
+                                                                            <a th:data-index="${m.id}" th:onclick="updateAndShowTipsBox(this.getAttribute('data-index'))" href="javascript:void(0);" data-toggle="modal" data-target="#longc"><i class="far fa-edit mr-2 "></i>曲线</a>
                                                                         </li>
                                                                         <li>
                                                                             <a href="javascript:void(0); "><i class="far fa-trash-alt mr-2 "></i>提醒</a>
@@ -458,7 +457,16 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <div class="card chart-card ">
+                            <div class="card-header">
+                                <h4>打卡-热点图</h4>
+                            </div>
+                            <div class="card-body ">
+                                <div id="HeatChart" style="height: 450px"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -476,10 +484,110 @@
 <!--引入Echarts-->
 <script src="../static/js/echarts.js"  th:src="@{~/static/js/echarts.js}" ></script>
 
-</body>
-
 <!--MyScript-->
 <script th:inline="javascript">
+
+    function updateAndShowTipsBox(memberId){
+
+        var myChart = echarts.init(document.getElementById('HeatChart'));
+        myChart.showLoading();
+        $.post("/MemberEachStage/getOneMemberEachStatus",{memberId:memberId}).done(function (dataJson) {
+            $('#longc').on('shown.bs.modal',function(){
+                myChart.resize()
+            })
+            myChart.hideLoading();
+            var seriesFillValue=[];
+
+            var dataJson2=eval(dataJson);
+            for (let i = 0; i < dataJson2.length; i++) {
+                seriesFillValue.push(
+                    {
+                        name: dataJson2[i][1],
+                        type: 'heatmap',
+                        data: [dataJson2[i][0]],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        itemStyle: {
+                            borderColor: 'rgba(68,68,68,)',
+                        },
+                    }
+                );
+            }
+            var option = {
+                tooltip: {
+                    position: 'top',
+                    trigger: 'item',
+                    triggerOn: 'mousemove',
+                    enterable: true,
+                    formatter: function (params, ticket, callback) {
+                        // console.log(params);
+                        return params.seriesName;
+                    }
+                },
+                grid: {
+                    height: '50%',
+                    y: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    axisTick: {
+                        show: true
+                    },
+
+                    axisLabel: {
+                        show: false,
+                        textStyle: {
+                            color: 'none'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+
+                    splitArea: {
+                        show: true
+                    },
+                    axisLabel: {
+                        show: false,
+                        textStyle: {
+                            color: 'none'
+                        }
+                    }
+                },
+                visualMap: {
+                    min: -1,
+                    max: 1,
+                    calculable: true,
+                    orient: 'horizontal',
+                    type: 'piecewise',
+                    left: 'center',
+                    bottom: '15%',
+                    inRange: {
+                        color: ['rgba(71, 178, 98)', 'rgba(134,134,134,1)', 'rgb(235, 84, 84)']
+                    },
+                    pieces: [
+                        { min: -1, max: -1, label: '完成' },
+                        { min: 0, max: 0, label: '未完成' },
+                        { min: 1, max: 1, label: '超时完成' }
+                    ]
+                },
+
+                series: seriesFillValue
+
+            };
+
+            option && myChart.setOption(option);
+
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            });
+        })
+    }
 
     function PointChart(){
         let minSize=5;
@@ -613,5 +721,7 @@
     }
 
 </script>
+</body>
+
 
 </html>
