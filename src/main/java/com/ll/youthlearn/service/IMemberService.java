@@ -26,6 +26,16 @@ public interface IMemberService {
     List<Member> selectMemberByUserIdAndPathId(int userId, Integer pathId, boolean isAsc) throws Exception;
 
     /**
+     * 根据当前用户的id，获得所有和当前用户关联的memberList，相对于selectMemberByUserIdAndPathId，该方法可以指定isDelete
+     * @param userId
+     * @param pathId
+     * @param isAsc
+     * @param i
+     * @return
+     */
+    List<Member> selectMemberByUserIdAndPathIdAndIsDelete(int userId, Integer pathId, boolean isAsc, int i);
+
+    /**
      *  根据传入的id修改对应member的email字段值
      * @param id
      * @param email
@@ -49,12 +59,11 @@ public interface IMemberService {
      * @param memberName
      * @param memberEmail
      * @param parentId
-     * @param maxTimes
      * @param path
      * @return
      * @throws Exception
      */
-    int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) throws Exception;
+    int addMemberByNameAndEmail(String memberName, String memberEmail,Integer parentId,String path) throws Exception;
 
     /**
      * 根据pathID返回多条结果,注意。该方法会会忽略isDelete的状态，返回全部的pathId的member
@@ -69,4 +78,13 @@ public interface IMemberService {
      * @return
      */
     int insertOne(Member newMember);
+
+    /**
+     * 根据memberId恢复指定的member，set isDelete=0
+     * @param memberId
+     * @param memberId
+     * @return 返回删除结果 int
+     * @throws Exception
+     */
+    int resumeOneWithId(Integer memberId);
 }

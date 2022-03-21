@@ -34,8 +34,9 @@ public class Member implements Serializable {
     @TableField("timestamp")
     private Timestamp timestamp;
 
-    @TableField("times")
-    private Integer times;
+    /**改为使用复杂sql赋值**/
+    @TableField(value = "times",exist = false)
+    private int times;
 
     @TableField("path")
     private String path;
@@ -45,9 +46,6 @@ public class Member implements Serializable {
 
     @TableField("parent_user_id")
     private Integer parentUserId;
-
-    @TableField("maxTimes")
-    private Integer maxTimes;
 
     /**
      * 0->假，非0->真。为0时正常显示，非0时为逻辑删除

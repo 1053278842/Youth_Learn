@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.youthlearn.mapper.IMemberMapper">
+
+    <resultMap id="MemberMapper" type="com.ll.youthlearn.entity.Member">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="email" column="email"></result>
+        <result property="timestamp" column="timestamp"></result>
+        <result property="path" column="path"></result>
+        <result property="pathId" column="path_id"></result>
+        <result property="parentUserId" column="parent_user_id"></result>
+        <result property="isDelete" column="isDelete"></result>
+
+        <association property="times" javaType="int">
+            <result property="times" column="times"></result>
+        </association>
+    </resultMap>
+    <select id="selectListContainTimesByUserAndPathAndIsDelete" resultMap="MemberMapper" parameterType="int">
+        SELECT
+            t_member.id, name, email, t_member.timestamp, path, path_id, parent_user_id, isDelete,count(t_member_each_stage.id) times
+        FROM
+            t_member
+                INNER JOIN
+            t_member_each_stage
+            ON
+                t_member.id = t_member_each_stage.member_id
+        WHERE
+            t_member.parent_user_id = #{userId} AND
+            t_member.path_id = #{pathId} AND
+            t_member.isDelete = #{isDelete}
+        GROUP BY
+            t_member.id
+        order by
+            count(t_member_each_stage.id) <if test="isAsc==false">DESC </if>
+
+    </select>
+</mapper>

@@ -93,6 +93,16 @@ public class StageController {
             stages.remove(0);
         }
 
+        //过滤该组织从未参加过的以前的期次;规则：从第一期开始删，直到遇到存在member的stage为止
+        int boundIndex= stages.size()-1;
+        for (int i = stages.size()-1; i >= 0; i--) {
+            if (stages.get(i).getMembers()!=null&&stages.get(i).getMembers().size()>0){
+                boundIndex=i;
+                break;
+            }
+        }
+        stages=stages.subList(0,boundIndex+1);
+
         //设置stage对象的stageDate
         //规则：存在member的情况下,stageDate等于member所在日期内的周一的日期
         for (Stage s:stages) {

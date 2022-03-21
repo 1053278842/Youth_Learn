@@ -34,19 +34,13 @@ public class MemberServiceImpl implements IMemberService{
 
     @Override
     public List<Member> selectMemberByUserIdAndPathId(int userId, Integer pathId, boolean isAsc) throws Exception {
-        if(isAsc){
-            return memberMapper.selectList(new QueryWrapper<Member>()
-                    .eq("parent_user_id",userId)
-                    .eq("path_id",pathId)
-                    .eq("isDelete",0)
-                    .orderByAsc("times"));
-        }else{
-            return memberMapper.selectList(new QueryWrapper<Member>().eq("parent_user_id",userId)
-                    .eq("parent_user_id",userId)
-                    .eq("path_id",pathId)
-                    .eq("isDelete",0)
-                    .orderByDesc("times"));
-        }
+
+        return memberMapper.selectListContainTimesByUserAndPathAndIsDelete(userId,pathId,0,isAsc);
+    }
+
+    @Override
+    public List<Member> selectMemberByUserIdAndPathIdAndIsDelete(int userId, Integer pathId, boolean isAsc, int i) {
+        return memberMapper.selectListContainTimesByUserAndPathAndIsDelete(userId,pathId,i,isAsc);
     }
 
     @Override
@@ -66,12 +60,10 @@ public class MemberServiceImpl implements IMemberService{
     }
 
     @Override
-    public int addMemberByNameAndEmail(String memberName, String memberEmail,Integer maxTimes,Integer parentId,String path) {
+    public int addMemberByNameAndEmail(String memberName, String memberEmail,Integer parentId,String path) {
         Member member=new Member();
         member.setEmail(memberEmail);
         member.setName(memberName);
-        member.setMaxTimes(maxTimes);
-        member.setTimes(0);
         member.setPath(path);
         member.setParentUserId(parentId);
         return memberMapper.insert(member);
@@ -85,5 +77,13 @@ public class MemberServiceImpl implements IMemberService{
     @Override
     public int insertOne(Member newMember) {
         return memberMapper.insert(newMember);
+    }
+
+    @Override
+    public int resumeOneWithId(Integer memberId) {
+        Member tempM=new Member();
+        tempM.setId(memberId);
+        tempM.setIsDelete(0);
+        return memberMapper.updateById(tempM);
     }
 }

@@ -64,8 +64,10 @@ public class MemberController {
 
         ModelAndView mv=new ModelAndView();
 
+        final int IS_DELETE_STATUS=1;
         //获取member列表，同时作为信息源
         List<Member> memberList=memberService.selectMemberByUserIdAndPathId(userId,pathId,isAsc);
+        List<Member> memberDeleteList=memberService.selectMemberByUserIdAndPathIdAndIsDelete(userId,pathId,isAsc,IS_DELETE_STATUS);
 
         //获取组织人数
         Integer orgNums=memberList.size();
@@ -81,9 +83,13 @@ public class MemberController {
 
         //统计的有效期次
         Integer effectiveStatisticsStage=0;
-        if(!memberList.isEmpty()){
-            effectiveStatisticsStage=memberList.get(0).getMaxTimes();
+        Integer maxTimes=0;
+        for (int i = 0; i < memberList.size(); i++) {
+            if(memberList.get(i).getTimes()>maxTimes){
+                maxTimes=memberList.get(i).getTimes();
+            }
         }
+        effectiveStatisticsStage=maxTimes;
 
 
         //更新maxNumber
@@ -92,6 +98,7 @@ public class MemberController {
         session.setAttribute("USER_INFO",currentUser);
 
         mv.addObject("MEMBER_LIST",memberList);
+        mv.addObject("MEMBER_DELETE_LIST",memberDeleteList);
         mv.addObject("MEMBER_LIST_NUMBER",orgNums);
         mv.addObject("MEMBER_LIST_AverTimes",timesAver);
         mv.addObject("MEMBER_LIST_STATUS",isAsc);
@@ -137,11 +144,33 @@ public class MemberController {
         return resultInt;
     }
 
+    /**
+     * 根据指定的id恢复member
+     * @param memberId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/ResumeMemberById")
+    public int ResumeMemberById(Integer memberId,HttpSession session) throws Exception {
+        int resultInt=memberService.resumeOneWithId(memberId);
+
+        User currentUser=(User)session.getAttribute("USER_INFO");
+        OrgPath orgPath=currentUser.getCurrent_path();
+        Integer delBeforeValue = orgPath.getMaxMemberNumber();
+        orgPath.setMaxMemberNumber(delBeforeValue+1);
+        currentUser.setCurrent_path(orgPath);
+
+        session.setAttribute("USER_INFO",currentUser);
+
+        return resultInt;
+    }
+
     @RequestMapping("/addMemberManual")
     public String addMemberManual(@RequestParam(value = "name-input") String memberName,@RequestParam(value = "email-input") String memberEmail,
-                               @RequestParam(value = "maxTimes-input")Integer maxTimes,@RequestParam(value = "parentId-input")Integer parentId,
+                               @RequestParam(value = "parentId-input")Integer parentId,
                                @RequestParam(value = "path-input") String path) throws Exception {
-        int resultInt=memberService.addMemberByNameAndEmail(memberName,memberEmail,maxTimes,parentId,path);
+        int resultInt=memberService.addMemberByNameAndEmail(memberName,memberEmail,parentId,path);
         return "redirect:/memberTable";
     }
 

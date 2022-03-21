@@ -140,8 +140,6 @@ public class StaticScheduleTask {
                                 //爬取到的用户不存在于member表中（包括isDelete标记的member）,是新的用户。进行插入新用户操作
                                 Member newMember=new Member();
                                 newMember.setName((String)jsonArray.getJSONObject(i).get("username"));
-                                newMember.setMaxTimes(0);
-                                newMember.setTimes(0);
                                 newMember.setPath(orgPath);
                                 newMember.setPathId(pathId);
                                 newMember.setParentUserId(userId);

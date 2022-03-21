@@ -42,11 +42,11 @@
 
     <select id="selectMesContainRelationshipByOneOrgParam" parameterType="int" resultMap="mesMap">
         select id, member_id, timestamp, stage_id, user_id,
-               mid, name, email, m_timestamp, times, path, path_id, parent_user_id, maxtimes, isdelete
+               mid, name, email, m_timestamp, path, path_id, parent_user_id, isdelete
         from t_member_each_stage mes
             inner join
             (
-                select id as mid, name, email, timestamp as m_timestamp, times, path, path_id, parent_user_id, maxtimes, isdelete
+                select id as mid, name, email, timestamp as m_timestamp, path, path_id, parent_user_id, isdelete
                 from t_member m
                 where path_id=#{pathId} and
                       parent_user_id=#{userId} AND
