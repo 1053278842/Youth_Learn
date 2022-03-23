@@ -86,4 +86,9 @@ public class MemberServiceImpl implements IMemberService{
         tempM.setIsDelete(0);
         return memberMapper.updateById(tempM);
     }
+
+    @Override
+    public Member selectMemberById(int memberId) {
+        return memberMapper.selectById(memberId);
+    }
 }

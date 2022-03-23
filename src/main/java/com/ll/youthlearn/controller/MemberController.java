@@ -4,6 +4,7 @@ import com.ll.youthlearn.entity.Member;
 import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
 import com.ll.youthlearn.factory.IPythonSpider;
+import com.ll.youthlearn.service.IMailService;
 import com.ll.youthlearn.service.IOrgPathService;
 import com.ll.youthlearn.service.IStageService;
 import com.ll.youthlearn.service.impl.MemberServiceImpl;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -33,6 +35,8 @@ import java.util.List;
 @RequestMapping("/Member")
 public class MemberController {
 
+    private final IMailService mailService;
+
     private final IOrgPathService orgPathService;
 
     private final IStageService stageService;
@@ -42,10 +46,11 @@ public class MemberController {
 
     private final MemberServiceImpl memberService;
 
-    public MemberController(MemberServiceImpl memberService, IOrgPathService orgPathService, IStageService stageService) {
+    public MemberController(MemberServiceImpl memberService, IOrgPathService orgPathService, IStageService stageService, IMailService mailService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
         this.stageService = stageService;
+        this.mailService = mailService;
     }
 
 
@@ -181,4 +186,15 @@ public class MemberController {
         return "member-table";
     }
 
+    @ResponseBody
+    @RequestMapping("/sendRemindEmailToMember")
+    public String sendRemindEmailToMember(HttpSession session,String memberId) throws MessagingException {
+        User user = (User)session.getAttribute("USER_INFO");
+        Member member = memberService.selectMemberById(Integer.parseInt(memberId));
+        //邮件地址为空时不发送
+        if(member.getEmail()!=""||member.getEmail()!= null){
+            mailService.sendThymeleafMail("",member.getName(),member.getEmail(),user.getUsername(),user.getEmail(),"");
+        }
+        return "success";
+    }
 }

@@ -87,4 +87,11 @@ public interface IMemberService {
      * @throws Exception
      */
     int resumeOneWithId(Integer memberId);
+
+    /**
+     * 根据Id返回Member
+     * @param memberId
+     * @return
+     */
+    Member selectMemberById(int memberId);
 }
