@@ -37,4 +37,116 @@
             count(t_member_each_stage.id) <if test="isAsc==false">DESC </if>
 
     </select>
+
+
+
+    <resultMap id="EmailListMapper" type="com.ll.youthlearn.entity.UserEmail">
+        <id property="id" column="id"></id>
+        <result property="userId"           column="user_id"></result>
+        <result property="name"             column="name"></result>
+        <result property="email"            column="email"></result>
+        <result property="content"          column="content"></result>
+        <result property="autoRemind"       column="auto_remind"></result>
+        <result property="autoRemindStart"  column="auto_remind_start"></result>
+        <result property="title"            column="title"></result>
+
+        <collection property="members" ofType="com.ll.youthlearn.entity.Member" javaType="java.util.ArrayList">
+            <id property="id" column="m_id"></id>
+            <result property="name" column="m_name"></result>
+            <result property="email" column="m_email"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectEmailAutoRemindLongTime" resultMap="EmailListMapper" parameterType="int">
+        SELECT
+            t_user_email.`id`,
+            t_user_email.`name`,
+            t_user_email.email,
+            t_user_email.title,
+            t_user_email.content,
+            t_temp.`name` AS m_name,
+            t_temp.email AS m_email,
+            t_temp.id AS m_id
+        FROM
+            (
+             (
+                 (
+                     (
+                         SELECT
+                             t_member.id AS id,
+                             t_member.`name` AS `name`,
+                             t_member.email AS email,
+                             t_member.`timestamp` AS `timestamp`,
+                             t_member.path AS path,
+                             t_member.path_id AS path_id,
+                             t_member.parent_user_id AS parent_user_id,
+                             t_member.isDelete AS isDelete
+                         FROM
+                             t_member
+                         WHERE
+                             (
+                                 NOT (
+                                         `youth_learn`.`t_member`.`id` IN (
+                                         SELECT
+                                             `t_member_no_study`.`id`
+                                         FROM
+                                             (
+                                              `youth_learn`.`t_member_each_stage` `t_mes_no_study`
+                                                 JOIN `youth_learn`.`t_member` `t_member_no_study` ON (((
+                                                                                                            `t_mes_no_study`.`member_id` = `t_member_no_study`.`id`
+                                                                                                            )
+                                                 AND ( `t_mes_no_study`.`stage_id` = #{stageId} )))))))
+                     ) AS t_temp
+                     )
+                     JOIN t_user ON ( ( ( t_temp.parent_user_id = t_user.id ) AND ( t_temp.email IS NOT NULL ) ) )
+                 )
+                JOIN t_user_email ON ( ( ( t_user.id = t_user_email.user_id ) AND ( t_user_email.auto_remind = 1 ) ) )
+                )
+    </select>
+
+
+    <select id="selectEmailAutoRemindWeekStart" resultMap="EmailListMapper" parameterType="int">
+        SELECT
+            t_user_email.`name`,
+            t_user_email.email,
+            t_user_email.title,
+            t_user_email.content,
+            t_temp.`name` AS m_name,
+            t_temp.email AS m_email
+        FROM
+            (
+             (
+                 (
+                     (
+                         SELECT
+                             t_member.id AS id,
+                             t_member.`name` AS `name`,
+                             t_member.email AS email,
+                             t_member.`timestamp` AS `timestamp`,
+                             t_member.path AS path,
+                             t_member.path_id AS path_id,
+                             t_member.parent_user_id AS parent_user_id,
+                             t_member.isDelete AS isDelete
+                         FROM
+                             t_member
+                         WHERE
+                             (
+                                 NOT (
+                                         `youth_learn`.`t_member`.`id` IN (
+                                         SELECT
+                                             `t_member_no_study`.`id`
+                                         FROM
+                                             (
+                                              `youth_learn`.`t_member_each_stage` `t_mes_no_study`
+                                                 JOIN `youth_learn`.`t_member` `t_member_no_study` ON (((
+                                                                                                            `t_mes_no_study`.`member_id` = `t_member_no_study`.`id`
+                                                                                                            )
+                                                 AND ( `t_mes_no_study`.`stage_id` = #{stageId} )))))))
+                     ) AS t_temp
+                     )
+                     JOIN t_user ON ( ( ( t_temp.parent_user_id = t_user.id ) AND ( t_temp.email IS NOT NULL ) ) )
+                 )
+                JOIN t_user_email ON ( ( ( t_user.id = t_user_email.user_id ) AND ( t_user_email.auto_remind_start = 1 ) ) )
+                )
+    </select>
 </mapper>

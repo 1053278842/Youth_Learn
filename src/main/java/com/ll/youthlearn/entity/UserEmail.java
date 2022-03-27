@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * |       |\__/,|   (`\
@@ -38,9 +39,20 @@ public class UserEmail implements Serializable {
     @TableField("content")
     private String content;
 
+    /**五天后自动提醒未学习人员的开关**/
     @TableField("auto_remind")
     private Integer autoRemind;
 
+    /**每期开始时自动提醒未学习人员的开关**/
+    @TableField("auto_remind_start")
+    private Integer autoRemindStart;
+
     @TableField("title")
     private String title;
+
+    /**
+     * userEmail和member的一对多关系
+     */
+    @TableField("members")
+    private List<Member> members;
 }

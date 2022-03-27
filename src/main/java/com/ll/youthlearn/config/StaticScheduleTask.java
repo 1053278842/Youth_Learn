@@ -1,15 +1,10 @@
 package com.ll.youthlearn.config;
 
 import com.alibaba.fastjson.JSONArray;
-import com.ll.youthlearn.entity.Member;
-import com.ll.youthlearn.entity.MemberEachStage;
-import com.ll.youthlearn.entity.OrgPath;
-import com.ll.youthlearn.entity.Stage;
+import com.ll.youthlearn.entity.*;
 import com.ll.youthlearn.factory.IPythonSpider;
-import com.ll.youthlearn.service.IMemberEachStageService;
-import com.ll.youthlearn.service.IMemberService;
-import com.ll.youthlearn.service.IOrgPathService;
-import com.ll.youthlearn.service.IStageService;
+import com.ll.youthlearn.service.*;
+import com.ll.youthlearn.utils.DateUtils;
 import com.ll.youthlearn.utils.JsonRegularUtils;
 import com.ll.youthlearn.utils.SpiderUtils;
 import com.ll.youthlearn.utils.UrlRegularUtils;
@@ -19,9 +14,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,12 +44,14 @@ public class StaticScheduleTask {
     private final IMemberEachStageService memberEachStageService;
     private final IMemberService memberService;
     private final IStageService stageService;
+    private final IMailService mailService;
 
-    public StaticScheduleTask(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService, IStageService stageService) {
+    public StaticScheduleTask(IMemberService memberService, IOrgPathService orgPathService, IMemberEachStageService memberEachStageService, IStageService stageService, IMailService mailService) {
         this.memberService = memberService;
         this.orgPathService = orgPathService;
         this.memberEachStageService = memberEachStageService;
         this.stageService = stageService;
+        this.mailService = mailService;
     }
 
     @Scheduled(cron = "0 0 0/4 ? * ?  ")
@@ -168,6 +167,46 @@ public class StaticScheduleTask {
             }
         }else{
             log.warn("未找到最新期次,更新最新期次中断");
+        }
+    }
+
+    /**
+     * 该方法用于判断
+     * 1、是否有当前期
+     * 2、判断当前时间和当前期隔了多少天
+     * 从而根据当前和当前期的情况执行【期初提醒】和【五天后提醒】服务
+     * “每天14:00,每天一次执行”
+     */
+    @Scheduled(cron = "0 0 14 1/1 * ?  ")
+    private void currentStageSearch() throws MessagingException {
+        final int LONG_TIME_REMIND_DAY=5;
+        final int WEEK_START_REMIND_DAY=1;
+        Stage stage=stageService.findNewestStage();
+        if(stage!=null){
+            //获取当前时间和当期stage对象的时间插值
+            double day= DateUtils.getBetweenDate(stage.getStageDateInsertTime(), Calendar.getInstance().getTime());
+
+            //当期开始不到一天
+            if(day<=WEEK_START_REMIND_DAY){
+                List<UserEmail>  userEmailList= memberService.selectEmailAutoRemindWeekStart(stage.getId());
+                for (UserEmail userEmail:userEmailList) {
+                    for (Member m: userEmail.getMembers()) {
+                        mailService.sendThymeleafMail("青年大学习提醒",m.getName(),m.getEmail(), userEmail.getName(), userEmail.getEmail(),
+                                "该青年大学习啦！");
+                    }
+                }
+            }
+
+            //当期开时后已经过去了五天
+            if(day>=LONG_TIME_REMIND_DAY && day<LONG_TIME_REMIND_DAY+1 ){
+                List<UserEmail>  userEmailList= memberService.selectEmailAutoRemindWeekStart(stage.getId());
+                for (UserEmail userEmail:userEmailList) {
+                    for (Member m: userEmail.getMembers()) {
+                        mailService.sendThymeleafMail(userEmail.getTitle(), m.getName(),m.getEmail(), userEmail.getName(), userEmail.getEmail(),
+                                userEmail.getContent());
+                    }
+                }
+            }
         }
     }
 }

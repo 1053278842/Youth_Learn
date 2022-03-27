@@ -56,6 +56,10 @@ public class MailServiceImpl implements IMailService {
         //插入到邮件中,True表示这个是Html文本
         helper.setText(process,true);
 
-        javaMailSender.send(mimeMessage);
+        try{
+            javaMailSender.send(mimeMessage);
+        }catch (Exception e){
+//            log.warn(e.getMessage());
+        }
     }
 }

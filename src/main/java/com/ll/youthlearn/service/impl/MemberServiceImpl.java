@@ -2,6 +2,7 @@ package com.ll.youthlearn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ll.youthlearn.entity.Member;
+import com.ll.youthlearn.entity.UserEmail;
 import com.ll.youthlearn.mapper.IMemberMapper;
 import com.ll.youthlearn.service.IMemberService;
 import lombok.extern.slf4j.Slf4j;
@@ -90,5 +91,15 @@ public class MemberServiceImpl implements IMemberService{
     @Override
     public Member selectMemberById(int memberId) {
         return memberMapper.selectById(memberId);
+    }
+
+    @Override
+    public List<UserEmail>  selectEmailAutoRemindLongTime(int stageId) {
+        return memberMapper.selectEmailAutoRemindLongTime(stageId);
+    }
+
+    @Override
+    public List<UserEmail> selectEmailAutoRemindWeekStart(int stageId) {
+        return memberMapper.selectEmailAutoRemindWeekStart(stageId);
     }
 }

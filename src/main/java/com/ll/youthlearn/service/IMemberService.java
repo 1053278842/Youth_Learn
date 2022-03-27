@@ -1,6 +1,7 @@
 package com.ll.youthlearn.service;
 
 import com.ll.youthlearn.entity.Member;
+import com.ll.youthlearn.entity.UserEmail;
 
 import java.util.List;
 
@@ -94,4 +95,20 @@ public interface IMemberService {
      * @return
      */
     Member selectMemberById(int memberId);
+
+    /**
+     * 获取指定期次内未学习的同学，并且email not null,
+     * 同时auto_remind 即用户User开启了临期次结束时自动提醒按钮的member的email列表
+     * @param stageId
+     * @return email 列表
+     */
+    List<UserEmail>  selectEmailAutoRemindLongTime(int stageId);
+
+    /**
+     * 获取指定期次内未学习的同学，并且email not null,
+     * 同时auto_remind_start 即用户User开启了当期开始时自动提醒按钮的member的email列表
+     * @param stageId
+     * @return email 列表
+     */
+    List<UserEmail>  selectEmailAutoRemindWeekStart(int stageId);
 }

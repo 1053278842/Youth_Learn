@@ -64,4 +64,27 @@ public class DateUtils {
 
         return first_day_week;
     }
+
+    /**
+     * 计算两日期相差的天(小数),两日期大小不需要比较，位置随意
+     * @param smallDate  两变量中较小的一个Date
+     * @param bigDate    两变量中较大的一个Date
+     * @return  double 天
+     */
+    public static double getBetweenDate(Date smallDate,Date bigDate){
+        Calendar cal = Calendar.getInstance();
+        if(smallDate.getTime()<=bigDate.getTime()){
+            cal.setTime(smallDate);
+            Long time1=cal.getTimeInMillis();
+            cal.setTime(bigDate);
+            Long time2=cal.getTimeInMillis();
+            return (time2-time1)*1.0/(1000*3600*24);
+        }else{
+            cal.setTime(bigDate);
+            Long time1=cal.getTimeInMillis();
+            cal.setTime(smallDate);
+            Long time2=cal.getTimeInMillis();
+            return (time2-time1)*1.0/(1000*3600*24);
+        }
+    }
 }

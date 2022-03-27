@@ -46,6 +46,7 @@ public class UserEmailController {
         tempUserEmail.setTitle(userEmail.getTitle());
         tempUserEmail.setName(userEmail.getName());
         tempUserEmail.setAutoRemind(userEmail.getAutoRemind());
+        tempUserEmail.setAutoRemindStart(userEmail.getAutoRemindStart());
         user.setUserEmail(tempUserEmail);
         session.setAttribute("USER_INFO",user);
 

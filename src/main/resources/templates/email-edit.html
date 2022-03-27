@@ -85,24 +85,31 @@
                                                                     <input readonly id="email" type="email" class="form-control" placeholder="只读： 个人 邮箱" th:value="${session.USER_INFO.email}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                                                                 <div class="form-group">
                                                                     <label for="email-title" class="col-form-label">邮件主题</label>
                                                                     <input name="title" id="email-title" type="text" class="form-control" placeholder="title" th:value="${session.USER_INFO.userEmail.title}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                                                                 <div class="form-group">
                                                                     <label for="name" class="col-form-label">姓名</label>
                                                                     <input name="name" id="name" type="text" class="form-control" placeholder="个人 姓名" th:value="${session.USER_INFO.userEmail.name}">
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                                                 <div class="form-group">
-                                                                    <div class="col-form-label">自动提醒</div>
+                                                                    <div class="col-form-label">到期提醒</div>
                                                                     <input type="number" hidden th:value="${session.USER_INFO.userEmail.autoRemind}" id="checkBoxHidden" name="autoRemind">
                                                                     <input type="checkbox" id="auto-remind-check"  th:checked="${session.USER_INFO.userEmail.autoRemind}"  >
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-form-label">开始提醒</div>
+                                                                    <input type="number" hidden th:value="${session.USER_INFO.userEmail.autoRemindStart}" id="checkBoxStartHidden" name="autoRemindStart">
+                                                                    <input type="checkbox" id="auto-remind-start-check"  th:checked="${session.USER_INFO.userEmail.autoRemindStart}"  >
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-12">
@@ -160,6 +167,21 @@
                         $("#checkBoxHidden").val("1")
                     } else {
                         $("#checkBoxHidden").val("0")
+                    }
+                }
+            });
+        })
+        $(function(){
+            $("#auto-remind-start-check").bootstrapSwitch({
+                size:"",
+                animate:false,
+                onColor:"success",
+                offColor:"warning",
+                onSwitchChange : function(event, state) {
+                    if (state == true) {
+                        $("#checkBoxStartHidden").val("1")
+                    } else {
+                        $("#checkBoxStartHidden").val("0")
                     }
                 }
             });
