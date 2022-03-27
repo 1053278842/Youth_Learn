@@ -8,6 +8,7 @@ import com.ll.youthlearn.service.IMemberService;
 import com.ll.youthlearn.service.IOrgPathService;
 import com.ll.youthlearn.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,12 @@ import java.util.List;
 @Controller
 @Slf4j
 public class UserController {
+
+    @Autowired
+    public MemberController memberController;
+
+    @Autowired
+    public MemberEachStageController memberEachStageController;
 
     private final IMemberService memberService;
     private final IUserService userService;
@@ -90,6 +97,7 @@ public class UserController {
 
     @RequestMapping("/User/addOrgPath")
     public ModelAndView addOrgPath(@RequestParam(value = "orgPath") String path, HttpSession session){
+
         ModelAndView mv=new ModelAndView();
         mv.setViewName("redirect:/index");
 
@@ -111,10 +119,22 @@ public class UserController {
             log.warn("插入出错！");
         }
 
+        List<OrgPath> orgPathList=orgPathService.selectListById(id);
         //更新session
-        current_user.setPaths(orgPathService.selectListById(id));
-        current_user.setCurrent_path(current_user.getPaths().get(0));
+        current_user.setPaths(orgPathList);
+        for (OrgPath o:orgPathList) {
+            if(o.getId().equals(newOrgPath.getId())){
+                current_user.setCurrent_path(o);
+            }
+        }
+        if(current_user.getCurrent_path()==null){
+            current_user.setCurrent_path(current_user.getPaths().get(0));
+        }
         session.setAttribute("USER_INFO",current_user);
+
+        //
+        memberController.addMemberByPath(id,orgPath,35,newOrgPath.getId());
+        memberEachStageController.addMemberEachStage(session,35);
         return mv;
     }
 
@@ -124,7 +144,7 @@ public class UserController {
         user.setRole(UserRoleEnum.user.name());
 
         try {
-            userService.insertUser(user);
+            int insertStatus = userService.insertUser(user);
             log.info(user.getEmail()+"账号注册成功！");
             mv.addObject("msg",user.getEmail()+"账号注册成功！");
             mv.setViewName("login");

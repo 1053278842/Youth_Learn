@@ -23,7 +23,7 @@
             t_member.id, name, email, t_member.timestamp, path, path_id, parent_user_id, isDelete,count(t_member_each_stage.id) times
         FROM
             t_member
-                INNER JOIN
+                LEFT JOIN
             t_member_each_stage
             ON
                 t_member.id = t_member_each_stage.member_id

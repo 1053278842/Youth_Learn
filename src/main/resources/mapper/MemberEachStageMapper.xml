@@ -68,25 +68,7 @@
     </insert>
 
     <delete id="deleteByUserIdAndMaxStageNumber">
-        delete from t_member_each_stage where user_id=#{userId} and stage_id in (
-            select stage_id from (
-            select stage_id
-            from
-                 t_stage right join t_member_each_stage
-                     on stage_id=t_stage.id
-            where
-                  user_id=#{userId} and
-                  stage_id not in
-                  (select
-                          t.id
-                  from
-                       (select
-                               id
-                       from
-                            t_stage
-                       order by id asc
-                       limit 0,#{maxStageNumber}) as t  )
-            group by t_stage.name
-            ) as tempT )
+        delete from t_member_each_stage where user_id=#{userId} and member_id in (
+            select id from t_member where parent_user_id=#{userId} and path_id=#{pathId})
     </delete>
 </mapper>

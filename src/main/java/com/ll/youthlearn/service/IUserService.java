@@ -14,11 +14,13 @@ import com.ll.youthlearn.entity.User;
  */
 public interface IUserService {
 
-    void selectTopOrgs() throws Exception;
 
-    void selectOrgsByLevels() throws Exception;
+    /**
+     * 插入User,并且也会插入t_user_email表。一对一关联
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    int insertUser(User user) throws Exception;
 
-    void insertUser(User user) throws Exception;
-
-    void refreshUserSession();
 }

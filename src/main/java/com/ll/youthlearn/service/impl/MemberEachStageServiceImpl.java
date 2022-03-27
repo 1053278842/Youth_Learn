@@ -29,8 +29,8 @@ public class MemberEachStageServiceImpl implements IMemberEachStageService {
     }
 
     @Override
-    public void deleteMemberEachStageByUserIdAndMaxStage(Integer userId, Integer maxStage) {
-        memberEachStageMapper.deleteByUserIdAndMaxStageNumber(userId,maxStage);
+    public void deleteMemberEachStageByUserIdAndMaxStage(Integer userId,Integer pathId, Integer maxStage) {
+        memberEachStageMapper.deleteByUserIdAndMaxStageNumber(userId,pathId,maxStage);
     }
 
     @Override

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+    <title>青学统计</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!--Start Style -->
+    <link rel="stylesheet" type="text/css" href="../static/css/fonts.css" th:href="@{~/static/css/fonts.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-switch.min.css" th:href="@{~/static/css/bootstrap-switch.min.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/font-awesome.min.css" th:href="@{~/static/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/icofont.min.css" th:href="@{~/static/css/icofont.min.css}">
+	<link rel="stylesheet" href="../static/css/swiper.min.css" th:href="@{~/static/css/swiper.min.css}">
+
+    <!--Page Specific -->
+    <link rel="stylesheet" type="text/css" href="../static/css/nice-select.css" th:href="@{~/static/css/nice-select.css}">
+    <!--Custom Style -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{~/static/css/style.css}">
+	<link rel="stylesheet" id="theme-change" type="text/css" href="">
+</head>
+
+
+<body>
+    <div th:include="fixed-module::loader"></div>
+    <!-- Main Body -->
+    <div class="page-wrapper">
+        <!-- Header Start -->
+        <div th:include="fixed-module::header"></div>
+        <!-- Sidebar Start -->
+        <div th:include="fixed-module::aside"></div>
+        <!-- Container Start -->
+        <div class="page-wrapper">
+            <div class="main-content">
+                <!-- Page Title Start -->
+                <div class="row">
+                    <div class="col xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-title-wrapper">
+                            <div class="page-title-box">
+                                <h4 class="page-title">邮件</h4>
+                            </div>
+                            <div class="breadcrumb-list">
+                                <ul>
+                                    <li class="breadcrumb-link">
+                                        <a href="javascript:void(0);"><i class="fas fa-home mr-2"></i>首页</a>
+                                    </li>
+                                    <li class="breadcrumb-link active">邮件</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<!--===Products Details===-->
+				<div class="product-detail-wrapper">
+					<div class="row">
+						<div class="col-lg-12 col-md-12">
+							<div class="product-detail-tab">
+								<ul class="nav nav-tabs">
+									<li><a data-toggle="tab" class="active"  href="#review">编辑</a></li>
+									<li><a data-toggle="tab" href="#browse">预览</a></li>
+								</ul>
+								<div class="tab-content">
+									<div id="review" class="tab-pane fade show active">
+										<div class="fd-review-wrapper">
+											<h3 class="review-heading">邮件-编辑</h3>
+											<h5>对您的提醒邮件进行个性化编辑</h5>
+											<div class="row">
+                                                <form id="mainForm" action="/user-email/updateEmailInfo" method="post">
+                                                    <input hidden type="number" name="id" th:value="${session.USER_INFO.userEmail.id}">
+                                                    <div class="col-lg-11">
+                                                        <div class="row">
+                                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <label  class="col-form-label">邮箱</label>
+                                                                    <input readonly id="email" type="email" class="form-control" placeholder="只读： 个人 邮箱" th:value="${session.USER_INFO.email}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <label for="email-title" class="col-form-label">邮件主题</label>
+                                                                    <input name="title" id="email-title" type="text" class="form-control" placeholder="title" th:value="${session.USER_INFO.userEmail.title}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <label for="name" class="col-form-label">姓名</label>
+                                                                    <input name="name" id="name" type="text" class="form-control" placeholder="个人 姓名" th:value="${session.USER_INFO.userEmail.name}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-form-label">自动提醒</div>
+                                                                    <input type="number" hidden th:value="${session.USER_INFO.userEmail.autoRemind}" id="checkBoxHidden" name="autoRemind">
+                                                                    <input type="checkbox" id="auto-remind-check"  th:checked="${session.USER_INFO.userEmail.autoRemind}"  >
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <div for="content" class="col-form-label">邮件内容</div>
+                                                                    <textarea name="content" placeholder="发件提醒内容" class="form-control" th:text="${session.USER_INFO.userEmail.content}"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <a href="javascript:$('#mainForm').submit();" class="ad-btn">Send</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+											</div>
+										</div>
+									</div>
+
+                                    <div id="browse"  class="tab-pane fade">
+										<div class="fd-review-wrapper">
+											<h3 class="review-heading">敬请期待...</h3>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--===Products Details===-->
+                <div th:include="fixed-module::footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Setting -->
+    <!-- Script Start -->
+    <script src="../static/js/jquery.min.js" th:src="@{~/static/js/jquery.min.js}"></script>
+    <script src="../static/js/popper.min.js" th:src="@{~/static/js/popper.min.js}"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{~/static/js/bootstrap.min.js}"></script>
+    <script src="../static/js/bootstrap-switch.min.js" th:src="@{~/static/js/bootstrap-switch.min.js}"></script>
+	<script src="../static/js/swiper.min.js" th:src="@{~/static/js/swiper.min.js}"></script>
+    <!-- Page Specific -->
+    <script th:src="@{~/static/js/nice-select.min.js}" src="../static/js/nice-select.min.js"></script>
+    <!-- Custom Script -->
+    <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+    <script>
+        $(function(){
+            $("#auto-remind-check").bootstrapSwitch({
+                size:"",
+                animate:false,
+                onColor:"success",
+                offColor:"warning",
+                onSwitchChange : function(event, state) {
+                    if (state == true) {
+                        $("#checkBoxHidden").val("1")
+                    } else {
+                        $("#checkBoxHidden").val("0")
+                    }
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

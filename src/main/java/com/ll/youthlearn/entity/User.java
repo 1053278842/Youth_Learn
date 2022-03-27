@@ -35,10 +35,6 @@ public class User implements Serializable {
     @TableField("password")
     private String password;
 
-    /**存放用户所创建组织的路径信息**/
-    /**弃用↓**/
-//    @TableField("org_path")
-//    private String orgPath;
 
     @TableField("role")
     private String role;
@@ -52,4 +48,7 @@ public class User implements Serializable {
      */
     @TableField(value="current_path",exist = false)
     private OrgPath current_path;
+
+    @TableField(value = "userEmail",exist = false)
+    private UserEmail userEmail;
 }

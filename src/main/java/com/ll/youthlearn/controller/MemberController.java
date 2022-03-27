@@ -193,7 +193,8 @@ public class MemberController {
         Member member = memberService.selectMemberById(Integer.parseInt(memberId));
         //邮件地址为空时不发送
         if(member.getEmail()!=""||member.getEmail()!= null){
-            mailService.sendThymeleafMail("",member.getName(),member.getEmail(),user.getUsername(),user.getEmail(),"");
+            mailService.sendThymeleafMail(user.getUserEmail().getTitle(),member.getName(),member.getEmail(),
+                    user.getUserEmail().getName(),user.getEmail(),user.getUserEmail().getContent());
         }
         return "success";
     }

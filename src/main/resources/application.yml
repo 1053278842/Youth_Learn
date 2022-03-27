@@ -43,3 +43,8 @@ mybatis-plus:
   type-aliases-package: com.ll.youthlearn.entity
 server:
   port: 8082
+
+custom-chart:
+  user-email:
+    content: 我敬爱的同志,近日庐州的天见不到太阳,连月亮也都是残缺的,不知同志您在那里呆的可习惯.不知同志可曾记得当初咱们定下“青年大学习”的誓盟,哪怕十二月的狂风也不曾让我感到寒冷,可是您的一丝疏忽让却我如坠冰窖,心底拔凉拔凉的不是滋味.同志,多说无益,只希望您不要忘记'青年大学习'哦！
+    title: 青年大学习提醒

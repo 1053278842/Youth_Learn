@@ -3,7 +3,9 @@ package com.ll.youthlearn.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.entity.User;
+import com.ll.youthlearn.entity.UserEmail;
 import com.ll.youthlearn.mapper.IOrgPathMapper;
+import com.ll.youthlearn.mapper.IUserEmailMapper;
 import com.ll.youthlearn.mapper.IUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,12 +34,14 @@ public class UserAuthService implements UserDetailsService {
     IUserMapper userMapper;
 
     private final IOrgPathMapper orgPathMapper;
+    private final IUserEmailMapper userEmailMapper;
 
     final HttpSession session;
 
-    public UserAuthService(HttpSession session, IOrgPathMapper orgPathMapper) {
+    public UserAuthService(HttpSession session, IOrgPathMapper orgPathMapper, IUserEmailMapper userEmailMapper) {
         this.session = session;
         this.orgPathMapper = orgPathMapper;
+        this.userEmailMapper = userEmailMapper;
     }
 
     @Override
@@ -48,6 +52,8 @@ public class UserAuthService implements UserDetailsService {
         if(user.getPaths().size()!=0){
             user.setCurrent_path(user.getPaths().get(0));
         }
+        //绑定Email对象
+        user.setUserEmail(userEmailMapper.selectOne(new QueryWrapper<UserEmail>().eq("user_id",user.getId())));
         //TODO session不安全
         session.setAttribute("USER_INFO",user);
         if (user==null){

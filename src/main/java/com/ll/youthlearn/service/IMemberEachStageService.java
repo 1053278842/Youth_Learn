@@ -19,8 +19,9 @@ public interface IMemberEachStageService {
      * 删除若干memberEachStage，根据maxStage的大小
      * @param userId
      * @param maxStage
+     * @param pathId
      */
-    void deleteMemberEachStageByUserIdAndMaxStage(Integer userId,Integer maxStage);
+    void deleteMemberEachStageByUserIdAndMaxStage(Integer userId,Integer pathId, Integer maxStage);
 
     /**
      * 批量插入列表对象，单次提交

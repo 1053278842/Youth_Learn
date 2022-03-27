@@ -95,10 +95,10 @@ public class MemberEachStageController {
                     
                     long minValueTime=new Timestamp(System.currentTimeMillis()).getTime();
                     for (int j = 0; j < AfterList .size(); j++) {
-                        if (j == AfterList .size() - 1) {
-                            continue;
-                        }
-                        MemberEachStage tempMes=AfterList .get(j + 1);
+//                        if (j == AfterList .size() - 1) {
+//                            continue;
+//                        }
+                        MemberEachStage tempMes=AfterList .get(j);
                         //判空
                         if(tempMes.getId()!=0){
                             long nextTime = tempMes.getTimestamp().getTime();
@@ -224,7 +224,7 @@ public class MemberEachStageController {
 
         //判断当前时间下，是否存在最新的期次，即是否属于寒暑假放假期间
         Stage stage=stageService.findNewestStage();
-        Integer inNewStage=1;
+        Integer inNewStage=0;
         if(stage==null){
             inNewStage=0;
         }
@@ -236,7 +236,7 @@ public class MemberEachStageController {
         String orgPath=((User)session.getAttribute("USER_INFO")).getCurrent_path().getOrgPath();
 
         //删除多余的memberEachStage数据,只在maxStage>MySQL:maxStage情况下发生
-        memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,maxStage);
+        memberEachStageService.deleteMemberEachStageByUserIdAndMaxStage(id,pathId,maxStage);
 
         pythonSpider.saveMemberEachStage(id,orgPath,maxStage,pathId,inNewStage);
 

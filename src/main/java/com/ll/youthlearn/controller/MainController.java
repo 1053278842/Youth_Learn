@@ -46,4 +46,8 @@ public class MainController {
     public String memberCurrent() {
         return "member-current";
     }
+    @RequestMapping("/emailEdit")
+    public String emailEdit() {
+        return "email-edit";
+    }
 }

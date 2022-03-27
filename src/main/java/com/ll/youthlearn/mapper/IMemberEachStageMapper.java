@@ -23,8 +23,9 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
      * 删除
      * @param userId rt
      * @param maxStageNumber rt
+     * @param maxStage
      */
-    void deleteByUserIdAndMaxStageNumber( @Param("userId") Integer userId, @Param("maxStageNumber") Integer maxStageNumber);
+    void deleteByUserIdAndMaxStageNumber(@Param("userId") Integer userId,@Param(value = "pathId") Integer pathId, @Param("maxStageNumber") Integer maxStageNumber);
 
     /**
      * 批量插入列表

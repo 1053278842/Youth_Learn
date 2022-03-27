@@ -65,7 +65,7 @@ if __name__=="__main__":
     # 数据库连接
     conn = getConn()
     cursor=conn.cursor()
-    sql = 'select stage from t_stage order by mid(stage,13,20)+1 desc limit 0,'+str(maxStage)
+    sql = 'select stage from t_stage ORDER BY t_stage.stage_date DESC, t_stage.stage DESC limit 0,'+str(maxStage)
     cursor.execute(sql)
     allStage=cursor.fetchall()
 
@@ -90,13 +90,6 @@ if __name__=="__main__":
         t.join()
     print("爬虫耗时:", time.time()-t1)
 
-    # 获得至少有一个人参与且在路径的严格要求下的 组织参与 次数
-    resultDict={}
-    for t in titleList:
-        resultDict[t]=0
-    maxTimes=len(resultDict.keys())
-
-
     # 去重计次重构
     t2=time.time()
     finalDict={}
@@ -111,7 +104,7 @@ if __name__=="__main__":
     # 拼接SQL语句，批量插入member
     t2=time.time()
     cursor=conn.cursor()
-    sql = 'insert into t_member (name,timestamp,times,path,parent_user_id,maxTimes,path_id) values '
+    sql = 'insert into t_member (name,timestamp,path,parent_user_id,path_id) values '
     for key,value in finalDict.items():
         userName=key
         addTime=value[0]
@@ -122,16 +115,14 @@ if __name__=="__main__":
         else:
             stamptime=datetime.datetime.strptime(addTime,"%Y-%m-%d")
         # print(stamptime)
-        sql+='("%s","%s","%s","%s","%s","%s","%s"),'%(
-            userName,stamptime,times,orgNames,userId,maxTimes,pathId
+        sql+='("%s","%s","%s","%s","%s"),'%(
+            userName,stamptime,orgNames,userId,pathId
         )
     # 去掉最后一个','!
     sql=sql[0:-1]
-    sql+=(" on duplicate key update "+
-          "times=IF(maxTimes<values(maxTimes),VALUES(times),times),"+
-          "maxTimes=IF(maxTimes<values(maxTimes),VALUES(maxTimes),maxTimes),"+
-          "timestamp=IF(timestamp<values(timestamp),values(timestamp),timestamp)")
+    sql+=(" on duplicate key update timestamp=timestamp")
     print("拼接SQL耗时:", time.time()-t2)
+    print(sql)
 
     #执行事务
     t2=time.time()
