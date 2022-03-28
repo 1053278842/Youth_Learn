@@ -53,6 +53,6 @@ public class UserEmail implements Serializable {
     /**
      * userEmail和member的一对多关系
      */
-    @TableField("members")
+    @TableField(value = "members",exist = false)
     private List<Member> members;
 }

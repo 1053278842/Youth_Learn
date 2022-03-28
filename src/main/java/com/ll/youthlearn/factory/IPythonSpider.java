@@ -1,6 +1,7 @@
 package com.ll.youthlearn.factory;
 
 import com.ll.youthlearn.entity.Org;
+import org.springframework.util.ClassUtils;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public interface IPythonSpider {
 
-    public final String location=System.getProperty("user.dir") + "\\src\\main\\java\\com\\ll\\youthlearn\\python\\";
+    public final String location= (ClassUtils.getDefaultClassLoader().getResource("static/python").getPath()+"\\").substring(1);
 
     /**
      * 查找所有的stage，然后持久化

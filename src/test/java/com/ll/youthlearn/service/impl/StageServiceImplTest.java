@@ -1,6 +1,9 @@
 package com.ll.youthlearn.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.ll.youthlearn.utils.DateUtils;
+import org.junit.jupiter.api.Test;
+
+import java.sql.Timestamp;
 
 /**
  * |       |\__/,|   (`\
@@ -13,5 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * @Description :
  */
 class StageServiceImplTest {
+    @Test
+    public void t(){
+        Timestamp currentTs = new Timestamp(System.currentTimeMillis());
 
+        String MonTs;
+        String SunTs;
+
+        MonTs= DateUtils.getWeekMondayDate("yyyy-MM-dd HH:mm:ss",currentTs);
+        SunTs = DateUtils.getWeekSundayDate("yyyy-MM-dd HH:mm:ss",currentTs);
+    }
 }

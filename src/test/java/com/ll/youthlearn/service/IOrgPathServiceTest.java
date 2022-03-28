@@ -1,9 +1,6 @@
 package com.ll.youthlearn.service;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * |       |\__/,|   (`\
@@ -17,5 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class IOrgPathServiceTest {
 
+    @Test
+    public void t(){
 
+        System.out.println(System.getProperty("user.dir") + "\\src\\main\\java\\com\\ll\\youthlearn\\python\\");
+    }
 }
