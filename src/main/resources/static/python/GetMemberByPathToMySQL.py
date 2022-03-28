@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import threading
 from turtle import stamp
 from typing import final

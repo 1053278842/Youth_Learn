@@ -1,19 +1,9 @@
+#! /usr/bin/env python3
 import threading
-from turtle import stamp
-from typing import final
-from pymysql import NULL
 import requests
 import pymysql
-from ast import If, Return
-from hashlib import new
-from itertools import count
 import json
-import multiprocessing
-from multiprocessing import Manager, Pool, Process, Queue
-import os
-import random
 import time
-from urllib import response
 import urllib.parse
 import requests
 import sys
