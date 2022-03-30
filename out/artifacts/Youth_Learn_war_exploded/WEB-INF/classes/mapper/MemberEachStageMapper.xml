@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.youthlearn.mapper.IMemberEachStageMapper">
+
+    <resultMap id="mesMap" type="com.ll.youthlearn.entity.MemberEachStage">
+        <id property="id" column="id"></id>
+        <result property="member_id"    column="member_id"></result>
+        <result property="timestamp"    column="timestamp"></result>
+        <result property="stage_id"     column="stage_id"></result>
+        <result property="user_id"      column="user_id"></result>
+        <association property="member" javaType="com.ll.youthlearn.entity.Member">
+            <id         property="id"           column="mid"></id>
+            <result     property="name"         column="name"></result>
+            <result     property="email"        column="email"></result>
+            <result     property="timestamp"    column="m_timestamp"></result>
+            <result     property="times"        column="times"></result>
+            <result     property="path"         column="path"></result>
+            <result     property="pathId"       column="path_id"></result>
+            <result     property="maxTimes"     column="maxTimes"></result>
+        </association>
+        <association property="stage" javaType="com.ll.youthlearn.entity.Stage">
+            <result property="name"     column="s_name"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectListByMemberId" parameterType="int" resultMap="mesMap">
+        SELECT
+            t_stage.`name` as s_name,
+            mes.id, member_id, timestamp, stage_id, user_id
+        FROM
+            t_stage
+                left JOIN
+            (SELECT * FROM t_member_each_stage WHERE t_member_each_stage.member_id = #{memberId}) mes
+            ON
+                t_stage.id = mes.stage_id
+
+        ORDER BY
+            t_stage.stage_date ASC
+    </select>
+
+    <select id="selectMesContainRelationshipByOneOrgParam" parameterType="int" resultMap="mesMap">
+        select id, member_id, timestamp, stage_id, user_id,
+               mid, name, email, m_timestamp, path, path_id, parent_user_id, isdelete
+        from t_member_each_stage mes
+            inner join
+            (
+                select id as mid, name, email, timestamp as m_timestamp, path, path_id, parent_user_id, isdelete
+                from t_member m
+                where path_id=#{pathId} and
+                      parent_user_id=#{userId} AND
+                      isDelete=0
+            ) m
+                on mes.member_id=m.mid
+        where stage_id=#{stageId}
+        order by timestamp asc
+    </select>
+
+    <insert id="insertMany" parameterType="java.util.List">
+        insert into t_member_each_stage
+            ( member_id, stage_id, user_id)
+        values
+        <foreach collection="list" item="m" separator=",">
+           (#{m.member_id},#{m.stage_id},#{m.user_id})
+        </foreach>
+        on duplicate KEY UPDATE member_id=member_id
+    </insert>
+
+    <delete id="deleteByUserIdAndMaxStageNumber">
+        delete from t_member_each_stage where user_id=#{userId} and member_id in (
+            select id from t_member where parent_user_id=#{userId} and path_id=#{pathId})
+    </delete>
+</mapper>

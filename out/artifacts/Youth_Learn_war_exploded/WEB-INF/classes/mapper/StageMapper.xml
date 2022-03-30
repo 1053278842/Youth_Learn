@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.youthlearn.mapper.IStageMapper">
+
+    <resultMap id="StageMapper" type="com.ll.youthlearn.entity.Stage">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="stage" column="stage"></result>
+        <collection property="members" ofType="com.ll.youthlearn.entity.MemberEachStage" javaType="java.util.ArrayList">
+            <id         property="id"           column="mid"></id>
+            <result     property="member_id"    column="member_id"></result>
+            <result     property="timestamp"    column="timestamp"></result>
+            <result     property="stage_id"     column="stage_id"></result>
+            <result     property="user_id"      column="user_id"></result>
+            <result     property="memberName"   column="member_name"></result>
+<!--            <result     property="stage"        column="stage"></result>-->
+        </collection>
+    </resultMap>
+    <select id="selectStageListByUserId" resultMap="StageMapper" parameterType="int">
+        select s.id, name, stage, stage_date,mes.timestamp, stage_id, user_id, mid, member_id, member_name, isDelete
+        from
+            t_stage s
+                left join (select timestamp, stage_id, user_id ,id as mesId, member_id from t_member_each_stage where user_id=#{userId} and member_id
+                        IN ( SELECT id FROM t_member WHERE parent_user_id = #{userId} AND path_id = #{pathId} AND isDelete = 0 )) mes
+                          on s.id=mes.stage_id
+                left join (select id as mid ,name as member_name, isDelete ,path_id from t_member where path_id=#{pathId} and isDelete=0 ) m
+                          on m.mid=mes.member_id
+        order by
+            s.stage_date DESC,
+            s.stage DESC,
+            timestamp asc;
+
+    </select>
+</mapper>

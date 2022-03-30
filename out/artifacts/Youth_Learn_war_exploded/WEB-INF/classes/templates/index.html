@@ -1,0 +1,382 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <title>青学统计</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!--favico-->
+    <link rel="icon" type="image/x-icon" th:href="@{~/static/favicon.ico}" href="../static/favicon.ico">
+    <!--Start Style -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/fonts.css}" href="../static/css/fonts.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/font-awesome.min.css}" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css">
+	<link rel="stylesheet" id="theme-change" type="text/css" href="">
+
+    <link rel="stylesheet" th:href="@{~/static/css/swiper.min.css}" href="../static/css/swiper.min.css" >
+    <!--Page Specific -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/nice-select.css}" href="../static/css/nice-select.css" >
+    <!--Custom Style -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css" >
+    <link rel="stylesheet" id="theme-change" type="text/css" href="">
+</head>
+
+<body>
+    <div th:include="fixed-module::loader"></div>
+    <!-- Main Body -->
+    <div class="page-wrapper">
+        <!-- Header Start -->
+        <div th:include="fixed-module::header"></div>
+<!--        <div th:include="fixed-module::header"></div>-->
+        <!-- Sidebar Start -->
+        <div th:include="fixed-module::aside"></div>
+        <!-- Container Start -->
+        <div class="page-wrapper">
+            <div class="main-content">
+                <!-- Page Title Start -->
+                <div class="row">
+                    <div class="col xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-title-wrapper">
+                            <div class="page-title-box">
+                                <h4 class="page-title">用户信息</h4>
+                            </div>
+                            <div class="breadcrumb-list">
+                                <ul>
+                                    <li class="breadcrumb-link">
+                                        <a href="javascript:void(0);"><i class="fas fa-home mr-2"></i>Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-link active">用户简介</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Products view Start -->
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card"><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: 0px; pointer-events: none;" class="cGcvT"></grammarly-extension>
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">我的信息</h4>
+                                <div class="card-options"><a class="card-options-collapse" href="javascript:;" data-bs-toggle="card-collapse" data-bs-original-title="" title=""><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="javascript:;" data-bs-toggle="card-remove" data-bs-original-title="" title=""><i class="fe fe-x"></i></a></div>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="profile-title">
+                                        <div class="media ad-profile2-img">
+                                            <img alt="" src="static/picture/user.jpg">
+                                            <div class="media-body">
+                                                <h5 class="mb-1" th:text="${session.USER_INFO.username}">天 門</h5>
+                                                <p>DESIGNER</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">简介</label>
+                                        <textarea class="form-control" rows="5" spellcheck="false">关于你,关于我的故事...</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">账户邮箱</label>
+                                        <input class="form-control" readonly="readonly" placeholder="your-email@domain.com" data-bs-original-title="" title="账户邮箱" th:value="${session.USER_INFO.email}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input class="form-control" type="password" value="password" data-bs-original-title="" title="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">待增加</label>
+                                        <input class="form-control" placeholder="xxx" data-bs-original-title="" title="">
+                                    </div>
+                                    <div class="form-footer">
+                                        <button class="btn btn-primary squer-btn" data-bs-original-title="" title="">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">组织-列表</h4>
+                                <div class="card-options"><a class="card-options-collapse" href="javascript:;" data-bs-toggle="card-collapse" data-bs-original-title="" title=""><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="javascript:;" data-bs-toggle="card-remove" data-bs-original-title="" title=""><i class="fe fe-x"></i></a></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-5">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">路径</th>
+                                            <th scope="col">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:each="path:${session.USER_INFO.paths}">
+                                        <tr>
+                                            <th scope="row" th:text="${pathStat.count}">1</th>
+                                            <td th:text="${path.orgPath}">Mark</td>
+                                            <td><a onclick="return confirm('确认删除？')" href="#" class="btn btn-danger sm-btn effect-btn" th:href="@{/User/delById(pathId=${path.id})}">删除</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" >
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">组织-添加</h4>
+                                <div class="card-options"><a class="card-options-collapse" href="javascript:;" data-bs-toggle="card-collapse" data-bs-original-title="" title=""><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="javascript:;" data-bs-toggle="card-remove" data-bs-original-title="" title=""><i class="fe fe-x"></i></a></div>
+                            </div>
+                            <div class="card-body">
+                                <form action="/User/addOrgPath" method="POST" id="AddOrgPathWarrperCard">
+                                        <div class="ad-auth-form">
+                                            <div class="ad-auth-feilds mb-20">
+                                                <h5 class="from-title mb-1 mt-4">组织信息</h5>
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                         style="cursor: pointer;">
+                                                        <div class="form-group" id="org_info_container">
+                                                            <input type="hidden" name="orgPath" value="">
+                                                            <label for="OrgLevel_I" class="col-form-label">一级组织</label>
+                                                            <select class="select2 form-control mb-2" id="OrgLevel_I">
+                                                                <option value="" selected="selected">......</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button id="SubmitButton" type="button" class="squer-btn btn btn-light mt-2 mr-2 mb-2" style="
+                                            padding: 15px;
+                                            padding: 15px 50px;
+                                             " onclick="$('#AddOrgPathWarrperCard').submit();">
+                                            <i class="fa fa-spin fa-spinner mr-2"></i>Add
+                                        </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div th:include="fixed-module::footer"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Start -->
+	<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+    <script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
+    <script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+	<script th:src="@{~/static/js/swiper.min.js}" src="../static/js/swiper.min.js"></script>
+    <script th:src="@{~/static/js/apexcharts.min.js}" src="../static/js/apexcharts.min.js"></script>
+    <script th:src="@{~/static/js/control-chart-apexcharts.js}" src="../static/js/control-chart-apexcharts.js"></script>
+	<!-- Page Specific -->
+    <script th:src="@{~/static/js/nice-select.min.js}" src="../static/js/nice-select.min.js"></script>
+    <!-- Custom Script -->
+    <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+
+    <!--我的Script-->
+    <script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            /*获取TopOrgJson,修改一级Select*/
+            getTopOrgListJson();
+            /*按钮默认不可点击*/
+            buttonEnableToggle(false);
+            loaddingButtonToggle(false);
+            warningSelect(false);
+        })
+
+        function warningSelect(statu){
+            $("select").each(function () {
+                if(statu){
+                    //可用
+                    $(this).addClass("new border border-danger");
+                    $(this).attr("disabled",true);
+                }else{
+                    //不可用
+                    $(this).removeClass("new");
+                    $(this).removeClass("border");
+                    $(this).removeClass("border-danger");
+                    $(this).attr("disabled",false);
+                }
+            })
+        }
+
+        function buttonEnableToggle(statu){
+            var button=$("#SubmitButton")
+            if(statu){
+                //可用
+                button.removeClass("btn-light");
+                button.addClass("btn-primary");
+                button.removeAttr("disabled");
+            }else{
+                //不可用
+                button.removeClass("btn-primary");
+                button.addClass("btn-light");
+                button.attr("disabled","disabled");
+            }
+        }
+
+        function loaddingButtonToggle(statu){
+            var i=$("#SubmitButton i")
+            if(statu){
+                //加载中
+                i.addClass("fa-spinner");
+            }else{
+                //非加载
+                i.removeClass("fa-spinner");
+            }
+        }
+
+        /*获取TopOrgJson,修改一级Select*/
+        function getTopOrgListJson() {
+            $.ajax({
+                type:"get",
+                url:"/Org/getTopOrgList",
+                contentType:"application/json;charset=UTF-8",
+                dataType:"json",
+                success:function (data){
+                    if(data.length != 0){
+                        for(let i=0; i<data.length; i++){
+                            let option = "<option value=\""+data[i].id+"\"";
+                            option += ">"+data[i].name+"</option>";  //动态添加数据
+                            $("select[id=OrgLevel_I]").append(option);
+                        }
+                    }
+                    warningSelect(false);
+                },
+                error:function (data){
+                    console.log("错误！getTopOrgListJson()",data);
+                    warningSelect(false);
+                }
+            })
+        }
+
+        /*Select值变动打开下一个select*/
+        $("select").change(function(){
+            buttonEnableToggle(false);
+            $(this).change(addSelectControl($(this)));
+        })
+
+        /**
+         * 获得所有select标签的value和selected的text,按照对象并存储到一个数组中。返回一个json数据！
+         * @return 数组内嵌对象 [{"id":"1","name":"直属高校"},{"id":"2","name":"省委数据"}]
+         */
+        function getAllSelectedValue() {
+            let orgs=[];
+            $("select").each(function () {
+                const id= $(this).val();
+                const name= $(this).children("option:selected").text();
+                let org={};
+                org.id=id;
+                org.name=name;
+                org.path=(orgs.length>0?orgs[orgs.length-1].path:"")+"|"+name;
+                orgs.push(org)
+            })
+            return JSON.stringify(orgs);
+        }
+
+        /**
+         * select多级联动添加以及爬虫爬取的模板方法
+         * @param currentSelectControl this,调用该方法的select对象
+         */
+        function addSelectControl(currentSelectControl) {
+            loaddingButtonToggle(true);
+            warningSelect(true);
+            //删除当前selector后的所有select元素
+            $("#"+currentSelectControl.attr("id")+"~ select").remove();
+
+
+            const changedValue = currentSelectControl.val();
+            //option text=...时,他的changedValue值为“”
+            if(changedValue!=""){
+                /*1.调用爬虫,根据所有selectLevel的id和name爬取*/
+                //将所有的select值收集过来
+                const urlPathJson=getAllSelectedValue();
+                /**
+                 * 给hiden的org_path input控件赋值
+                 * 值为最后一个json的path值
+                 */
+                console.log(urlPathJson);
+                const tempObj=JSON.parse( urlPathJson )
+                let path = tempObj[tempObj.length-1]['path']
+                //截掉最前面的“|”
+                path=path.substring(1);
+                $('input[name="orgPath"]').val(path);
+
+                /**
+                 * 将所有的select选中信息发送给后台
+                 * @success 得到对应org联动列表下的所有期‘组织’数据
+                 */
+                $.ajax({
+                    type:"post",
+                    url:"/Org/getOrgsAllStage",
+                    data:urlPathJson,
+                    contentType:"application/json;charset=UTF-8",
+                    dataType:"json",
+                    success:function (data){
+                        /*1 根据返回的json判断是否是member,为组织就继续,否则中断创建*/
+                        /*2.创建一个新的select*/
+                        /*3.填充值*/
+                        // alert(data);
+                        //获取根据上一个select一个递增唯一的id值
+                        const newId=currentSelectControl.attr("id")+'I';
+                        // console.log(data);
+                        if(data.length==0){
+                            buttonEnableToggle(true);
+                            loaddingButtonToggle(false);
+                            warningSelect(false);
+                            return;
+                        }
+                        let selectStr="";
+                        selectStr+="<select class=\"select2 mb-2 form-control\" id=\"OrgLevel"+newId+"\">";
+                        selectStr+="<option value=\"\" selected=\"selected\">......</option>";
+                        for(let i=0;i<data.length;i++){
+                            selectStr+="<option value=\"999\" >"+data[i]['name']+"</option>";
+                        }
+                        selectStr+="</select>";
+                        $("#org_info_container").append(selectStr);
+
+                        // 给新添加的select绑定changed事件方法
+                        $("#org_info_container select:last-child").change(function(){
+                            $(this).change(addSelectControl($(this)));
+                            // $(this).change(canSaveOrg($(this)));
+                            $(this).change(buttonEnableToggle(false));
+                        })
+                        loaddingButtonToggle(false);
+                        warningSelect(false);
+                    },
+                    error:function (data){
+                        console.log("js方法错误！");
+                        warningSelect(false);
+                    }
+                })
+
+            }else{
+                loaddingButtonToggle(false);
+                buttonEnableToggle(false);
+                warningSelect(false);
+            }
+        }
+    </script>
+</body>
+
+</html>

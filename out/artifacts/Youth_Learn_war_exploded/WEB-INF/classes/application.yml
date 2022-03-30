@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://110.42.155.172:3306/youth_learn
+    username: root
+    password: LiuLong123123+
+    hikari:
+      max-lifetime: 180000
+      minimum-idle: 3
+      maximum-pool-size: 10
+      connection-test-query: SELECT 1
+  mvc:
+    static-path-pattern: /static/**
+#    favicon:
+#      enabled: false
+  # Mail配置
+  mail:
+    # 配置 SMTP 服务器地址
+    host: smtp.qq.com
+    # 发送者邮箱
+    username: 1053278842@qq.com
+    # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
+    password: npczgvgofdwybdih
+    # 端口号465或587
+    port: 587
+    # 默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    # 配置SSL 加密工厂
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+          # 设置开启ssl
+#          ssl:
+#            enable: true
+        #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.ll.youthlearn.entity
+server:
+  port: 8082
+
+custom-chart:
+  user-email:
+    content: 我敬爱的同志,近日庐州的天见不到太阳,连月亮也都是残缺的,不知同志您在那里呆的可习惯.不知同志可曾记得当初咱们定下“青年大学习”的誓盟,哪怕十二月的狂风也不曾让我感到寒冷,可是您的一丝疏忽让却我如坠冰窖,心底拔凉拔凉的不是滋味.同志,多说无益,只希望您不要忘记'青年大学习'哦！
+    title: 青年大学习提醒
