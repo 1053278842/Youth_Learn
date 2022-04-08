@@ -102,4 +102,19 @@ public class MemberServiceImpl implements IMemberService{
     public List<UserEmail> selectEmailAutoRemindWeekStart(int stageId) {
         return memberMapper.selectEmailAutoRemindWeekStart(stageId);
     }
+
+    @Override
+    public List<Member> searchListByFuzzyName(Integer uid, String fuzzy_name) {
+        return memberMapper.selectList(
+                new QueryWrapper<Member>()
+                .eq("parent_user_id",uid)
+                .eq("isDelete",0)
+                .like("name",fuzzy_name)
+        );
+    }
+
+    @Override
+    public List<Member> findCountOfGroupByPathId(Integer uid) {
+        return memberMapper.findCountOfGroupByPath(uid);
+    }
 }

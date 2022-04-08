@@ -8,7 +8,11 @@ import urllib.parse
 import requests
 import sys
 import datetime
+import io
+import sys
 
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 def getConn():
@@ -19,13 +23,14 @@ def getOrgByNameStage(orgNames,stage,dataList):
     url='http://dxx.ahyouth.org.cn/api/peopleRankStage?table_name=%s'%(stage)
     for i in range(len(orgNames)):
         url+="&level%s=%s"%(i+1,urllib.parse.quote(orgNames[i]))
-    response=requests.get(url=url,headers=headers)
+
+    response=requests.get(url=url,headers=headers,timeout=5)
     pageJson=json.loads(response.content.decode())
     # print(urllib.parse.unquote_plus(url))
     # print(url)
     if(len(pageJson['list']['list'])!=0):
         for i in pageJson['list']['list']:
-            if(list(i.keys())[0]!="username"):
+            if("username" not in i.keys()):
                 # dataList.append(i)
                 pass
             else:
@@ -34,8 +39,9 @@ def getOrgByNameStage(orgNames,stage,dataList):
                 dataList.append(i)
 
 
+
 if __name__=="__main__":
-    
+    print("获取往期信息脚本启动！")
     # 获取java传来的值
     userId=sys.argv[1]
     orgNames=eval(sys.argv[2])
@@ -46,13 +52,13 @@ if __name__=="__main__":
     # maxStage=35
     # userId=1
     # pathId=9
-
+    print(userId," | ",orgNames," | ",maxStage," | ",pathId," | ",isNewStage)
 
     t1=time.time()
     t2=time.time()
     headers={
         "User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x6304051b)"
-    }  
+    }
 
     # 数据库连接
     t2=time.time()
@@ -67,6 +73,7 @@ if __name__=="__main__":
         s_id=s[1]
         allStageDict[s_name]=s_id
     print("获取stage耗时:",time.time()-t2)
+    print("共获取stage数:",len(allStageDict.keys()))
 
 
     #遍历结果,多线程启动爬虫
@@ -78,7 +85,7 @@ if __name__=="__main__":
         stage=raw[0]
         t=threading.Thread(target=getOrgByNameStage,args=(orgNames,stage,dataList))
         threads.append(t)
-    
+
     # 开启新线程
     for t in threads:
         t.start()
@@ -86,10 +93,13 @@ if __name__=="__main__":
     # 等待所有线程完成
     for t in threads:
         t.join()
-    print("爬虫耗时:", time.time()-t2)  
+    print("爬虫耗时:", time.time()-t2)
 
+    print("------------")
     # for org in dataList:
     #     print(org)
+    print("爬取数据数：",len(dataList))
+    print("------------")
 
     # 数据库连接
     t2=time.time()
@@ -103,12 +113,14 @@ if __name__=="__main__":
         m_id=m[1]
         fixedMemberDict[m_name]=m_id
     print("获取固定成员组耗时:",time.time()-t2)
-
+    print("固定成员数:",len(fixedMemberDict.keys()))
     # 拼接SQL语句，批量插入member
     t2=time.time()
     cursor=conn.cursor()
     sql = 'insert into t_member_each_stage (member_id,timestamp,stage_id,user_id) values '
     for member in dataList:
+        # print("测试用2:"+member['username'])
+        # print("测试用2:"+member['stage'])
         # 数据不属于用户预先规划好的时,放弃存储该条数据.后期要修改为新用户自动添加到member中，并建立each关系
         if member['username'] not in fixedMemberDict.keys():
             continue
@@ -131,7 +143,7 @@ if __name__=="__main__":
     # 去掉最后一个','!
     sql=sql[0:-1]
     sql+=(" on duplicate key update member_id=member_id")
-    print("拼接SQL耗时:", time.time()-t2)  
+    print("拼接SQL耗时:", time.time()-t2)
 
     # 执行事务
     t2=time.time()
@@ -141,8 +153,8 @@ if __name__=="__main__":
     except Exception as e:
         print(e)
         conn.rollback()
-    print("Commit耗时:", time.time()-t2)  
-    
+    print("Commit耗时:", time.time()-t2)
+
 
     print("总耗时:", time.time()-t1)
     print('===========================++++++++===========================')

@@ -48,4 +48,11 @@ public interface IMemberMapper extends BaseMapper<Member> {
      * @return email 列表
      */
     List<UserEmail>  selectEmailAutoRemindWeekStart(@Param(value="stageId") int stageId);
+
+    /**
+     * 根据id筛选未删除的member，将其按照pathId分组，并计算id的count
+     * @param uid
+     * @return
+     */
+    List<Member> findCountOfGroupByPath(Integer uid);
 }

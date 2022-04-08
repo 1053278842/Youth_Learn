@@ -1,0 +1,410 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+    <title>查找组织成员</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!--Start Style -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/fonts.css}" href="../static/css/fonts.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/font-awesome.min.css}" href="../static/css/font-awesome.min.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css" >
+    <link rel="stylesheet" id="theme-change" type="text/css" href="">
+</head>
+
+
+<body>
+<div th:include="fixed-module::loader"></div>
+<!-- Main Body -->
+<div class="page-wrapper">
+    <!-- Header Start -->
+    <div th:include="fixed-module::header"></div>
+
+    <!-- Sidebar Start -->
+    <div th:include="fixed-module::aside"></div>
+
+    <!-- Container Start -->
+    <div class="page-wrapper">
+        <div class="main-content" th:fragment="page_member_table" id="page_member_table">
+            <!-- Page Title Start -->
+            <div class="row">
+                <div class="colxl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-title-wrapper">
+                        <div class="page-title-box">
+                            <h2 class="page-title bold">成员-搜索</h2>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-link">
+                                    <a href="javascript:void(0);"><i class="fas fa-home mr-2"></i>Home</a>
+                                </li>
+                                <li class="breadcrumb-link active">Search-Member</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row ">
+                <!-- Dragable Table Card-->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <div class="card table-card ">
+                        <div class="card-header pb-0 ">
+                            <h4 class="mb-3">姓名-模糊搜索
+                            </h4>
+                            <div class="ad-user-btn">
+                                <input onkeydown="onKeyDownOfSearchBtn(event,this)" class="form-control" type="text" placeholder="在此输入姓名..." id="text-input">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56.966 56.966">
+                                    <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23
+												s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92
+												c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17
+												s-17-7.626-17-17S14.61,6,23.984,6z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="card-body ">
+                            <div class="chart-holder ">
+                                <div class="table-responsive ">
+                                    <table id="example" class="table table-hover table-striped advance-table mb-0 vertically-middle ">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>姓名</th>
+                                            <th>所属</th>
+                                            <th>学习时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="dragable-container " id="member_table">
+                                        <tr th:each="member:${MEMBER_LIST}">
+                                            <td th:text="${memberStat.count}">
+                                                1
+                                            </td>
+                                            <td>
+                                                <span class="img-thumb ">
+                                                    <span class="ml-2 " th:text="${member.name}">无名氏1</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="img-thumb ">
+                                                    <span class="ml-2 " th:text="${member.path}">xxx组织</span>
+                                                </span>
+                                            </td>
+                                            <td th:text="${member.timestamp}">
+                                                2000-01-01
+                                            </td>
+                                            <td>
+                                                <!-- Button trigger modal -->
+                                                <button  th:data-index="${member.id}" th:onclick="updateAndShowTipsBox(this.getAttribute('data-index'))" type="button" class="btn squer-btn effect-btn sm-btn btn-info" data-toggle="modal" data-target="#longc">
+                                                    详细情况
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--页码-->
+                        <div class="card-footer text-right pt-0">
+                            <nav class="d-inline-block ">
+                                <ul class="pagination mb-0 ">
+                                    <li class="page-item disabled ">
+                                        <a class="page-link" href="javascript:void(0);" tabindex="-1"><i
+                                                class="fas fa-chevron-left"></i></a>
+                                    </li>
+                                    <li class="page-item active "><a class="page-link "
+                                                                     href="javascript:void(0); ">1</a></li>
+                                    <li class="page-item ">
+                                        <a class="page-link " href="javascript:void(0); ">2</a>
+                                    </li>
+                                    <li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
+                                    <li class="page-item ">
+                                        <a class="page-link " href="javascript:void(0); "><i
+                                                class="fas fa-chevron-right "></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- footer -->
+            <div th:include="fixed-module::footer"></div>
+
+
+        </div>
+    </div>
+</div>
+<!--信息框框-->
+<!--信息框框-->
+<div class="modal fade bd-example-modal-lg" id="longc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle2">学习曲线</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <div class="card chart-card ">
+                            <div class="card-header">
+                                <h4>打卡-热点图</h4>
+                            </div>
+                            <div class="card-body ">
+                                <div id="HeatChart" style="height: 450px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script Start -->
+<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+<script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
+<script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+<script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+<!--引入Echarts-->
+<script src="../static/js/echarts.min.js"  th:src="@{~/static/js/echarts.min.js}" ></script>
+
+</body>
+<!--字符串格式化工具-->
+<script>
+    /**
+     函数:格式化字符串
+     参数：str:字符串模板； data:数据
+     调用方式:formatString("api/values/{id}/{name}",{id:101,name:"test"});
+     formatString("api/values/{0}/{1}",101,"test");
+     */
+    function formatString(str, data) {
+        if (!str || data == undefined) {
+            return str;
+        }
+
+        if (typeof data === "object") {
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    str = str.replace(new RegExp("\{" + key + "\}", "g"), data[key]);
+                }
+            }
+        } else {
+            var args = arguments,
+                reg = new RegExp("\{([0-" + (args.length - 1) + "])\}", "g");
+            return str.replace(reg, function(match, index) {
+                return args[index - (-1)];
+            });
+        }
+        return str;
+    }
+</script>
+<!--MyScript-->
+<script th:inline="javascript">
+
+    function onKeyDownOfSearchBtn(event,btn){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==27){ // 按 Esc
+             //要做的事情
+        }
+        if(e && e.keyCode==113){ // 按 F2
+              //要做的事情
+         }
+        if(e && e.keyCode==13){ // enter 键
+              const fuzzy_name=$(btn).val();
+              requestMemberListByName(fuzzy_name);
+         }
+    }
+
+    function requestMemberListByName(fuzzy_name){
+        $.get("Member/searchByFuzzyName",{fuzzy_name:fuzzy_name}).done(function(data){
+            let str="";
+
+            for(let i=0;i<data.length;i++){
+                const listIndex=i+1;
+                const name=data[i]['name'];
+                const time=data[i]['timestamp'].substr(0,10);
+                const mid=data[i]['id']
+                const pathNames=eval(data[i]['path'])
+                const pathName=pathNames[pathNames.length-1];
+                const pathId=data[i]['pathId'];
+                str+=formatString(''
+                    + '<tr>'
+                    +    '<td>'
+                    +        '{listIndex}'
+                    +    '</td>'
+                    +    '<td>'
+                    +       '<span class="img-thumb ">'
+                    +            '<span class="ml-2 ">{name}</span>'
+                    +        '</span>'
+                    +    '</td>'
+                    +   ' <td>'
+                    +        '<span class="img-thumb ">'
+                    +            '<a href="#" onclick="forwardMemberPageByPathId({pathId})"><span class="ml-2 ">{pathName}</span></a>'
+                    +       '</span>'
+                    +    '</td>'
+                    +    '<td>'
+                    +        '{time}'
+                    +    '</td>'
+                    +    '<td>'
+                    +       '<button '
+                    +                ' onclick="updateAndShowTipsBox({mid})" type="button"'
+                    +                ' class="btn squer-btn effect-btn sm-btn btn-info" data-toggle="modal"'
+                    +                ' data-target="#longc">'
+                    +            '详细情况'
+                    +        '</button>'
+                    +    '</td>'
+                    +'</tr>'
+                    ,
+                    {
+                        listIndex:listIndex.toString(),
+                        name:name,
+                        pathName:pathName,
+                        time:time,
+                        mid:mid,
+                        pathId:pathId
+                    }
+                );
+            }
+            $("#member_table").html(str);
+        })
+    }
+
+    function forwardMemberPageByPathId(pathId){
+        $.get("/User/switchPath",{id:pathId}).done(function(){
+            window.open("/memberTable");
+        })
+    }
+
+
+    function updateAndShowTipsBox(memberId){
+
+        var myChart = echarts.init(document.getElementById('HeatChart'));
+        myChart.showLoading();
+        $.post("/MemberEachStage/getOneMemberEachStatus",{memberId:memberId}).done(function (dataJson) {
+            $('#longc').on('shown.bs.modal',function(){
+                myChart.resize()
+            })
+            myChart.hideLoading();
+            var seriesFillValue=[];
+
+            var dataJson2=eval(dataJson);
+            for (let i = 0; i < dataJson2.length; i++) {
+                seriesFillValue.push(
+                    {
+                        name: dataJson2[i][1],
+                        type: 'heatmap',
+                        data: [dataJson2[i][0]],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        itemStyle: {
+                            borderColor: 'rgba(68,68,68,)',
+                        },
+                    }
+                );
+            }
+            var option = {
+                tooltip: {
+                    position: 'top',
+                    trigger: 'item',
+                    triggerOn: 'mousemove',
+                    enterable: true,
+                    formatter: function (params, ticket, callback) {
+                        console.log(params);
+                        return params.seriesName;
+                    }
+                },
+                grid: {
+                    height: '50%',
+                    y: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    axisTick: {
+                        show: true
+                    },
+
+                    axisLabel: {
+                        show: false,
+                        textStyle: {
+                            color: 'none'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+
+                    splitArea: {
+                        show: true
+                    },
+                    axisLabel: {
+                        show: false,
+                        textStyle: {
+                            color: 'none'
+                        }
+                    }
+                },
+                visualMap: {
+                    min: -1,
+                    max: 1,
+                    calculable: true,
+                    orient: 'horizontal',
+                    type: 'piecewise',
+                    left: 'center',
+                    bottom: '15%',
+                    inRange: {
+                        color: ['rgba(71, 178, 98)', 'rgba(134,134,134,1)', 'rgb(235, 84, 84)']
+                    },
+                    pieces: [
+                        { min: -1, max: -1, label: '完成' },
+                        { min: 0, max: 0, label: '未完成' },
+                        { min: 1, max: 1, label: '超时完成' }
+                    ]
+                },
+
+                series: seriesFillValue
+
+            };
+
+            option && myChart.setOption(option);
+
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            });
+        })
+    }
+
+
+
+</script>
+
+</html>

@@ -56,6 +56,7 @@ public class UserController {
 
         //更新Session
         OrgPath switchOrgPath=orgPathService.selectOneById(orgPathId);
+        if(switchOrgPath==null) {return "404未找到对应的路径！";}
 
         Integer userId = current_user.getId();
         OrgPath current_OrgPath= switchOrgPath;

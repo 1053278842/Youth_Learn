@@ -17,7 +17,10 @@ import java.util.List;
  */
 public interface IPythonSpider {
 
-    public final String location= (ClassUtils.getDefaultClassLoader().getResource("static/python").getPath()+"\\").substring(1);
+    public final String location= (ClassUtils.getDefaultClassLoader().getResource("static/python").getPath()+"/").substring(1)
+            .replace(".jar","")
+            .replace("ile:","")
+            .replace("!","");
 
     /**
      * 查找所有的stage，然后持久化

@@ -13,7 +13,7 @@
         <result property="pathId" column="path_id"></result>
         <result property="parentUserId" column="parent_user_id"></result>
         <result property="isDelete" column="isDelete"></result>
-
+        <result property="countId" column="countId"></result>
         <association property="times" javaType="int">
             <result property="times" column="times"></result>
         </association>
@@ -148,5 +148,27 @@
                  )
                 JOIN t_user_email ON ( ( ( t_user.id = t_user_email.user_id ) AND ( t_user_email.auto_remind_start = 1 ) ) )
                 )
+    </select>
+
+
+    <resultMap id="MemberGroupMapper" type="com.ll.youthlearn.entity.Member">
+
+        <result property="pathId" column="path_id"></result>
+
+        <result property="countId" column="countId"></result>
+
+    </resultMap>
+    <select id="findCountOfGroupByPath" resultMap="MemberGroupMapper" parameterType="int">
+        SELECT
+            COUNT(t_member.id) as countId,
+            path_id
+        FROM
+            t_member
+        WHERE
+            t_member.isDelete = 0 AND
+            parent_user_id = #{uid}
+        GROUP BY
+            t_member.path
+
     </select>
 </mapper>

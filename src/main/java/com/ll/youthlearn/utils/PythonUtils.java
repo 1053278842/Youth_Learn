@@ -22,7 +22,7 @@ public class PythonUtils {
         try {
             Process proc = Runtime.getRuntime().exec(args);
             //用输入输出流来截取结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"gbk"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"utf-8"));
             String line = null;
             while ((line = in.readLine()) != null) {
                 log.info(line);

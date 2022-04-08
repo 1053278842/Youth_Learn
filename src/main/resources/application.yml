@@ -37,6 +37,7 @@ spring:
         debug: true
 
 mybatis-plus:
+  # 开启sql打印
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml

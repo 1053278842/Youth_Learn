@@ -6,7 +6,11 @@ import time
 import urllib.parse
 import requests
 import sys
-
+import io
+import sys
+ 
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 #再写一个脚本,判断当前路径子路径是否在两个以内。即可除去对memberjson的判断！！
 
 def getConn():

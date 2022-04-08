@@ -53,4 +53,10 @@ public class Member implements Serializable {
     @TableField("isDelete")
     private Integer isDelete;
 
+    /**
+     * 分组统计用的字段，意义模糊。多代表分组后的计数字段
+     */
+    @TableField(value = "countId",exist = false)
+    private Integer countId;
+
 }

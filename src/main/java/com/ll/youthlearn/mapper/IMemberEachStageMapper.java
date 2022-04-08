@@ -51,4 +51,12 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
      * @return
      */
     List<MemberEachStage> selectListByMemberId(Integer memberId);
+
+    /**
+     * 将stage和path分组，统计path的count
+     * @param userId
+     * @param maxStageNum
+     * @return
+     */
+    List<MemberEachStage> FindPathCountOfGroup(@Param("userId")Integer userId, @Param("maxStageNum")Integer maxStageNum);
 }

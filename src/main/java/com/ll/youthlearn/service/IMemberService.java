@@ -111,4 +111,20 @@ public interface IMemberService {
      * @return email 列表
      */
     List<UserEmail>  selectEmailAutoRemindWeekStart(int stageId);
+
+    /**
+     * name为条件模糊搜索member
+     *
+     * @param uid
+     * @param fuzzy_name 模糊搜索的name
+     * @return 返回0-n个数据
+     */
+    List<Member> searchListByFuzzyName(Integer uid, String fuzzy_name);
+
+    /**
+     * 单用户下，根据不同路径组织分组，计算获得每个组织下的【未删除成员总数】
+     * @param uid
+     * @return
+     */
+    List<Member> findCountOfGroupByPathId(Integer uid);
 }

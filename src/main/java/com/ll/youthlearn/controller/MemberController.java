@@ -53,6 +53,14 @@ public class MemberController {
         this.mailService = mailService;
     }
 
+    @ResponseBody
+    @RequestMapping("/searchByFuzzyName")
+    public List<Member> searchByFuzzyName(String fuzzy_name,HttpSession session){
+        User currentUser=(User)session.getAttribute("USER_INFO");
+        Integer uid=currentUser.getId();
+        List<Member> memberList = memberService.searchListByFuzzyName(uid,fuzzy_name);
+        return memberList;
+    }
 
     /**
      * 根据传入的用户主键id，返回联动相关的member列表

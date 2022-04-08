@@ -8,7 +8,11 @@ import urllib.parse
 import requests
 import sys
 from retrying import retry
+import io
+import sys
 
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def getConn():
     return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='LiuLong123123+',db='youth_learn')
@@ -25,7 +29,7 @@ def getOrgByNameStage(orgNames,stage,dataList):
     # print(url)
     if(len(pageJson['list']['list'])!=0):
         for i in pageJson['list']['list']:
-            if(list(i.keys())[0]!="username"):
+            if("username" not in i.keys()):
                 dataList.append(i)
             else:
                 # 读取的是user信息
@@ -73,7 +77,11 @@ if __name__=="__main__":
         t.join()
 
     for org in dataList:
-        resultDict[list(org.values())[0]]=0
+        # 防止num和level两项位置是与正常情况里相反的情况
+        if(list(org.keys())[0]=="num"):
+            resultDict[list(org.values())[1]]=0
+        else:
+            resultDict[list(org.values())[0]]=0
 
     for key in resultDict.keys():
         print(key)

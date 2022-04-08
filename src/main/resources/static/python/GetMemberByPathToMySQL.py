@@ -1,25 +1,18 @@
 #! /usr/bin/env python3
 import threading
-from turtle import stamp
-from typing import final
-from pymysql import NULL
 import requests
 import pymysql
-from ast import If, Return
-from hashlib import new
-from itertools import count
 import json
-import multiprocessing
-from multiprocessing import Manager, Pool, Process, Queue
-import os
-import random
 import time
-from urllib import response
 import urllib.parse
 import requests
 import sys
 import datetime
+import io
+import sys
 
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 def getConn():
@@ -36,7 +29,7 @@ def getOrgByNameStage(orgNames,stage,dataList,titleList):
     # print(url)
     if(len(pageJson['list']['list'])!=0):
         for i in pageJson['list']['list']:
-            if(list(i.keys())[0]!="username"):
+            if("username" not in i.keys()):
                 # dataList.append(i)
                 pass
             else:
@@ -46,8 +39,8 @@ def getOrgByNameStage(orgNames,stage,dataList,titleList):
 
 
 if __name__=="__main__":
-
-    #获取java传来的值
+    print("获取成员信息脚本启动2.0!")
+    # 获取java传来的值
     # userId=9
     # orgNames=eval("['团省委', '机关', '学校部']")
     # maxStage=80
@@ -56,6 +49,8 @@ if __name__=="__main__":
     orgNames=eval(sys.argv[2])
     maxStage=sys.argv[3]
     pathId=sys.argv[4]
+
+    # print(userId," | ",orgNames," | ",maxStage," | ",pathId)
 
     t1=time.time()
     t2=time.time()
@@ -110,6 +105,9 @@ if __name__=="__main__":
         userName=key
         addTime=value[0]
         times=value[1]
+        # print("测试用1："+userName)
+        # print("测试用1："+addTime)
+        # print("测试用1："+times)
         # print(org['addtime'],org['username'])
         if addTime is None:
             stamptime=datetime.datetime.strptime("2000-01-01","%Y-%m-%d")
@@ -123,7 +121,7 @@ if __name__=="__main__":
     sql=sql[0:-1]
     sql+=(" on duplicate key update timestamp=timestamp")
     print("拼接SQL耗时:", time.time()-t2)
-    print(sql)
+    # print(sql)
 
     #执行事务
     t2=time.time()

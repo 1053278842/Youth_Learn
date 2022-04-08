@@ -48,4 +48,10 @@ public class MemberEachStageServiceImpl implements IMemberEachStageService {
         return memberEachStageMapper.selectListByMemberId(memberId);
     }
 
+    @Override
+    public List<MemberEachStage> findCountOfGroupByPath(Integer userId, Integer maxStageNum) {
+        if(maxStageNum<0){maxStageNum=0;}
+        return memberEachStageMapper.FindPathCountOfGroup(userId,maxStageNum);
+    }
+
 }

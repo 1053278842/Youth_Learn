@@ -50,4 +50,8 @@ public class MainController {
     public String emailEdit() {
         return "email-edit";
     }
+    @RequestMapping("/orgMemberSearch")
+    public String orgMemberSearch() {
+        return "org-member-search";
+    }
 }

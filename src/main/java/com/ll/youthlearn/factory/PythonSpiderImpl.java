@@ -2,6 +2,7 @@ package com.ll.youthlearn.factory;
 
 import com.ll.youthlearn.entity.Org;
 import com.ll.youthlearn.utils.PythonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import java.util.List;
  * @CreateTime :  2022/2/24 23:21
  * @Description :
  */
+@Slf4j
 @Component(value = "pythonSpider")
 public class PythonSpiderImpl implements IPythonSpider {
 
@@ -89,12 +91,13 @@ public class PythonSpiderImpl implements IPythonSpider {
 
         Process proc;
         String pyLocation=location+"GetOrgJsonByName_Spider.py";
+
         String param=paramStr;
         try {
             String[] args=new String[]{"python", pyLocation,param};
             proc = Runtime.getRuntime().exec(args);
             //用输入输出流来截取结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"gbk"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"utf-8"));
             String line = null;
             while ((line = in.readLine()) != null) {
                 Org tempOrg=new Org();
@@ -129,7 +132,7 @@ public class PythonSpiderImpl implements IPythonSpider {
         try {
             proc = Runtime.getRuntime().exec(args);
             //用输入输出流来截取结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"gbk"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"utf-8"));
             String line = null;
             while ((line = in.readLine()) != null) {
                 resultStr=line;
