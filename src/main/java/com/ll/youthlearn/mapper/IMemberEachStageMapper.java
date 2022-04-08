@@ -23,7 +23,7 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
      * 删除
      * @param userId rt
      * @param maxStageNumber rt
-     * @param maxStage
+     * @param pathId
      */
     void deleteByUserIdAndMaxStageNumber(@Param("userId") Integer userId,@Param(value = "pathId") Integer pathId, @Param("maxStageNumber") Integer maxStageNumber);
 
@@ -52,11 +52,5 @@ public interface IMemberEachStageMapper extends BaseMapper<MemberEachStage> {
      */
     List<MemberEachStage> selectListByMemberId(Integer memberId);
 
-    /**
-     * 将stage和path分组，统计path的count
-     * @param userId
-     * @param maxStageNum
-     * @return
-     */
-    List<MemberEachStage> FindPathCountOfGroup(@Param("userId")Integer userId, @Param("maxStageNum")Integer maxStageNum);
+
 }

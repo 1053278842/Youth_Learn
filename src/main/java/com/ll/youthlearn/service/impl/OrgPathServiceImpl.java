@@ -2,8 +2,6 @@ package com.ll.youthlearn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.ll.youthlearn.entity.MemberEachStage;
-import com.ll.youthlearn.entity.Org;
 import com.ll.youthlearn.entity.OrgPath;
 import com.ll.youthlearn.mapper.IOrgPathMapper;
 import com.ll.youthlearn.service.IOrgPathService;

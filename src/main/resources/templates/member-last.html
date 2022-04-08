@@ -292,7 +292,7 @@
                                                     <span class="ml-2 " th:text="${stage.name}">无名氏1</span>
                                                 </span>
                                             </td>
-                                            <td th:attr="title=${stage.members.size()}+'/'+${ORG_PATH_MAX_MEMBER_NUMBER}+'|'+${#numbers.formatInteger(1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100,3)}+'%'">
+                                            <td th:attr="title=${stage.members.size()}+'/'+${ORG_PATH_MAX_MEMBER_NUMBER}+'|'+${#numbers.formatInteger(1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100,2)}+'%'">
                                                 <div class="progress">
                                                     <div class="progress-bar bg-primary" role="progressbar" th:style="'width:'+${1.0*stage.members.size()/ORG_PATH_MAX_MEMBER_NUMBER*100}+'%;'"
                                                          aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ></div>

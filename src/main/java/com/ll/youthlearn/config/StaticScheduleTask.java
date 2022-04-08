@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.ll.youthlearn.entity.*;
 import com.ll.youthlearn.factory.IPythonSpider;
 import com.ll.youthlearn.service.*;
-import com.ll.youthlearn.utils.DateUtils;
-import com.ll.youthlearn.utils.JsonRegularUtils;
-import com.ll.youthlearn.utils.SpiderUtils;
-import com.ll.youthlearn.utils.UrlRegularUtils;
+import com.ll.youthlearn.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -122,6 +119,8 @@ public class StaticScheduleTask {
                         Integer userId = op.getUserId();
                         Integer pathId = op.getId();
                         String orgPath=op.getOrgPath();
+                        //xxx|xxx|xx型转化为['XXX','XXX','xx']
+                        orgPath= PythonUtils.RegulatePath(orgPath);
 
                         //获取memberList,作为限制的依据
                         List<Member> memberList = memberService.selectByPathIdIgnoreIsDelete(pathId);

@@ -155,7 +155,7 @@
 
         <result property="pathId" column="path_id"></result>
 
-        <result property="countId" column="countId"></result>
+        <result property="count" column="countId"></result>
 
     </resultMap>
     <select id="findCountOfGroupByPath" resultMap="MemberGroupMapper" parameterType="int">
@@ -168,7 +168,48 @@
             t_member.isDelete = 0 AND
             parent_user_id = #{uid}
         GROUP BY
-            t_member.path
+            t_member.path_id
 
+    </select>
+
+    <resultMap id="AvgMemberMap" type="com.ll.youthlearn.entity.Member">
+        <result     property="pathId"       column="path_id"></result>
+        <result     property="count"      column="avg"></result>
+    </resultMap>
+    <select id="findPathAvgOfGroupCount" resultMap="AvgMemberMap" parameterType="int">
+        SELECT AVG(count_of_group_by_path) as avg ,path_id,path
+        FROM (
+                 SELECT
+                     COUNT(t_member.id) AS count_of_group_by_path,
+                     path_id,
+                     path
+                 FROM
+                     t_member_each_stage
+                         INNER JOIN
+                     t_member
+                     ON
+                             t_member_each_stage.member_id = t_member.id AND
+                             t_member.isDelete=0 AND
+                             t_member.parent_user_id=#{userId}
+                 WHERE
+                     t_member_each_stage.user_id = #{userId} AND
+                     t_member.isDelete = 0 AND
+                         t_member_each_stage.stage_id IN ((
+                         SELECT id FROM (
+                                            SELECT ID FROM t_stage ORDER BY t_stage.stage_date DESC LIMIT #{startStageNum},#{maxStageNum}
+                                        )as t_stage_temp
+                     ))
+                 GROUP BY
+                     t_member_each_stage.stage_id,
+                     t_member.path_id
+                 ORDER BY
+                     t_member_each_stage.stage_id DESC,
+                     t_member.path_id ASC
+             ) as countTable
+
+        GROUP BY
+            path_id
+        ORDER BY
+            path_id
     </select>
 </mapper>

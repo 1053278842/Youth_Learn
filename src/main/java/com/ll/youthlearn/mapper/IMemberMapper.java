@@ -55,4 +55,13 @@ public interface IMemberMapper extends BaseMapper<Member> {
      * @return
      */
     List<Member> findCountOfGroupByPath(Integer uid);
+
+    /**
+     * 将stage和path分组，统计path的count
+     * @param userId
+     * @param maxStageNum
+     * @param startStageNum
+     * @return
+     */
+    List<Member> findPathAvgOfGroupCount(@Param("userId")Integer userId, @Param("startStageNum")Integer startStageNum, @Param("maxStageNum")Integer maxStageNum);
 }

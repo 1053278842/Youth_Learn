@@ -46,12 +46,5 @@ public interface IMemberEachStageService {
      */
     List<MemberEachStage> selectListByMemberId(Integer memberId);
 
-    /**
-     * 获取mes列表，包含不同期次下不同路径分组后的人数总量。
-     * 用于分析单个用户下，指定期次数量中，不同路径组织的学习人数（mes.member.countId）
-     * @param userId 用户id
-     * @param maxStageNum 从最近的期次开始向下取X个期次
-     * @return
-     */
-    List<MemberEachStage> findCountOfGroupByPath(Integer userId,Integer maxStageNum);
+
 }

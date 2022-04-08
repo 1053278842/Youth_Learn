@@ -56,6 +56,24 @@ public class PythonUtils {
         return orgPathStrParam;
     }
 
+    /**
+     * ['直属高校', '合肥学院', '外国语学院', '2018级朝鲜语2+2（2）班'] To 2018级朝鲜语2+2（2）班
+     * @param org
+     * @return
+     */
+    public static String ExtractLastOrgNameFromArrayStr(String org){
+
+        String result="";
+
+        String[] strings=org.split(",");
+        String str=strings[strings.length-1];
+        str=str.trim();
+        str=str.substring(1,str.length()-2);
+
+        result=str;
+        return result;
+    }
+
     public static int RegulateNumberRange(Integer value,Integer minValue,Integer maxValue){
         //maxStage的范围
         if(value<minValue){

@@ -19,7 +19,7 @@
             <result     property="path"         column="path"></result>
             <result     property="pathId"       column="path_id"></result>
             <result     property="maxTimes"     column="maxTimes"></result>
-            <result     property="countId"      column="count_of_group_by_path"></result>
+            <result     property="avg"      column="avg"></result>
         </association>
         <association property="stage" javaType="com.ll.youthlearn.entity.Stage">
             <result property="name"     column="s_name"></result>
@@ -73,31 +73,4 @@
             select id from t_member where parent_user_id=#{userId} and path_id=#{pathId})
     </delete>
 
-    <select id="FindPathCountOfGroup" resultMap="mesMap" parameterType="int">
-        SELECT
-            COUNT(t_member.id) AS `count_of_group_by_path`,
-            t_member_each_stage.id, member_id, t_member_each_stage.timestamp, stage_id, user_id,
-            t_member.id as mid, name, email, t_member.timestamp as m_timestamp, path, path_id, parent_user_id, isDelete
-        FROM
-            t_member_each_stage
-                INNER JOIN
-            t_member
-            ON
-                t_member_each_stage.member_id = t_member.id
-        WHERE
-            t_member_each_stage.user_id = #{userId} AND
-            t_member.isDelete=0 AND
-            t_member_each_stage.stage_id in(
-                SELECT id FROM (
-                    SELECT ID FROM t_stage ORDER BY t_stage.stage_date DESC LIMIT 0,#{maxStageNum}
-                )as t_stage_temp
-            )
-        GROUP BY
-            t_member_each_stage.stage_id,
-            t_member.path_id
-        ORDER BY
-            t_member_each_stage.stage_id DESC,
-            t_member.path_id ASC
-
-    </select>
 </mapper>

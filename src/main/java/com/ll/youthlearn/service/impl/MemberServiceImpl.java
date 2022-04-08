@@ -117,4 +117,12 @@ public class MemberServiceImpl implements IMemberService{
     public List<Member> findCountOfGroupByPathId(Integer uid) {
         return memberMapper.findCountOfGroupByPath(uid);
     }
+
+
+    @Override
+    public List<Member> findAvgOfGroupByPathCount(Integer userId, Integer startStageNum,Integer maxStageNum) {
+        if(maxStageNum<=0){maxStageNum=1;}
+        if(maxStageNum<startStageNum){maxStageNum=startStageNum;}
+        return memberMapper.findPathAvgOfGroupCount(userId,startStageNum,maxStageNum);
+    }
 }

@@ -54,9 +54,8 @@ public class Member implements Serializable {
     private Integer isDelete;
 
     /**
-     * 分组统计用的字段，意义模糊。多代表分组后的计数字段
+     * 分组统计用的字段，意义模糊。多代表分组后的计数聚合字段
      */
-    @TableField(value = "countId",exist = false)
-    private Integer countId;
-
+    @TableField(value = "count",exist = false)
+    private Double count;
 }
