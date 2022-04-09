@@ -1,0 +1,252 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+    <title>多期排行榜</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!--Start Style -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/fonts.css}" href="../static/css/fonts.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/font-awesome.min.css}" href="../static/css/font-awesome.min.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/icofont.min.css}" href="../static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{~/static/css/style.css}" href="../static/css/style.css" >
+    <link rel="stylesheet" id="theme-change" type="text/css" href="">
+</head>
+
+
+<body>
+<div th:include="fixed-module::loader"></div>
+<!-- Main Body -->
+<div class="page-wrapper">
+    <!-- Header Start -->
+    <div th:include="fixed-module::header"></div>
+
+    <!-- Sidebar Start -->
+    <div th:include="fixed-module::aside"></div>
+
+    <!-- Container Start -->
+    <div class="page-wrapper">
+        <div class="main-content" th:fragment="page_member_table" id="page_member_table">
+            <!-- Page Title Start -->
+            <div class="row">
+                <div class="colxl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-title-wrapper">
+                        <div class="page-title-box">
+                            <h2 class="page-title bold">多期排行榜-完成率</h2>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-link">
+                                    <a href="javascript:void(0);"><i class="fas fa-home mr-2"></i>Home</a>
+                                </li>
+                                <li class="breadcrumb-link active">Ranking-Range</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row ">
+                <!-- Dragable Table Card-->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <div class="card table-card ">
+                        <div class="card-header pb-0 ">
+                            <h4 class="" >完成率排行
+                            </h4>
+                        </div>
+
+                        <div class="card-body ">
+                            <div class="chart-holder ">
+                                <div class="table-responsive ">
+                                    <table id="example" class="table table-hover table-striped advance-table mb-0 vertically-middle ">
+                                        <thead>
+                                        <tr>
+                                            <th>排名</th>
+                                            <th>组织名</th>
+                                            <th>组织人数</th>
+                                            <th>达成率</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="dragable-container " id="member_table">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--页码-->
+                        <div class="card-footer text-right pt-0 box-footer" style="position: relative;">
+                            <div class="pull-left  col-4" style="float: left">
+                                <div class="form-group form-inline">
+                                    <div>当前排名表从
+                                        <select class="form-control" id="stage-select" onchange="ChangePageSize()">
+                                            <option value="0" selected>第七期</option>
+                                            <option value="1">第六期</option>
+                                            <option value="2">第五期</option>
+                                            <option value="3">第四期</option>
+                                            <option value="stageId">stageName</option>
+                                        </select>
+                                        开始统计</div>
+                                    <div>按时间统计前
+                                        <select class="form-control" id="num-size-select" onchange="ChangePageSize()">
+                                            <option value="1">1</option>
+                                            <option value="5">2</option>
+                                            <option value="10" selected="">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                        期次.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-tools pull-right" style="float: right;position: absolute;right: 30;bottom: 40;">
+                                <nav class="d-inline-block ">
+                                    <ul class="pagination mb-0 ">
+                                        <li class="page-item disabled ">
+                                            <a class="page-link" href="javascript:void(0);" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                                        </li>
+                                        <li class="page-item active "><a class="page-link " href="javascript:void(0); ">1</a></li>
+                                        <li class="page-item ">
+                                            <a class="page-link " href="javascript:void(0); ">2</a>
+                                        </li>
+                                        <li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
+                                        <li class="page-item ">
+                                            <a class="page-link " href="javascript:void(0); "><i class="fas fa-chevron-right "></i></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- footer -->
+            <div th:include="fixed-module::footer"></div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Script Start -->
+<script th:src="@{~/static/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+<script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
+<script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+<script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+
+</body>
+<!--字符串格式化工具-->
+<script>
+    /**
+     函数:格式化字符串
+     参数：str:字符串模板； data:数据
+     调用方式:formatString("api/values/{id}/{name}",{id:101,name:"test"});
+     formatString("api/values/{0}/{1}",101,"test");
+     */
+    function formatString(str, data) {
+        if (!str || data == undefined) {
+            return str;
+        }
+
+        if (typeof data === "object") {
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    str = str.replace(new RegExp("\{" + key + "\}", "g"), data[key]);
+                }
+            }
+        } else {
+            var args = arguments,
+                reg = new RegExp("\{([0-" + (args.length - 1) + "])\}", "g");
+            return str.replace(reg, function(match, index) {
+                return args[index - (-1)];
+            });
+        }
+        return str;
+    }
+</script>
+<script>
+
+    $(function(){
+        fetchRankingByLimitParams(0,35);
+    })
+
+    function fillRankingTable(str){
+        $("#card-title").text($("#card-title").text()+"| 0,35");
+        $("#member_table").html(str);
+    }
+
+    function fetchRankingByLimitParams(startIndex,stageCountNums){
+        $.get("/OrgRanking/RangeRanking",{startIndex:startIndex,stageCountNums:stageCountNums}).done(function(data){
+            let str="";
+
+            for(let i=0;i<data.length;i++){
+                const ranking=data[i]['ranking'];
+                const orgLastName=data[i]['orgLastName'];
+                const orgNumSize=data[i]['orgNumSize'];
+                const completionRate=(data[i]['completionRate']*100).toFixed(2)
+                const pathId=data[i]['pathId'];
+                str+=formatString(''
+                    +'<tr >'
+                    +    '<td>'
+                    +        '{ranking}'
+                    +    '</td>'
+                    +    '<td>'
+                    +           '<span class="img-thumb ">'
+                    +               '<a href="#" onclick="forwardMemberPageByPathId({pathId})"><span class="ml-2 ">{orgLastName}</span></a>'
+                    +           '</span>'
+                    +    '</td>'
+                    +    '<td>'
+                    +           '<span class="img-thumb ">'
+                    +               '<span class="ml-2 ">{orgNumSize}</span>'
+                    +           '</span>'
+                    +    '</td>'
+                    +    '<td>'
+                    +        '{completionRate}'
+                    +    '</td>'
+                    +'</tr>'
+                    ,
+                    {
+                        ranking:ranking,
+                        orgLastName:orgLastName,
+                        orgNumSize:orgNumSize,
+                        completionRate:completionRate+"%",
+                        pathId:pathId
+                    }
+                );
+            }
+
+            fillRankingTable(str);
+            return str;
+        }).fail(function(){
+            console.log("请求失败！");
+            return "请求失败！"
+        })
+    }
+
+
+    function forwardMemberPageByPathId(pathId){
+        $.get("/User/switchPath",{id:pathId}).done(function(){
+            window.open("/memberTable");
+        })
+    }
+
+</script>
+
+</html>

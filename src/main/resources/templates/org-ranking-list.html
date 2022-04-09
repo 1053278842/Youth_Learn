@@ -89,7 +89,10 @@
                                             </td>
                                             <td>
                                                 <span class="img-thumb ">
-                                                    <span class="ml-2 " th:text="${orgRanking.orgLastName}">19信管</span>
+                                                    <a href="#"
+                                                       th:data-index="${orgRanking.pathId}" th:onclick="forwardMemberPageByPathId(this.getAttribute('data-index'))">
+                                                        <span class="ml-2 " th:text="${orgRanking.orgLastName}">19信管</span>
+                                                    </a>
                                                 </span>
                                             </td>
                                             <td>
@@ -150,5 +153,13 @@
 <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
 
 </body>
+<script>
+    function forwardMemberPageByPathId(pathId){
+        $.get("/User/switchPath",{id:pathId}).done(function(){
+            window.open("/memberTable");
+        })
+    }
+
+</script>
 
 </html>

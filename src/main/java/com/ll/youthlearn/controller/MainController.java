@@ -54,5 +54,8 @@ public class MainController {
     public String orgMemberSearch() {
         return "org-member-search";
     }
-
+    @RequestMapping("/orgRankingRange")
+    public String orgRankingRange() {
+        return "org-ranking-range-list";
+    }
 }

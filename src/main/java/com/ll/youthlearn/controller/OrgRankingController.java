@@ -6,6 +6,7 @@ import com.ll.youthlearn.service.IOrgRankingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -39,8 +40,9 @@ public class OrgRankingController {
         return mv;
     }
 
+    @ResponseBody
     @RequestMapping("/RangeRanking")
-    public ModelAndView RangeRanking(HttpSession session,Integer startIndex,Integer stageCountNums){
+    public List<OrgRanking> RangeRanking(HttpSession session,Integer startIndex,Integer stageCountNums){
         User current_user=(User)session.getAttribute("USER_INFO");
         Integer uid= current_user.getId();
 
@@ -49,11 +51,7 @@ public class OrgRankingController {
 
         List<OrgRanking> orgRankingList = orgRankingService.findRangeStageRanking(uid,startIndex,stageCountNums);
 
-        ModelAndView mv=new ModelAndView();
-        mv.setViewName("org-ranking-list");
-        mv.addObject("ONE_STAGE_LIST",orgRankingList);
-
-        return mv;
+        return orgRankingList;
     }
 
 
