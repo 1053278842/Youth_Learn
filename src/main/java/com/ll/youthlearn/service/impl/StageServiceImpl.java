@@ -50,4 +50,12 @@ public class StageServiceImpl implements IStageService {
         return stageMapper.selectOne(new QueryWrapper<Stage>().between("stage_date",MonTs,SunTs).orderByDesc("stage").last("limit 0,1"));
     }
 
+    @Override
+    public List<Stage> findNewStageByNum(Integer num) {
+
+        return stageMapper.selectList(new QueryWrapper<Stage>()
+                .orderByDesc("stage_date")
+                .last("limit 0,"+num));
+    }
+
 }

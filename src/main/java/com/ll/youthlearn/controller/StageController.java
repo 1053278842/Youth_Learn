@@ -11,6 +11,7 @@ import com.ll.youthlearn.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,6 +58,16 @@ public class StageController {
     public String updateStage(){
         pythonSpider.saveAllStage();
         return "success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/getStageByLimitNum")
+    public List<Stage> getStageByLimitNum(@RequestParam(defaultValue = "1") Integer num){
+
+        if(num<=0){num=1;}
+
+        List<Stage> stages = stageService.findNewStageByNum(num);
+        return stages;
     }
 
     @RequestMapping("/getAllStageByUid")

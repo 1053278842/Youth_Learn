@@ -29,4 +29,11 @@ public interface IStageService {
      * @return
      */
     Stage findNewestStage();
+
+    /**
+     * 从新到旧的顺序查找num个stage
+     * @param num
+     * @return
+     */
+    List<Stage> findNewStageByNum(Integer num);
 }

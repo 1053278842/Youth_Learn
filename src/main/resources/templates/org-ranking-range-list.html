@@ -67,6 +67,20 @@
                         <div class="card-header pb-0 ">
                             <h4 class="" >完成率排行
                             </h4>
+                            <div class="form-group form-inline mb-0 mt-3">
+                                <span>当前排名表从  </span>
+                                <select class="custom-select custom-select-sm" id="stage-select" onchange="changeLimitParams()">
+                                    <option value="0" selected>第七期</option>
+                                    <option value="1">第六期</option>
+                                    <option value="2">第五期</option>
+                                    <option value="3">第四期</option>
+                                    <option value="stageId">stageName</option>
+                                </select>
+                                <span>  前开始,共统计 </span>
+                                <input id="stage-num" value="35" type="number" min="0" max="80" placeholder="During 1~50"
+                                       onchange="changeLimitParams()" style="width: 50px;height: 30px;padding: 0 0 0 10px;margin: 0 10px;">
+                                <span> 个期次.</span>
+                            </div>
                         </div>
 
                         <div class="card-body ">
@@ -90,47 +104,21 @@
                         </div>
                         <!--页码-->
                         <div class="card-footer text-right pt-0 box-footer" style="position: relative;">
-                            <div class="pull-left  col-4" style="float: left">
-                                <div class="form-group form-inline">
-                                    <div>当前排名表从
-                                        <select class="form-control" id="stage-select" onchange="ChangePageSize()">
-                                            <option value="0" selected>第七期</option>
-                                            <option value="1">第六期</option>
-                                            <option value="2">第五期</option>
-                                            <option value="3">第四期</option>
-                                            <option value="stageId">stageName</option>
-                                        </select>
-                                        开始统计</div>
-                                    <div>按时间统计前
-                                        <select class="form-control" id="num-size-select" onchange="ChangePageSize()">
-                                            <option value="1">1</option>
-                                            <option value="5">2</option>
-                                            <option value="10" selected="">10</option>
-                                            <option value="15">15</option>
-                                            <option value="20">20</option>
-                                        </select>
-                                        期次.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="box-tools pull-right" style="float: right;position: absolute;right: 30;bottom: 40;">
-                                <nav class="d-inline-block ">
-                                    <ul class="pagination mb-0 ">
-                                        <li class="page-item disabled ">
-                                            <a class="page-link" href="javascript:void(0);" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active "><a class="page-link " href="javascript:void(0); ">1</a></li>
-                                        <li class="page-item ">
-                                            <a class="page-link " href="javascript:void(0); ">2</a>
-                                        </li>
-                                        <li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
-                                        <li class="page-item ">
-                                            <a class="page-link " href="javascript:void(0); "><i class="fas fa-chevron-right "></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <nav class="d-inline-block ">
+                                <ul class="pagination mb-0 ">
+                                    <li class="page-item disabled ">
+                                        <a class="page-link" href="javascript:void(0);" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                                    </li>
+                                    <li class="page-item active "><a class="page-link " href="javascript:void(0); ">1</a></li>
+                                    <li class="page-item ">
+                                        <a class="page-link " href="javascript:void(0); ">2</a>
+                                    </li>
+                                    <li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
+                                    <li class="page-item ">
+                                        <a class="page-link " href="javascript:void(0); "><i class="fas fa-chevron-right "></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -184,11 +172,25 @@
 <script>
 
     $(function(){
-        fetchRankingByLimitParams(0,35);
+        //填充选择框
+        fillStageSelectAutoLoad();
+        //默认选择selector中的第一个option
+        selectOptionByValue(0);
+
+        const startStageIndex=$("#stage-select").find("option:selected").val();
+        const stageNum=$("#stage-num").val();
+
+        fetchRankingByLimitParams(startStageIndex,stageNum);
     })
 
+    function changeLimitParams(){
+        const startStageIndex=$("#stage-select").find("option:selected").val();
+        const stageNum=$("#stage-num").val();
+
+        fetchRankingByLimitParams(startStageIndex,stageNum);
+    }
+
     function fillRankingTable(str){
-        $("#card-title").text($("#card-title").text()+"| 0,35");
         $("#member_table").html(str);
     }
 
@@ -202,34 +204,27 @@
                 const orgNumSize=data[i]['orgNumSize'];
                 const completionRate=(data[i]['completionRate']*100).toFixed(2)
                 const pathId=data[i]['pathId'];
-                str+=formatString(''
+                str+=''
                     +'<tr >'
                     +    '<td>'
-                    +        '{ranking}'
+                    +        ranking
                     +    '</td>'
                     +    '<td>'
                     +           '<span class="img-thumb ">'
-                    +               '<a href="#" onclick="forwardMemberPageByPathId({pathId})"><span class="ml-2 ">{orgLastName}</span></a>'
+                    +               '<a href="#" onclick="forwardMemberPageByPathId('+pathId+')"><span class="ml-2 ">'+orgLastName+'</span></a>'
                     +           '</span>'
                     +    '</td>'
                     +    '<td>'
                     +           '<span class="img-thumb ">'
-                    +               '<span class="ml-2 ">{orgNumSize}</span>'
+                    +               '<span class="ml-2 ">'+orgNumSize+'</span>'
                     +           '</span>'
                     +    '</td>'
-                    +    '<td>'
-                    +        '{completionRate}'
+                    +    '<td class="'+(completionRate>60?"success":"danger")+' font-weight-bold lead">'
+                    +        completionRate
                     +    '</td>'
                     +'</tr>'
-                    ,
-                    {
-                        ranking:ranking,
-                        orgLastName:orgLastName,
-                        orgNumSize:orgNumSize,
-                        completionRate:completionRate+"%",
-                        pathId:pathId
-                    }
-                );
+
+                ;
             }
 
             fillRankingTable(str);
@@ -246,6 +241,27 @@
             window.open("/memberTable");
         })
     }
+
+    /**
+     * 填充stage选择框
+     */
+    function fillStageSelectAutoLoad(){
+        $.get("/Stage/getStageByLimitNum",{num:10}).done(function(data){
+            if(data!=null&&data.length!=0){
+                $("#stage-select").empty();
+                for (let i = 0; i < data.length; i++) {
+                    let option = "<option value='"+i+"'>"+data[i].name+"</option>";
+                    $("#stage-select").append(option);
+                }
+            }
+        })
+    }
+
+    function selectOptionByValue(selectorIdStr,value){
+        const findStr="option[value="+value+"]";
+        $("#"+selectorIdStr).find(findStr).attr("selected",true);
+    }
+
 
 </script>
 
