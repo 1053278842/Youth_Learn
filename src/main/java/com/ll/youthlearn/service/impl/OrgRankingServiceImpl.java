@@ -127,6 +127,7 @@ public class OrgRankingServiceImpl implements IOrgRankingService {
     }
 
     public Map<Integer, OrgRanking> setRankingTrend(Map<Integer,OrgRanking> currentStageRankMap, Map<Integer,OrgRanking> beforeStageRankMap ){
+
         currentStageRankMap.forEach((key,value)->{
             //如果前一期没有该组织的情况下,趋势等于默认值0
             if(beforeStageRankMap.containsKey(key)){

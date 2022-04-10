@@ -23,18 +23,25 @@ public class DateUtils {
      * @return  format指定的字符串格式化日期
      */
     public static String getWeekMondayDate(String format,Date date){
+
         DateFormat sdf = new SimpleDateFormat(format);
 
         Calendar cal = Calendar.getInstance();
-
         cal.setTime(date);
-        //去掉时分秒
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
 
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        //-1是为了修正cal类以周日为每星期第一天的设定
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK)-1;
+        //day_of_week-1==0的情况对应为当前是周日,周日day_of_week=1,修正为周日=7.
+        if(day_of_week==0){
+            day_of_week=7;
+        }
+        //+1为了回到cal周日是一周第一天的设置
+        cal.add(Calendar.DATE,-day_of_week+1);
+
         String first_day_week = sdf.format(cal.getTime());
+        if(format.equals("yyyyMMdd")){
+            first_day_week = sdf.format(cal.getTime())+"00000000";
+        }
 
         return first_day_week;
     }
@@ -49,20 +56,25 @@ public class DateUtils {
         DateFormat sdf = new SimpleDateFormat(format);
 
         Calendar cal = Calendar.getInstance();
-
         cal.setTime(date);
-        //去掉时分秒
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
 
-        //时间延长至周日
-        cal.add(Calendar.DATE,7);
+        //-1是为了修正cal类以周日为每星期第一天的设定
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK)-1;
+        //day_of_week-1==0的情况对应为当前是周日,周日day_of_week=1,修正为周日=7.
+        if(day_of_week==0){
+            day_of_week=7;
+        }
+        //+1为了回到cal周日是一周第一天的设置
+        cal.add(Calendar.DATE,-day_of_week+7);
 
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+
         String first_day_week = sdf.format(cal.getTime());
+        if(format.equals("yyyyMMdd")){
+            first_day_week = sdf.format(cal.getTime())+"235959999";
+        }
 
         return first_day_week;
+
     }
 
     /**

@@ -204,10 +204,31 @@
                 const orgNumSize=data[i]['orgNumSize'];
                 const completionRate=(data[i]['completionRate']*100).toFixed(2)
                 const pathId=data[i]['pathId'];
+
+                const firstColorClass="bg-danger";
+                const secondColorClass="bg-warning";
+                const thirdColorClass="bg-info";
+                const otherColorClass="bg-success";
+
+                let colorClassName=otherColorClass;
+                switch (ranking) {
+                    case 1:
+                        colorClassName=firstColorClass;
+                        break;
+                    case 2:
+                        colorClassName=secondColorClass;
+                        break;
+                    case 3:
+                        colorClassName=thirdColorClass;
+                        break;
+                }
+
                 str+=''
                     +'<tr >'
                     +    '<td>'
-                    +        ranking
+                    +           '<span  style="padding: 5px 15px;" class="text-white ' + colorClassName + '">'
+                    +               ranking
+                    +           '</span>'
                     +    '</td>'
                     +    '<td>'
                     +           '<span class="img-thumb ">'
@@ -220,7 +241,7 @@
                     +           '</span>'
                     +    '</td>'
                     +    '<td class="'+(completionRate>60?"success":"danger")+' font-weight-bold lead">'
-                    +        completionRate
+                    +        completionRate+'%'
                     +    '</td>'
                     +'</tr>'
 
@@ -238,7 +259,7 @@
 
     function forwardMemberPageByPathId(pathId){
         $.get("/User/switchPath",{id:pathId}).done(function(){
-            window.open("/memberTable");
+            window.open("/Stage/getAllStageByUid");
         })
     }
 

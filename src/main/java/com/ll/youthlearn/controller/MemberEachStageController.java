@@ -186,6 +186,9 @@ public class MemberEachStageController {
 
                 Double hourIndex=Math.floor(hour/(24/timeCount));
                 //-1 -> 为了消除calendar sunday为每周第一天的误差; -1 -> 消除index下标和实际统计1的误差
+                if(weekDay==1){
+                    weekDay=6;
+                }
                 Integer weekDayIndex=weekDay-2;
 
                 Integer localIndex=(hourIndex.intValue())+weekDayIndex*timeCount;

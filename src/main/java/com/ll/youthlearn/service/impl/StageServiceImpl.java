@@ -44,8 +44,9 @@ public class StageServiceImpl implements IStageService {
         String MonTs;
         String SunTs;
 
-        MonTs= DateUtils.getWeekMondayDate("yyyy-MM-dd HH:mm:ss",currentTs);
-        SunTs = DateUtils.getWeekSundayDate("yyyy-MM-dd HH:mm:ss",currentTs);
+
+        MonTs= DateUtils.getWeekMondayDate("yyyyMMdd",currentTs);
+        SunTs = DateUtils.getWeekSundayDate("yyyMMdd",currentTs);
 
         return stageMapper.selectOne(new QueryWrapper<Stage>().between("stage_date",MonTs,SunTs).orderByDesc("stage").last("limit 0,1"));
     }
