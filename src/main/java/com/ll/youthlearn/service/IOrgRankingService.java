@@ -32,4 +32,17 @@ public interface IOrgRankingService {
      * @return
      */
     List<OrgRanking> findRangeStageRanking(Integer uid,Integer startIndex,Integer endNums);
+
+    /**
+     * 返回类似：
+     * ['product'，'第7期','第6期',‘第5期’,‘第4期’]
+     * ['19信管'，   88,    32,    43,     22]
+     * ['21计科'，   88,    32,    43,     22]
+     * 提供Echarts的Line型必要数据。
+     * 其中数据为达成率（百分制）
+     * @param uid
+     * @param stageTotal
+     * @return
+     */
+    List<Object[]> getEchartsLineRankingDate(Integer uid,Integer stageTotal);
 }

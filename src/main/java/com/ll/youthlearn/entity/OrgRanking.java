@@ -21,6 +21,8 @@ public class OrgRanking implements Serializable {
 
     private Integer pathId;
 
+    private String pathName;
+
     /**
      * 相当于xx市xx乡xx村中代表的村名
      */
@@ -42,6 +44,12 @@ public class OrgRanking implements Serializable {
      */
     private Integer rankingTrend;
 
+
+    private Integer stageId;
+
+    private String stageName;
+
+    private Integer totalNumberOfLearners;
 
 
 }

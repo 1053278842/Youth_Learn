@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.youthlearn.mapper.IOrgRankingMapper">
+
+    <resultMap id="RankingMap" type="com.ll.youthlearn.entity.OrgRanking">
+        <result property="pathId"                   column="path_id"></result>
+        <result property="totalNumberOfLearners"    column="count_of_group_by_path"></result>
+        <result property="pathName"                     column="path"></result>
+        <result property="stageName"                column="name"></result>
+        <result property="stageId"                  column="id"></result>
+    </resultMap>
+    <select id="selectTotalNumberOfLearnersGroupedByStage" resultMap="RankingMap" parameterType="int">
+
+        SELECT
+            COUNT(t_member.id) AS count_of_group_by_path,
+            path_id,
+            path,
+            t_stage.name,
+            t_stage.id
+        FROM
+            t_member_each_stage
+                INNER JOIN
+            t_member
+            ON
+                    t_member_each_stage.member_id = t_member.id AND
+                    t_member.isDelete = 0 AND
+                    t_member.parent_user_id = #{uid}
+                INNER JOIN
+            t_stage
+            ON
+                t_member_each_stage.stage_id = t_stage.id
+        WHERE
+            t_member_each_stage.user_id = #{uid} AND
+            t_member.isDelete = 0 AND
+                t_member_each_stage.stage_id IN ((
+                SELECT
+                    id
+                FROM
+                        ( SELECT ID FROM t_stage ORDER BY t_stage.stage_date DESC LIMIT 0,#{stageTotal} ) AS t_stage_temp
+            ))
+        GROUP BY
+            t_member_each_stage.stage_id,
+            t_member.path_id
+        ORDER BY
+            t_member_each_stage.stage_id DESC,
+            t_member.path_id ASC
+
+    </select>
+</mapper>

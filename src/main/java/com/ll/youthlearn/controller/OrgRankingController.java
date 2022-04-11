@@ -54,5 +54,21 @@ public class OrgRankingController {
         return orgRankingList;
     }
 
+    /**
+     * 后端返回的数据距离能用还多了一层[],前端注意要eval()一下
+     * @param session
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getEchartsLineData")
+    public List<Object[]> getEchartsLineData(HttpSession session){
+        User current_user=(User)session.getAttribute("USER_INFO");
+        Integer uid= current_user.getId();
+
+        //该图标一次统计近X期的数据
+        final Integer maxStageNums=10;
+
+        return orgRankingService.getEchartsLineRankingDate(uid,maxStageNums);
+    }
 
 }
