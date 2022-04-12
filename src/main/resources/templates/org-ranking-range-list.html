@@ -214,9 +214,25 @@
                 legend: {
                     type:'scroll'
                 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        show: true,
+                        yAxisIndex: [0],
+                        left: '93%',
+                        start: 0, //数据窗口范围的起始百分比
+                        end: 100
+                    },
+                    {
+                        type: 'inside',
+                        yAxisIndex: [0],
+                        start: 0,
+                        end: 100
+                    }
+                ],
                 grid: {
                     left: '3%',
-                    right: '4%',
+                    right: '7%',
                     bottom: '3%',
 
                     containLabel: true
@@ -284,8 +300,28 @@
                         return relVal
                     }
                 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        show: true,
+                        yAxisIndex: [0],
+                        left: '93%',
+                        start: 0, //数据窗口范围的起始百分比
+                        end: 100
+                    },
+                    {
+                        type: 'inside',
+                        yAxisIndex: [0],
+                        start: 0,
+                        end: 100
+                    }
+                ],
                 title: {
-                    subtext: '数据来源当前用户所管理的组织完成率'
+                    subtext: '数据来源当前用户所管理的组织完成率',
+                    left:'40%',
+                    subtextStyle:{
+                        align:"right",
+                    }
                 },
                 legend: {
                     data: ['2018级朝鲜语2+2（2）班']
@@ -299,7 +335,7 @@
                     inverse: true,
                     animationDuration: 300,
                     animationDurationUpdate: 300,
-                    max: 7 // only the largest 3 bars will be displayed
+                    max: data_all[0].length-2 // only the largest 3 bars will be displayed
                 },
                 series: [
                     {
@@ -342,11 +378,27 @@
                 animationEasingUpdate: 'sinusoidalOut'
             };
 
+            //防止滑动条被动画重置
+            myChart.on('dataZoom',function(event){
+                if(event.batch){
+                    start=event.batch[0].start;
+                    end=event.batch[0].end;
+                }else{
+                    start=event.start;
+                    end=event.end;
+                };
+            });
+            window.setInterval(function () {
+
+                option.dataZoom[0].start=start;
+                option.dataZoom[0].end=end;
+                myChart.setOption(option);
+            },4000);
 
             function run() {
                 let data = option.series[0].data;
                 option.series[0].name = data_all[index][0];
-                option.title.text = data_all[index][0];
+                option.title.text = "    "+data_all[index][0];
                 for (let i = 0; i < data.length; i++) {
                     data[i] = data_all[index][i];
                 }
