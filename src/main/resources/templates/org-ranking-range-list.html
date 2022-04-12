@@ -124,6 +124,36 @@
                 </div>
             </div>
 
+            <div class="row ">
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card chart-card ">
+                        <div class="card-header">
+                            <h4>近10期组织参与率-折线图</h4>
+                        </div>
+                        <div class="card-body ">
+                            <div id="LineChartManyOrgReachRate" style="height: 500px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row ">
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card chart-card ">
+                        <div class="card-header">
+                            <h4>近10期组织排名动画-柱状图</h4>
+                            <button type="button" onclick="resetAnim()" id="resetAnimButton" class="btn btn-primary squer-btn sm-btn mt-2">重置动画</button>
+                        </div>
+
+                        <div class="card-body ">
+                            <div id="AnimBarECharts" style="height: 500px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- footer -->
             <div th:include="fixed-module::footer"></div>
 
@@ -138,7 +168,212 @@
 <script th:src="@{~/static/js/popper.min.js}" src="../static/js/popper.min.js"></script>
 <script th:src="@{~/static/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
 <script th:src="@{~/static/js/custom.js}" src="../static/js/custom.js"></script>
+<!--引入Echarts-->
+<script src="../static/js/echarts.min.js"  th:src="@{~/static/js/echarts.min.js}" ></script>
 
+<script>
+
+    function resetAnim(){
+
+        fillAnimBarEcharts();
+    }
+
+    $(function (){
+        LineEcharts();
+        fillAnimBarEcharts();
+    })
+
+    function LineEcharts(){
+
+        const chartDom = document.getElementById('LineChartManyOrgReachRate');
+        const myChart = echarts.init(chartDom);
+        let option;
+
+        $.get("/OrgRanking/getEchartsLineData").done(function (data) {
+
+            let series_count=[];
+            for (let i = 0; i < data.length-1; i++) {
+                series_count[i]={
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis:{
+                        focus:'series'
+                    }
+                }
+            }
+
+            console.log(data);
+            option = {
+                dataset:{
+                    source:data
+                },
+                tooltip: {
+                    trigger: 'axis',
+                },
+                legend: {
+                    type:'scroll'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: series_count
+            };
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
+        })
+    }
+
+
+    setTimeAnimBarEchartsData=null;
+    updateAnimBarEchartsData=null;
+    function fillAnimBarEcharts(){
+        $.get("/OrgRanking/getEchartsLineData").done(function (data) {
+
+            const chartDom = document.getElementById('AnimBarECharts');
+            const myChart = echarts.init(chartDom);
+
+            myChart.clear();
+            clearInterval(updateAnimBarEchartsData);
+            clearTimeout(setTimeAnimBarEchartsData);
+
+            let option;
+
+            let data_all = [];
+            //去掉自带的product
+            data[0][0]="";
+
+            //转置
+            let array1=data;
+            let newArray = array1[0].map(function(col, i) {
+                return array1.map(function(row) {
+                    return row[i];
+                })
+            });
+            data_all=newArray;
+
+
+            let data_r = data_all[1];
+            let index = 1;
+            option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    formatter: function (params) {
+                        let relVal = params[0].name
+                        for (let i = 0, l = params.length; i < l; i++) {
+                            relVal += '<br/>' + params[i].marker +'完成率 :   '+ params[i].value + ' %'
+                        }
+                        return relVal
+                    }
+                },
+                title: {
+                    subtext: '数据来源当前用户所管理的组织完成率'
+                },
+                legend: {
+                    data: ['2018级朝鲜语2+2（2）班']
+                },
+                xAxis: {
+                    max: 'dataMax'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: data_all[0],
+                    inverse: true,
+                    animationDuration: 300,
+                    animationDurationUpdate: 300,
+                    max: 7 // only the largest 3 bars will be displayed
+                },
+                series: [
+                    {
+                        colorBy: 'data',
+                        realtimeSort: true,
+                        type: 'bar',
+                        data: data_r,
+                        label: {
+                            show: true,
+                            position: 'insideRight',
+                            valueAnimation: true,
+                            distance: -1,
+                            formatter: '{orgName|{b}}   {percent|{c}%}',
+                            rich: {
+                                percent: {
+                                    color: '',
+                                    width: -1,
+                                    fontSize: 14
+                                },
+                                orgName: {
+                                    color: 'white'
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            decal: {
+                                symbol: 'circle',
+                                color: 'rgba(0, 0, 0, .2)',
+                                rotation: 0.5,
+                                dashArrayX: 1,
+                                dashArrayY: 3
+                            }
+                        }
+                    }
+                ],
+
+                animationDuration: 0,
+                animationDurationUpdate: 3000,
+                animationEasing: 'sinusoidalOut',
+                animationEasingUpdate: 'sinusoidalOut'
+            };
+
+
+            function run() {
+                let data = option.series[0].data;
+                option.series[0].name = data_all[index][0];
+                option.title.text = data_all[index][0];
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = data_all[index][i];
+                }
+                index++;
+                myChart.setOption(option);
+            }
+            setTimeAnimBarEchartsData =setTimeout(function () {
+                run();
+            }, 0);
+            //4000等待，但是动画是3000，这里多了1000秒是为了让用户看清排名和数据
+            updateAnimBarEchartsData = setInterval(function () {
+                run();
+            }, 4000);
+
+            option && myChart.setOption(option);
+            window.addEventListener('resize', () => {
+                console.log('resize')
+                myChart.resize()
+            })
+
+        });
+
+    }
+
+
+
+</script>
 </body>
 <!--字符串格式化工具-->
 <script>
@@ -255,7 +490,6 @@
             return "请求失败！"
         })
     }
-
 
     function forwardMemberPageByPathId(pathId){
         $.get("/User/switchPath",{id:pathId}).done(function(){

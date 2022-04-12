@@ -41,10 +41,10 @@
                         ( SELECT ID FROM t_stage ORDER BY t_stage.stage_date DESC LIMIT 0,#{stageTotal} ) AS t_stage_temp
             ))
         GROUP BY
-            t_member_each_stage.stage_id,
+            t_stage.stage_date,
             t_member.path_id
         ORDER BY
-            t_member_each_stage.stage_id DESC,
+            t_stage.stage_date ASC,
             t_member.path_id ASC
 
     </select>

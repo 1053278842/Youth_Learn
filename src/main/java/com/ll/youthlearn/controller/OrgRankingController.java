@@ -6,6 +6,7 @@ import com.ll.youthlearn.service.IOrgRankingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,19 +55,14 @@ public class OrgRankingController {
         return orgRankingList;
     }
 
-    /**
-     * 后端返回的数据距离能用还多了一层[],前端注意要eval()一下
-     * @param session
-     * @return
-     */
+
     @ResponseBody
     @RequestMapping("/getEchartsLineData")
-    public List<Object[]> getEchartsLineData(HttpSession session){
+    public List<Object[]> getEchartsLineData(HttpSession session,@RequestParam(defaultValue = "10") Integer maxStageNums){
         User current_user=(User)session.getAttribute("USER_INFO");
         Integer uid= current_user.getId();
 
-        //该图标一次统计近X期的数据
-        final Integer maxStageNums=10;
+        if(maxStageNums<0){maxStageNums=0;}
 
         return orgRankingService.getEchartsLineRankingDate(uid,maxStageNums);
     }
