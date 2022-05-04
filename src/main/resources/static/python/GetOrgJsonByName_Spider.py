@@ -15,7 +15,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def getConn():
-    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='LiuLong123123+',db='youth_learn')
+    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='xxx',db='youth_learn')
 
 @retry(stop_max_attempt_number=5)
 def getOrgByNameStage(orgNames,stage,dataList):
