@@ -14,7 +14,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 #再写一个脚本,判断当前路径子路径是否在两个以内。即可除去对memberjson的判断！！
 
 def getConn():
-    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='LiuLong123123+',db='youth_learn')
+    return pymysql.Connect(host='110.42.155.172',port=3306,user='root',password='xxx',db='youth_learn')
 
 def getOrgByNameStage(orgName,stage,dataList):
     # url='http://dxx.ahyouth.org.cn/api/peopleRankStage?table_name=%s&level1=%s'%(stage,urllib.parse.quote(orgNames))
