@@ -25,7 +25,7 @@ if __name__=="__main__":
     dataList=pageJson['list']
 
     # 数据库连接
-    conn = pymysql.Connect(host='110.42.155.172',port=3306,user='root',password="LiuLong123123+",db='youth_learn')
+    conn = pymysql.Connect(host='110.42.155.172',port=3306,user='root',password="xxx",db='youth_learn')
     cursor=conn.cursor()
     sql = 'insert into t_stage (name,stage) values '
     for stage in dataList:
